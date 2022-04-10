@@ -306,20 +306,20 @@ public final class SellGUI extends JFrame{
         
         //Header
         this.setpOderHeader(new JPanel());
-        this.getpOderHeader().setPreferredSize(new Dimension(400, 80));
+        this.getpOderHeader().setPreferredSize(new Dimension(420, 80));
         this.getpOderHeader().setBackground(new Color(229, 167, 123));
         this.getpOderHeader().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         
         //Body
         this.setpOrderBody(new JPanel());
-        this.getpOrderBody().setPreferredSize(new Dimension(400, 30000));
+        this.getpOrderBody().setPreferredSize(new Dimension(420, 30000));
         this.getpOrderBody().setBackground(BACKGROUND_COLOR);
         this.getpOrderBody().setLayout(new FlowLayout(FlowLayout.LEFT));
         this.setsOrderBody(new JScrollPane(this.getpOrderBody(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
        
         //Footer
         this.setpOrderFooter(new JPanel());
-        this.getpOrderFooter().setPreferredSize(new Dimension(400, 220));
+        this.getpOrderFooter().setPreferredSize(new Dimension(420, 220));
         this.getpOrderFooter().setBackground(BROWN_COLOR);
         this.getpOrderFooter().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         
