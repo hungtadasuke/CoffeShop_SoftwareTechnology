@@ -52,6 +52,7 @@ public class FormStaff extends JFrame {
         homeButton.setBounds(1230,20,50, 50);
         homeButton.setIcon(new ImageIcon("Resource\\home-icon.png"));
         homeButton.setBackground(new Color(190,148,92));
+        homeButton.setBorder(null);
         
         saveButton.setBounds(950, 470, 50, 140);
         saveButton.setIcon(new ImageIcon("Resource\\save-icon.png"));

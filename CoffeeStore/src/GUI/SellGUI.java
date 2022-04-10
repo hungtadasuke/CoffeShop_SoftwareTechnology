@@ -12,7 +12,7 @@ public final class SellGUI extends JFrame{
     private JPanel pOrderInfo, pOderHeader, pOrderBody, pOrderFooter,
                    pMenus, pHeaderMenus, pBodyMenus, pScrossBar1, pClassifyMenu, pSrossBar2, pTableMenu, pCoffeeMenu, pTeaMenu, pFruitJuiceMenu, pYogurtMenu, pSmoothieMenu;
     
-    private JScrollPane sOrderBody, sTableMenu, sCoffeMenu, sTeaMenu, sFruitJuiceMenu, sYogurtMenu, sSmoothieMenu;
+    private JScrollPane sOrderBody, sCoffeMenu, sTeaMenu, sFruitJuiceMenu, sYogurtMenu, sSmoothieMenu;
     
     private ArrayList<JButton> buttonList; 
     
@@ -23,6 +23,8 @@ public final class SellGUI extends JFrame{
     private URL url;
     
     private Image icon;
+    
+    CardLayout card = new CardLayout();
     
     Color BROWN_COLOR = new Color(145, 91, 54);
     Color BACKGROUND_COLOR = new Color(234, 231, 214);
@@ -173,14 +175,6 @@ public final class SellGUI extends JFrame{
         this.sOrderBody = sOrderBody;
     }
 
-    public JScrollPane getsTableMenu() {
-        return sTableMenu;
-    }
-
-    public void setsTableMenu(JScrollPane sTableMenu) {
-        this.sTableMenu = sTableMenu;
-    }
-
     public JScrollPane getsCoffeMenu() {
         return sCoffeMenu;
     }
@@ -281,7 +275,7 @@ public final class SellGUI extends JFrame{
     //Tao cua so ung dung (JFrame Container)
     private void createJFrame() {
         this.setTitle("Sell Form");
-        icon = Toolkit.getDefaultToolkit().createImage("Image\\iconJFrame.png");
+        icon = Toolkit.getDefaultToolkit().createImage("Resource\\iconJFrame.png");
         this.setIconImage(icon);
         this.setSize(1300, 760);
         this.setLocationRelativeTo(null);
@@ -378,7 +372,7 @@ public final class SellGUI extends JFrame{
         });
         
         //set button has home icon
-        this.setpHome(new JButton(new ImageIcon("Image\\iconHome.png")));
+        this.setpHome(new JButton(new ImageIcon("Resource\\iconHome.png")));
         this.getpHome().setActionCommand("Home");
         this.getpHome().setPreferredSize(new Dimension(50, 40));
         this.getpHome().setBackground(BROWN_COLOR);
@@ -390,12 +384,12 @@ public final class SellGUI extends JFrame{
         this.getpHome().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                getpHome().setIcon(new ImageIcon("Image\\iconHomeHover.png"));
+                getpHome().setIcon(new ImageIcon("Resource\\iconHomeHover.png"));
             }
             
             @Override
             public void mouseReleased(MouseEvent e) {
-                getpHome().setIcon(new ImageIcon("Image\\iconHome.png"));
+                getpHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
             }
         });
         
@@ -446,37 +440,35 @@ public final class SellGUI extends JFrame{
         
         
         //Center
-        this.setpBodyMenus(createJPanel());
+        this.setpBodyMenus(new JPanel());
+        this.getpBodyMenus().setLayout(card);
         
         this.setpTableMenu(createJPanel());
+        this.getpTableMenu().setBackground(BROWN_COLOR);
         this.setpCoffeeMenu(createJPanel());
         this.getpCoffeeMenu().setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        this.getpCoffeeMenu().setBackground(HOVER_COLOR);
         this.setpTeaMenu(createJPanel());
+        this.getpTeaMenu().setBackground(BUTTON_COLOR);
         this.setpFruitJuiceMenu(createJPanel());
+        this.getpFruitJuiceMenu().setBackground(BACKGROUND_COLOR);
         this.setpYogurtMenu(createJPanel());
+        this.getpYogurtMenu().setBackground(Color.RED);
         this.setpSmoothieMenu(createJPanel());
+        this.getpSmoothieMenu().setBackground(Color.YELLOW);
         
-        this.setsTableMenu(new JScrollPane(this.getpTableMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         this.setsCoffeMenu(new JScrollPane(this.getpCoffeeMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         this.setsTeaMenu(new JScrollPane(this.getpTeaMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         this.setsFruitJuiceMenu(new JScrollPane(this.getpFruitJuiceMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         this.setsYogurtMenu(new JScrollPane(this.getpYogurtMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         this.setsSmoothieMenu(new JScrollPane(this.getpSmoothieMenu(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         
-        this.getpBodyMenus().add(this.getsTableMenu(), "Table");
+        this.getpBodyMenus().add(this.getpTableMenu(), "Table");
         this.getpBodyMenus().add(this.getsCoffeMenu(), "Coffee");
         this.getpBodyMenus().add(this.getsTeaMenu(), "Tea");
         this.getpBodyMenus().add(this.getsFruitJuiceMenu(), "Fruit Juice");
         this.getpBodyMenus().add(this.getsYogurtMenu(), "Yogurt");
         this.getpBodyMenus().add(this.getsSmoothieMenu(), "Smoothie");
-        
-        //create lists
-//        this.setCoffeList(new ArrayList<>());
-//        this.getCoffeList().add(createChooseDrinkJButton("Black Coffee", "Black Coffee"));
-//        this.getCoffeList().add(createChooseDrinkJButton("Black Coffee", "Black Coffee"));
-//        for(JButton o: this.getCoffeList()) {
-//            this.getpCoffeeMenu().add(o);
-//        }
         
         //Them cac thanh phan vao panel pMenus
         this.getpHeaderMenus().add(this.getpScrossBar1(), BorderLayout.NORTH);
@@ -551,7 +543,6 @@ public final class SellGUI extends JFrame{
     private JPanel createJPanel() {
         JPanel o = new JPanel();
         o.setBackground(BACKGROUND_COLOR);
-        o.setLayout(new CardLayout());
         o.setPreferredSize(new Dimension(JFrame.MAXIMIZED_HORIZ, 50000));
         return o;
     }
@@ -559,11 +550,7 @@ public final class SellGUI extends JFrame{
     public void addJPanelTopBodyMenus(JPanel jpanel, String name) {
         this.getpBodyMenus().add(jpanel, name);
     }
-    
-    
-    
-    
-    
+        
     //main
     public static void main (String[] args) {
         SellGUI o = new SellGUI("Sell Form");
