@@ -8,6 +8,6 @@ package DTO;
  *
  * @author My Asus
  */
-public class Product {
+public class ProductDTO {
     
 }
