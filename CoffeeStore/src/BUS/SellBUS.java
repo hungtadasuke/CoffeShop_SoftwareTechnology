@@ -1,13 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BUS;
 
-/**
- *
- * @author My Asus
- */
 public class SellBUS {
+   //attribute
+   private ClassifyBUS classifyBUS;
+   private ProductBUS productBUS;
+   
+   //constructor
+   public SellBUS() {
+       this.classifyBUS = new ClassifyBUS();
+       this.productBUS = new ProductBUS();
+   }
+   
+   //setter and getter
+    public ClassifyBUS getClassifyBUS() {
+        return classifyBUS;
+    }
+
+    public void setClassifyBUS(ClassifyBUS classifyBUS) {
+        this.classifyBUS = classifyBUS;
+    }
+
+    public ProductBUS getProductBUS() {
+        return productBUS;
+    }
+
+    public void setProductBUS(ProductBUS productBUS) {
+        this.productBUS = productBUS;
+    }
+    
+    
     
 }
