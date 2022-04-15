@@ -12,7 +12,7 @@ public class ProductBUS {
     //constructor
     public ProductBUS() {
         this.productDAO = new ProductDAO();
-        this.productList = new Vector<>();
+        this.productList = productDAO.readProductListFromDatabase();
     }
     
     //setter and getter
@@ -32,13 +32,9 @@ public class ProductBUS {
         this.productList = productList;
     }
     
-    //method
-    public void getProductListFromClassifyId(String classifyId) {
-        this.setProductList(this.getProductDAO().getProductListFromClassify(classifyId));
-    }
-    
-    public void getProductListFromProductDAO() {
-        this.setProductList(this.getProductDAO().getProductListFromDatabase());
+    //method  
+    public void resetProductList() {
+        this.setProductList(this.getProductDAO().readProductListFromDatabase());
     }
     
 }
