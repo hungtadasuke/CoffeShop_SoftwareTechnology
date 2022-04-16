@@ -33,11 +33,4 @@ public class Product_ToppingDAO {
         return productToppingList;
     }
     
-    public static void main(String[] args) {
-        Product_ToppingDAO o = new Product_ToppingDAO();
-        Vector<Product_ToppingDTO> list = o.readProductToppingListFromDatabase();
-        for(Product_ToppingDTO x: list) {
-            System.out.println(x.getProductId() + "---" + x.getToppingId());
-        }
-    }
 }

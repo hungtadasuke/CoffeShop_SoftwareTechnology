@@ -25,11 +25,11 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     
     //constructor
     public ChoiceMenuOfProductGUI(String productId, SellBUS sellBUS) {
-        this.num = 0;
         this.setSellBUS(sellBUS);
         this.setProductId(productId);
         this.setTitle("Choice Menu Of Product");
         this.init();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     
@@ -231,7 +231,6 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setSize(450, 600);
         this.setIconImage(Toolkit.getDefaultToolkit().createImage("Resource\\choice-icon.png"));
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setLayout(new BorderLayout());
         
@@ -376,11 +375,16 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
         this.setToppingPanelList(this.createToppingPanelList());
         
-        if(this.getToppingPanelList().size() < 5) {
-            this.setSize(450, 500);
+        if(this.getToppingPanelList().size() < 3) {
+            this.setSize(450, 400);
             for(JPanel toppingPanel: this.getToppingPanelList()) {
             this.getpBodyCenter().add(toppingPanel);
             }               
+        } else if (this.getToppingPanelList().size() < 5) {
+            this.setSize(450, 500);
+            for(JPanel toppingPanel: this.getToppingPanelList()) {
+            this.getpBodyCenter().add(toppingPanel);
+            }
         } else {
             for(JPanel toppingPanel: this.getToppingPanelList()) {
             this.getpBodyCenter().add(toppingPanel);
@@ -505,7 +509,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
         JButton btnAdd = this.createJButtonFromText("+", actionCommand1);
         
-        JButton btnSub = this.createJButtonFromText("-", actionCommand2);
+        JButton btnSub = this.createJButtonFromText("−", actionCommand2);
         
         JTextField tfTopping = new JTextField("0", 5);
         tfTopping.setEditable(false);

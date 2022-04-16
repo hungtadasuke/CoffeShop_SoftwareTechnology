@@ -8,6 +8,7 @@ public class SellBUS {
    private Product_SizeBUS productSizeBUS;
    private ToppingBUS toppingBUS;
    private Product_ToppingBUS productToppingBUS;
+   private StaffBUS staffBUS;
    
    //constructor
    public SellBUS() {
@@ -17,6 +18,7 @@ public class SellBUS {
        this.productSizeBUS = new Product_SizeBUS();
        this.toppingBUS = new ToppingBUS();
        this.productToppingBUS = new Product_ToppingBUS();
+       this.staffBUS = new StaffBUS();
    }
    
    //setter and getter
@@ -66,5 +68,13 @@ public class SellBUS {
 
     public void setProductToppingBUS(Product_ToppingBUS productToppingBUS) {
         this.productToppingBUS = productToppingBUS;
+    }
+
+    public StaffBUS getStaffBUS() {
+        return staffBUS;
+    }
+
+    public void setStaffBUS(StaffBUS staffBUS) {
+        this.staffBUS = staffBUS;
     }
 }
