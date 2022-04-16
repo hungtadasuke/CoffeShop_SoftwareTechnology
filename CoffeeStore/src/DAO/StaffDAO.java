@@ -11,7 +11,7 @@ public class StaffDAO {
     }
     
     //method
-     //get product list from database
+     //get staff list from database
     public Vector<StaffDTO> readStaffListFromDatabase() {
         Vector<StaffDTO> staffList = new Vector<>();
         try (Connection con = DatabaseHelper.openConnection()){
@@ -36,7 +36,7 @@ public class StaffDAO {
         StaffDAO o = new StaffDAO();
         Vector<StaffDTO> list = o.readStaffListFromDatabase();
         for(StaffDTO x: list) {
-            System.out.println(x.getStaffId() + "---" + x.getStaffName() + "---" + x.getStaffAddress()+ "---" + x.getStaffBirthday()+ "---" + x.getPosition());
+            System.out.println(x.getStaffId() + "---" + x.getStaffName() + "---" + x.getStaffAddress()+ "---" + x.getStaffBirthday().toString()+ "---" + x.getPosition());
         }
     }
     

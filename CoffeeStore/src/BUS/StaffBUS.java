@@ -7,7 +7,7 @@ import java.util.Vector;
 public class StaffBUS {
     //attribute
     private StaffDAO staffDAO;
-    Vector<StaffDTO> staffList;
+    private Vector<StaffDTO> staffList;
     
     //constructor
     public StaffBUS() {

@@ -1,9 +1,11 @@
 package DTO;
 
+import ApplicationHelper.MyDate;
+
 public class BillDTO {
     //attribute
     private String billId;
-    private String date;
+    private MyDate date;
     private Double total;
     private Double receivedMoney;
     private Double excessMoney;
@@ -11,14 +13,16 @@ public class BillDTO {
     private String staffId;
     
     //constructor
-    public BillDTO(String billId, String date, Double total, Double receivedMoney, Double excessMoney, String staffId) {
+    public BillDTO(String billId, MyDate date, Double total, Double receivedMoney, Double excessMoney, boolean billStatus, String staffId) {
         this.billId = billId;
         this.date = date;
         this.total = total;
         this.receivedMoney = receivedMoney;
         this.excessMoney = excessMoney;
+        this.billStatus = billStatus;
         this.staffId = staffId;
     }
+    
     
     //setter and getter
     public String getBillId() {
@@ -29,11 +33,11 @@ public class BillDTO {
         this.billId = billId;
     }
 
-    public String getDate() {
+    public MyDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(MyDate date) {
         this.date = date;
     }
 

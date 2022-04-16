@@ -8,11 +8,13 @@ public class BillDetail_ToppingDTO {
     private double price;
     
     //constructor
-    public BillDetail_ToppingDTO(String detailBillId, String toppingId) {
+    public BillDetail_ToppingDTO(String detailBillId, String toppingId, int quantity, double price) {    
         this.detailBillId = detailBillId;
         this.toppingId = toppingId;
+        this.quantity = quantity;
+        this.price = price;
     }
-    
+
     //setter and getter
     public String getDetailBillId() {
         return detailBillId;
