@@ -571,17 +571,17 @@ public final class SellGUI extends JFrame{
             }
         });
         o.addActionListener((ActionEvent e) -> {
-           if(e.getActionCommand().equalsIgnoreCase("Table")) {
-               getCard().show(getpBodyMenus(), "Table");
-           } else if (e.getActionCommand().contains("CL0")){
-               getpItemMenu().removeAll();
-               createProductButtonList(e.getActionCommand());
-               addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
-               getCard().show(getpBodyMenus(), "Temp");
-               getCard().show(getpBodyMenus(), "Item");
-           } else if (!e.getActionCommand().equals("")) {
-               ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), this.getSellBUS());
-           }
+            if (e.getActionCommand().equalsIgnoreCase("Table")) {
+                getCard().show(getpBodyMenus(), "Table");
+            } else if (e.getActionCommand().contains("CL0")) {
+                getpItemMenu().removeAll();
+                createProductButtonList(e.getActionCommand());
+                addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
+                getCard().show(getpBodyMenus(), "Temp");
+                getCard().show(getpBodyMenus(), "Item");
+            } else if (!e.getActionCommand().equals("")) {
+                ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), SellGUI.this.getSellBUS());
+            }
         });
         return o;
     }

@@ -32,4 +32,14 @@ public class ToppingBUS {
         this.toppingList = toppingList;
     }
     
+    //method
+    public ToppingDTO getToppingFromId (String toppingId) {
+        for(ToppingDTO topping: this.getToppingList()) {
+            if(topping.getToppingId().equalsIgnoreCase(toppingId)) {
+                return topping;
+            }
+        }
+        return null;
+    }
+    
 }
