@@ -6,18 +6,23 @@ public class Detail_BillDTO {
     private String billId;
     private String productId;
     private int ordinalNumber;
+    private String productSize;
+    private String producStatus;
     private int quantity;
     private Double unitPrice;
     
     //constructor
-    public Detail_BillDTO (String detailBillId, String billId, String productId, int ordinalNumber, int quantity, Double unitPrice) {
+    public Detail_BillDTO(String detailBillId, String billId, String productId, int ordinalNumber, String productSize, String producStatus, int quantity, Double unitPrice) {
         this.detailBillId = detailBillId;
         this.billId = billId;
         this.productId = productId;
         this.ordinalNumber = ordinalNumber;
+        this.productSize = productSize;
+        this.producStatus = producStatus;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+    
     
     //setter and getter
     public String getDetailBillId() {
@@ -66,5 +71,21 @@ public class Detail_BillDTO {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public String getProductSize() {
+        return productSize;
+    }
+
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+
+    public String getProducStatus() {
+        return producStatus;
+    }
+
+    public void setProducStatus(String producStatus) {
+        this.producStatus = producStatus;
     }
 }
