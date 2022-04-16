@@ -32,9 +32,20 @@ public class ProductBUS {
         this.productList = productList;
     }
     
-    //method  
+    //method
+    //reset list when update database
     public void resetProductList() {
         this.setProductList(this.getProductDAO().readProductListFromDatabase());
+    }
+    
+    //lay san pham tu id cua san pham
+    public ProductDTO getProductFromId (String productId) {
+        for(ProductDTO o: this.getProductList()) {
+            if(o.getProductId().equalsIgnoreCase(productId)) {
+                return o;
+            }
+        }
+        return null;
     }
     
 }

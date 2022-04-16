@@ -8,7 +8,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.border.*;
 
 public final class SellGUI extends JFrame{
@@ -581,7 +580,7 @@ public final class SellGUI extends JFrame{
                getCard().show(getpBodyMenus(), "Temp");
                getCard().show(getpBodyMenus(), "Item");
            } else if (!e.getActionCommand().equals("")) {
-               getpOrderBody().setBackground(BROWN_COLOR);
+               ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), this.getSellBUS());
            }
         });
         return o;
@@ -620,7 +619,9 @@ public final class SellGUI extends JFrame{
         this.getButtonList().clear();
         this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table"));
         for(ClassifyDTO classify: this.getSellBUS().getClassifyBUS().getClassifyList()) {
-            this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId()));
+            if(classify.isClassifyBusiness()) {
+                this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId()));
+            }
         }
         if(this.getButtonList().size() < 11) {
             for(int i = this.getButtonList().size(); i < 11; i++) {
@@ -642,8 +643,9 @@ public final class SellGUI extends JFrame{
     private void createProductButtonSearchList(String search) {
         this.getButtonList().clear();
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
-            if(product.isProductBusiness() && (product.getProductName().toLowerCase().contains(search) || product.getProductName().toUpperCase().contains(search) || product.getProductName().contains(search))) {
-                this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId()));
+            if(!search.equals("") && (product.isProductBusiness() && (product.getProductName().toLowerCase().contains(search) || product.getProductName().toUpperCase().contains(search) || product.getProductName().contains(search)))
+                && this.getSellBUS().getClassifyBUS().getClassifyFromId(product.getClassifyId()).isClassifyBusiness()) {
+                    this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId()));
             }
         }
     }

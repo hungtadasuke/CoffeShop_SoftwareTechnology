@@ -39,4 +39,14 @@ public class ClassifyBUS {
         this.setClassifyList(this.getClassifyDAO().readClassifyListFromDatabase());
     }
     
+    public ClassifyDTO getClassifyFromId (String id) {
+        ClassifyDTO classify = null;
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyId().equalsIgnoreCase(id)) {
+                return o;
+            }
+        }
+        return classify;
+    }
+    
 }

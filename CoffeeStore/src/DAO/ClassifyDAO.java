@@ -18,7 +18,7 @@ public class ClassifyDAO {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()) {
-                ClassifyDTO classify = new ClassifyDTO(rs.getString(1), rs.getString("CLASSIFY_NAME"));
+                ClassifyDTO classify = new ClassifyDTO(rs.getString("CLASSIFY_ID"), rs.getString("CLASSIFY_NAME"), rs.getBoolean("CLASSIFY_BUSINESS"));
                 classifyList.add(classify);
             }
         } catch (ClassNotFoundException|SQLException e) {

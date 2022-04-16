@@ -1,4 +1,4 @@
-CREATE DATABASE MANAGE_COFFEE_STORE;
+﻿CREATE DATABASE MANAGE_COFFEE_STORE;
 
 USE MANAGE_COFFEE_STORE;
 
@@ -134,6 +134,7 @@ INSERT INTO CLASSIFY (CLASSIFY_ID, CLASSIFY_NAME) VALUES
 	('CL005', 'Smoothie');
 
 UPDATE CLASSIFY SET CLASSIFY_BUSINESS = 1;
+UPDATE CLASSIFY SET CLASSIFY_BUSINESS = 1 WHERE CLASSIFY_ID = 'CL001';
 
 SELECT * FROM CLASSIFY;
 
@@ -156,6 +157,28 @@ INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PR
 	('CL001', 'CF005', 'Mocha', 'Mocha', 'HOT', '1'),
 	('CL001', 'CF006', 'Macchiato', 'Macchiato', 'BOTH', '1'),
 	('CL001', 'CF007', 'Milk Coffee', 'Milk Coffee', 'BOTH', '1');
+
+INSERT INTO PRODUCT_TOPPING (PRODUCT_ID, TOPPING_ID) VALUES
+	('CF003', 'TP009'),
+	('CF007', 'TP009');
+
+INSERT INTO PRODUCT_SIZE (PRODUCT_ID, PRODUCT_SIZE, PRODUCT_PRICE) VALUES
+	('CF001', 'S', 19000),
+	('CF001', 'M', 29000),
+	('CF002', 'S', 19000),
+	('CF002', 'M', 29000),
+	('CF003', 'S', 19000),
+	('CF003', 'M', 25000),
+	('CF003', 'L', 34000),
+	('CF004', 'S', 19000),
+	('CF004', 'M', 29000),
+	('CF005', 'S', 19000),
+	('CF005', 'M', 29000),
+	('CF006', 'S', 19000),
+	('CF006', 'M', 29000),
+	('CF007', 'S', 15000),
+	('CF007', 'M', 20000),
+	('CF007', 'L', 25000);
 
 INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PRODUCT_STATUS, PRODUCT_BUSINESS) VALUES
 	('CL002', 'TE001', 'Black Tea', 'Black Tea', 'COLD', '1'),
@@ -180,6 +203,99 @@ INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PR
 	('CL002', 'TE020', 'Coffee Milk Tea', 'Coffee MT', 'COLD', '1'),
 	('CL002', 'TE021', 'Japanese Milk Tea', 'Japanese MT', 'COLD', '1');
 
+INSERT INTO PRODUCT_TOPPING (PRODUCT_ID, TOPPING_ID) VALUES
+	('TE001', 'TP001'),
+	('TE001', 'TP003'),
+	('TE001', 'TP004'),
+	('TE001', 'TP005'),
+	('TE001', 'TP006'),
+	('TE002', 'TP001'),
+	('TE002', 'TP003'),
+	('TE002', 'TP004'),
+	('TE002', 'TP005'),
+	('TE002', 'TP006'),
+	('TE003', 'TP001'),
+	('TE003', 'TP003'),
+	('TE003', 'TP004'),
+	('TE003', 'TP005'),
+	('TE003', 'TP006'),
+	('TE004', 'TP001'),
+	('TE004', 'TP003'),
+	('TE004', 'TP004'),
+	('TE004', 'TP005'),
+	('TE004', 'TP006'),
+	('TE005', 'TP001'),
+	('TE005', 'TP003'),
+	('TE005', 'TP004'),
+	('TE005', 'TP005'),
+	('TE005', 'TP006'),
+	
+
+INSERT INTO PRODUCT_SIZE (PRODUCT_ID, PRODUCT_SIZE, PRODUCT_PRICE) VALUES
+	('TE001', 'S', 15000),
+	('TE001', 'M', 20000),
+	('TE001', 'L', 25000),
+	('TE002', 'S', 19000),
+	('TE002', 'M', 25000),
+	('TE002', 'L', 30000),
+	('TE003', 'S', 19000),
+	('TE003', 'M', 25000),
+	('TE003', 'L', 30000),
+	('TE004', 'S', 15000),
+	('TE004', 'M', 25000),
+	('TE004', 'L', 35000),
+	('TE005', 'S', 15000),
+	('TE005', 'M', 25000),
+	('TE005', 'L', 35000),
+	('TE006', 'S', 15000),
+	('TE006', 'M', 20000),
+	('TE006', 'L', 25000),
+	('TE007', 'S', 19000),
+	('TE007', 'M', 25000),
+	('TE007', 'L', 35000),
+	('TE008', 'S', 19000),
+	('TE008', 'M', 25000),
+	('TE008', 'L', 35000),
+	('TE009', 'S', 19000),
+	('TE009', 'M', 25000),
+	('TE009', 'L', 35000),
+	('TE010', 'S', 19000),
+	('TE010', 'M', 25000),
+	('TE010', 'L', 35000),
+	('TE011', 'S', 19000),
+	('TE011', 'M', 25000),
+	('TE011', 'L', 35000),
+	('TE012', 'S', 19000),
+	('TE012', 'M', 25000),
+	('TE012', 'L', 35000),
+	('TE013', 'S', 21000),
+	('TE013', 'M', 29000),
+	('TE013', 'L', 40000),
+	('TE014', 'S', 21000),
+	('TE014', 'M', 29000),
+	('TE014', 'L', 40000),
+	('TE015', 'S', 19000),
+	('TE015', 'M', 25000),
+	('TE015', 'L', 35000),
+	('TE016', 'S', 19000),
+	('TE016', 'M', 25000),
+	('TE016', 'L', 35000),
+	('TE017', 'S', 19000),
+	('TE017', 'M', 25000),
+	('TE017', 'L', 35000),
+	('TE018', 'S', 19000),
+	('TE018', 'M', 25000),
+	('TE018', 'L', 35000),
+	('TE019', 'S', 19000),
+	('TE019', 'M', 25000),
+	('TE019', 'L', 35000),
+	('TE020', 'S', 19000),
+	('TE020', 'M', 25000),
+	('TE020', 'L', 35000),
+	('TE021', 'S', 19000),
+	('TE021', 'M', 25000),
+	('TE021', 'L', 35000);
+
 INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PRODUCT_STATUS, PRODUCT_BUSINESS) VALUES
 	('CL003', 'FJ001', 'Mango Juice', 'Mango Juice', 'COLD', '1'),
 	('CL003', 'FJ002', 'Apple Juice', 'Apple Juice', 'COLD', '1'),
@@ -192,6 +308,38 @@ INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PR
 	('CL003', 'FJ009', 'Strawberry Juice', 'Strawberry Juice', 'COLD', '1'),
 	('CL003', 'FJ010', 'Waterlemon Juice', 'Waterlemon Juice', 'COLD', '1');
 
+INSERT INTO PRODUCT_SIZE (PRODUCT_ID, PRODUCT_SIZE, PRODUCT_PRICE) VALUES
+	('FJ001', 'S', 15000),
+	('FJ001', 'M', 20000),
+	('FJ001', 'L', 25000),
+	('FJ002', 'S', 15000),
+	('FJ002', 'M', 20000),
+	('FJ002', 'L', 25000),
+	('FJ003', 'S', 15000),
+	('FJ003', 'M', 20000),
+	('FJ003', 'L', 25000),
+	('FJ004', 'S', 15000),
+	('FJ004', 'M', 20000),
+	('FJ004', 'L', 25000),
+	('FJ005', 'S', 15000),
+	('FJ005', 'M', 20000),
+	('FJ005', 'L', 25000),
+	('FJ006', 'S', 15000),
+	('FJ006', 'M', 20000),
+	('FJ006', 'L', 25000),
+	('FJ007', 'S', 15000),
+	('FJ007', 'M', 20000),
+	('FJ007', 'L', 25000),
+	('FJ008', 'S', 15000),
+	('FJ008', 'M', 20000),
+	('FJ008', 'L', 25000),
+	('FJ009', 'S', 15000),
+	('FJ009', 'M', 20000),
+	('FJ009', 'L', 25000),
+	('FJ010', 'S', 15000),
+	('FJ010', 'M', 20000),
+	('FJ010', 'L', 25000);
+
 INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PRODUCT_STATUS, PRODUCT_BUSINESS) VALUES
 	('CL004', 'YG001', 'Orange Yogurt', 'Orange Yogurt', 'COLD', '1'),
 	('CL004', 'YG002', 'Mango Yogurt', 'Mango Yogurt', 'COLD', '1'),
@@ -203,12 +351,53 @@ INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PR
 	('CL004', 'YG008', 'Berry Yogurt', 'Berry Yogurt', 'COLD', '1'),
 	('CL004', 'YG009', 'Pomelo Yogurt', 'Pomelo Yogurt', 'COLD', '1');
 
+INSERT INTO PRODUCT_SIZE (PRODUCT_ID, PRODUCT_SIZE, PRODUCT_PRICE) VALUES
+	('YG001', 'S', 15000),
+	('YG001', 'M', 20000),
+	('YG001', 'L', 25000),
+	('YG002', 'S', 15000),
+	('YG002', 'M', 20000),
+	('YG002', 'L', 25000),
+	('YG003', 'S', 15000),
+	('YG003', 'M', 20000),
+	('YG003', 'L', 25000),
+	('YG004', 'S', 15000),
+	('YG004', 'M', 20000),
+	('YG004', 'L', 25000),
+	('YG005', 'S', 15000),
+	('YG005', 'M', 20000),
+	('YG005', 'L', 25000),
+	('YG006', 'S', 15000),
+	('YG006', 'M', 20000),
+	('YG006', 'L', 25000),
+	('YG007', 'S', 15000),
+	('YG007', 'M', 20000),
+	('YG007', 'L', 25000),
+	('YG008', 'S', 15000),
+	('YG008', 'M', 20000),
+	('YG008', 'L', 25000),
+	('YG009', 'S', 15000),
+	('YG009', 'M', 20000),
+	('YG009', 'L', 25000);
+
 INSERT INTO PRODUCT (CLASSIFY_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_NICKNAME, PRODUCT_STATUS, PRODUCT_BUSINESS) VALUES
 	('CL005', 'SM001', 'Mango Smoothie', 'Mango Smoothie', 'COLD', '1'),
 	('CL005', 'SM002', 'Berry Smoothie', 'Berry Smoothie', 'COLD', '1'),
 	('CL005', 'SM003', 'Black Diamond Coffee Smoothie', 'Diamond Coffee', 'COLD', '1'),
 	('CL005', 'SM004', 'Strawberry Smoothie', 'Strawberry SM', 'COLD', '1'),
 	('CL005', 'SM005', 'Matcha Smoothie', 'Matcha Smoothie', 'COLD', '1');
+
+INSERT INTO PRODUCT_SIZE (PRODUCT_ID, PRODUCT_SIZE, PRODUCT_PRICE) VALUES
+	('SM001', 'S', 30000),
+	('SM001', 'M', 40000),
+	('SM002', 'S', 30000),
+	('SM002', 'M', 40000),
+	('SM003', 'S', 30000),
+	('SM003', 'M', 40000),
+	('SM004', 'S', 30000),
+	('SM004', 'M', 40000),
+	('SM005', 'S', 35000),
+	('SM005', 'M', 45000);
 
 INSERT INTO TABLE_IN_STORE (TABLE_ID, TABLE_TYPE, TABLE_STATUS) VALUES
 	('TB001', 2, 1),
@@ -224,11 +413,22 @@ INSERT INTO TABLE_IN_STORE (TABLE_ID, TABLE_TYPE, TABLE_STATUS) VALUES
 	('TB011', 8, 1),
 	('TB012', 8, 1);
 
+	INSERT INTO STAFF (STAFF_ID, STAFF_NAME, STAFF_ADDRESS, STAFF_BIRTHDAY, STAFF_PHONE, STAFF_POSITION) VALUES
+		('SF001', N'Võ Văn Hùng', N'521/91E, CMT8, P13, Q10, TP HCM', '2002/07/15', '0907604514', 'Manager'),
+		('SF002', N'Thiều Việt Hoàng', N'521/91E, CMT8, P13, Q10, TP HCM', '2002/01/01', '0907604514', 'Seller'),
+		('SF003', N'Lộc Gia Phúc', N'521/91E, CMT8, P13, Q10, TP HCM', '2002/01/01', '0907604514', 'Seller'),
+		('SF004', N'Đoàn Thành Lợi', N'521/91E, CMT8, P13, Q10, TP HCM', '2002/01/01', '0907604514', 'Seller'),
+		('SF005', N'Nguyễn Hoàng Giang Trường', N'521/91E, CMT8, P13, Q10, TP HCM', '2002/01/01', '0907604514', 'Seller');
+
 
 SELECT * FROM CLASSIFY;
 SELECT * FROM PRODUCT;
+SELECT * FROM PRODUCT_SIZE;
+SELECT * FROM PRODUCT_TOPPING;
 SELECT * FROM TOPPING;
 SELECT * FROM TABLE_IN_STORE;
+SELECT * FROM STAFF;
+
 
 
 

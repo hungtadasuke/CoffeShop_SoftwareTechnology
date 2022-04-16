@@ -5,12 +5,18 @@ public class SellBUS {
    private ClassifyBUS classifyBUS;
    private ProductBUS productBUS;
    private TableBUS tableBUS;
+   private Product_SizeBUS productSizeBUS;
+   private ToppingBUS toppingBUS;
+   private Product_ToppingBUS productToppingBUS;
    
    //constructor
    public SellBUS() {
        this.classifyBUS = new ClassifyBUS();
        this.productBUS = new ProductBUS();
        this.tableBUS = new TableBUS();
+       this.productSizeBUS = new Product_SizeBUS();
+       this.toppingBUS = new ToppingBUS();
+       this.productToppingBUS = new Product_ToppingBUS();
    }
    
    //setter and getter
@@ -36,5 +42,29 @@ public class SellBUS {
 
     public void setTableBUS(TableBUS tableBUS) {
         this.tableBUS = tableBUS;
+    }
+
+    public Product_SizeBUS getProductSizeBUS() {
+        return productSizeBUS;
+    }
+
+    public void setProductSizeBUS(Product_SizeBUS productSizeBUS) {
+        this.productSizeBUS = productSizeBUS;
+    }
+
+    public ToppingBUS getToppingBUS() {
+        return toppingBUS;
+    }
+
+    public void setToppingBUS(ToppingBUS toppingBUS) {
+        this.toppingBUS = toppingBUS;
+    }
+
+    public Product_ToppingBUS getProductToppingBUS() {
+        return productToppingBUS;
+    }
+
+    public void setProductToppingBUS(Product_ToppingBUS productToppingBUS) {
+        this.productToppingBUS = productToppingBUS;
     }
 }
