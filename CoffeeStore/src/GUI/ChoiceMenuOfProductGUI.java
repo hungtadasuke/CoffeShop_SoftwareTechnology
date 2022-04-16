@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.SellBUS;
 import DTO.Product_SizeDTO;
+import DTO.Product_ToppingDTO;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -18,6 +19,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     String productId;
     Vector <JRadioButton> sizeRadioButtonList;
     JCheckBox[] statusCheckBoxList;
+    Vector <JPanel> toppingPanelList;
     int num;
     Color BACKGROUND_COLOR = new Color(175, 136, 110);
     
@@ -215,7 +217,14 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     public void setStatusCheckBoxList(JCheckBox[] statusCheckBoxList) {
         this.statusCheckBoxList = statusCheckBoxList;
     }
-    
+
+    public Vector<JPanel> getToppingPanelList() {
+        return toppingPanelList;
+    }
+
+    public void setToppingPanelList(Vector<JPanel> toppingPanelList) {
+        this.toppingPanelList = toppingPanelList;
+    }
     
     //method
     private void init() {
@@ -365,6 +374,20 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         lineBorder = new LineBorder(Color.WHITE);
         this.getpBodyCenter().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(emtyBorder, lineBorder), "Topping", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
         
+        this.setToppingPanelList(this.createToppingPanelList());
+        
+        if(this.getToppingPanelList().size() < 5) {
+            this.setSize(450, 500);
+            for(JPanel toppingPanel: this.getToppingPanelList()) {
+            this.getpBodyCenter().add(toppingPanel);
+            }               
+        } else {
+            for(JPanel toppingPanel: this.getToppingPanelList()) {
+            this.getpBodyCenter().add(toppingPanel);
+            }
+        }
+        
+    
         this.getpBody().add(this.getpBodyHeader(), BorderLayout.NORTH);
         this.getpBody().add(this.getpBodyCenter(), BorderLayout.CENTER);
     }
@@ -462,6 +485,56 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(HAND_CURSOR));
+        return button;
+    }
+    
+    //Tao list panel tooping
+    public JPanel createToppingPanel(String toppingId, String actionCommand1, String actionCommand2) {
+        //Tao khung chua chung
+        JPanel toppingPanel = new JPanel();
+        toppingPanel.setLayout(new GridLayout(1, 2));
+        toppingPanel.setBackground(BACKGROUND_COLOR);
+        toppingPanel.setBorder(new EmptyBorder(0, 5, 2, 5));
+        
+        //Them cac thanh phan vao panel topping
+        JLabel toppingName = new JLabel(this.getSellBUS().getToppingBUS().getToppingFromId(toppingId).getToppingName());
+        
+        JPanel pCenter = new JPanel();
+        pCenter.setBackground(BACKGROUND_COLOR);
+        pCenter.setLayout(new GridLayout(1, 3, 5, 0));
+        
+        JButton btnAdd = this.createJButtonFromText("+", actionCommand1);
+        
+        JButton btnSub = this.createJButtonFromText("-", actionCommand2);
+        
+        JTextField tfTopping = new JTextField("0", 5);
+        tfTopping.setEditable(false);
+        tfTopping.setHorizontalAlignment((int) JTextField.CENTER_ALIGNMENT);
+        
+        pCenter.add(btnSub);
+        pCenter.add(tfTopping);
+        pCenter.add(btnAdd);
+        
+        toppingPanel.add(toppingName);
+        toppingPanel.add(pCenter);
+        
+        return toppingPanel;
+    }
+    
+    private Vector<JPanel> createToppingPanelList() {
+       Vector<JPanel> list = new Vector<>();
+       for(Product_ToppingDTO o: this.getSellBUS().getProductToppingBUS().getProductToppingList()) {
+           if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
+               list.add(this.createToppingPanel(o.getToppingId(), o.getToppingId() + "Add", "Sub"));
+           }
+       }
+       return list;
+    }
+    
+    private JButton createJButtonFromText (String text, String actionCommand) {
+        JButton button = new JButton(text);
+        button.setActionCommand(actionCommand);
+        button.setFocusPainted(false);
         return button;
     }
     
