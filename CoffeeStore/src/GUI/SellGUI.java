@@ -1,5 +1,6 @@
 package GUI;
 
+import ApplicationHelper.ID;
 import BUS.SellBUS;
 import DTO.ClassifyDTO;
 import DTO.ProductDTO;
@@ -580,7 +581,8 @@ public final class SellGUI extends JFrame{
                 getCard().show(getpBodyMenus(), "Temp");
                 getCard().show(getpBodyMenus(), "Item");
             } else if (!e.getActionCommand().equals("")) {
-                ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), SellGUI.this.getSellBUS());
+                ///////////////////////////////////////
+                ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), getSellBUS(), ID.createDetailBillId("BL001"));
             }
         });
         return o;

@@ -37,5 +37,14 @@ public class Detail_BillBUS {
         this.setDetailBillList(this.getDetailBillDAO().readDetailBillListFromDatabase());
     }
     
-    
+    //Tra ve so luong khi truyen vao chi tiet hoa don
+    public int getQuantity(String detailBillId) {
+        int num = 0;
+        for(Detail_BillDTO detail: this.getDetailBillList()) {
+            if(detail.getDetailBillId().trim().equalsIgnoreCase(detailBillId)) {
+                return detail.getQuantity();
+            }
+        }
+        return num;
+    }
 }
