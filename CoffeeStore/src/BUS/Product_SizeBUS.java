@@ -38,6 +38,14 @@ public class Product_SizeBUS {
         this.setProductSizeList(this.getProductSizeDAO().readProductAndSizeFromDatabase());
     }
     
-    
+    //Lay gia cua san pham khi truyen vao size va productId
+    public Double getPrice(String productId, String size) {
+        for(Product_SizeDTO o: this.getProductSizeList()) {
+            if(o.getProductId().equalsIgnoreCase(productId) && o.getSize().equalsIgnoreCase(size)) {
+                return o.getPrice();
+            }
+        }
+        return 0.0;
+    }
     
 }

@@ -9,6 +9,10 @@ public class SellBUS {
    private ToppingBUS toppingBUS;
    private Product_ToppingBUS productToppingBUS;
    private StaffBUS staffBUS;
+   private BillBUS billBUS;
+   private Detail_BillBUS detailBillBUS;
+   private DetailBillToppingBUS detailBillToppingBUS;
+   private SpotBillBUS spotBillBUS;
    
    //constructor
    public SellBUS() {
@@ -19,6 +23,10 @@ public class SellBUS {
        this.toppingBUS = new ToppingBUS();
        this.productToppingBUS = new Product_ToppingBUS();
        this.staffBUS = new StaffBUS();
+       this.billBUS = new BillBUS();
+       this.detailBillBUS = new Detail_BillBUS();
+       this.detailBillToppingBUS = new DetailBillToppingBUS();
+       this.spotBillBUS = new SpotBillBUS();
    }
    
    //setter and getter
@@ -76,5 +84,37 @@ public class SellBUS {
 
     public void setStaffBUS(StaffBUS staffBUS) {
         this.staffBUS = staffBUS;
+    }
+
+    public BillBUS getBillBUS() {
+        return billBUS;
+    }
+
+    public void setBillBUS(BillBUS billBUS) {
+        this.billBUS = billBUS;
+    }
+
+    public Detail_BillBUS getDetailBillBUS() {
+        return detailBillBUS;
+    }
+
+    public void setDetailBillBUS(Detail_BillBUS detailBillBUS) {
+        this.detailBillBUS = detailBillBUS;
+    }
+
+    public DetailBillToppingBUS getDetailBillToppingBUS() {
+        return detailBillToppingBUS;
+    }
+
+    public void setDetailBillToppingBUS(DetailBillToppingBUS detailBillToppingBUS) {
+        this.detailBillToppingBUS = detailBillToppingBUS;
+    }
+
+    public SpotBillBUS getSpotBillBUS() {
+        return spotBillBUS;
+    }
+
+    public void setSpotBillBUS(SpotBillBUS spotBillBUS) {
+        this.spotBillBUS = spotBillBUS;
     }
 }

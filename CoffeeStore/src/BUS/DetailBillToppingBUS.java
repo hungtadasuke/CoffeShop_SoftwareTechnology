@@ -38,5 +38,24 @@ public class DetailBillToppingBUS {
         this.setDetailBillToppingList(this.getDetailBillToppingDAO().readDetailBillToppingListFromDB());
     }
     
+    //Tra ve so luong cua chi tiet bill_topping khi truyen vao id chi tiet bill + id topping
+    public int getQuantity(String detailBillId, String toppingId) {
+        for(BillDetail_ToppingDTO o: this.getDetailBillToppingList()) {
+            if(o.getDetailBillId().trim().equalsIgnoreCase(detailBillId) && o.getToppingId().equalsIgnoreCase(toppingId)) {
+                return o.getQuantity();
+            }
+        }
+        return 0;
+    }
     
+    //Tra ve tong gia cua cac chi tiet topping khi truyen vao id chi tiet bill
+    public Double getToTal(String detailBillId) {
+        double total = 0;
+        for(BillDetail_ToppingDTO o: this.getDetailBillToppingList()) {
+            if(o.getDetailBillId().trim().equalsIgnoreCase(detailBillId)) {
+                total += o.getPrice();
+            }
+        }
+        return total;
+    }
 }

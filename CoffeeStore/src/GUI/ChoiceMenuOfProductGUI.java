@@ -16,17 +16,18 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     JButton btnCheck, bAdd, bSub;
     JTextField tfQuantity, tfPrice;
     SellBUS sellBUS;
-    String productId;
     Vector <JRadioButton> sizeRadioButtonList;
     JCheckBox[] statusCheckBoxList;
-    Vector <JPanel> toppingPanelList;
-    int num;
+    Vector <ChoiceMenuOfToppingGUI> toppingPanelList;
+    String productId;
+    String detailBillId;
     Color BACKGROUND_COLOR = new Color(175, 136, 110);
     
     //constructor
-    public ChoiceMenuOfProductGUI(String productId, SellBUS sellBUS) {
+    public ChoiceMenuOfProductGUI(String productId, SellBUS sellBUS, String detailBillId) {
         this.setSellBUS(sellBUS);
         this.setProductId(productId);
+        this.setDetailBillId(detailBillId);
         this.setTitle("Choice Menu Of Product");
         this.init();
         this.setLocationRelativeTo(null);
@@ -218,13 +219,24 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.statusCheckBoxList = statusCheckBoxList;
     }
 
-    public Vector<JPanel> getToppingPanelList() {
+    public Vector<ChoiceMenuOfToppingGUI> getToppingPanelList() {
         return toppingPanelList;
     }
 
-    public void setToppingPanelList(Vector<JPanel> toppingPanelList) {
+    public void setToppingPanelList(Vector<ChoiceMenuOfToppingGUI> toppingPanelList) {
         this.toppingPanelList = toppingPanelList;
     }
+
+    public String getDetailBillId() {
+        return detailBillId;
+    }
+
+    public void setDetailBillId(String detailBillId) {
+        this.detailBillId = detailBillId;
+    }
+    
+    
+    
     
     //method
     private void init() {
@@ -258,7 +270,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         //Tao cac thanh phan
         this.setlHeader(new JLabel(this.getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductName()));
         this.getlHeader().setForeground(Color.WHITE);
-        this.getlHeader().setFont(new Font("Arial", Font.BOLD, 18));
+        this.getlHeader().setFont(new Font("Arial", Font.BOLD, 19));
         
         //Them cac thanh phan vao pHeader
         this.getpHeader().add(this.getlHeader());
@@ -267,31 +279,29 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     private void createpBodyPanel() {
         //Tao khung chua chung
         this.setpBody(new JPanel());
-        this.getpBody().setLayout(new BorderLayout());
+        this.getpBody().setLayout(new BorderLayout(0, 5));
         this.getpBody().setBackground(BACKGROUND_COLOR);
-        Border emtyBorder = new EmptyBorder(0, 0, 0, 0);
-        Border lineBorder = new LineBorder(Color.BLACK);
-        this.getpBody().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(lineBorder, emtyBorder), "Please Choose Drink Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 13), Color.BLACK));
+        this.getpBody().setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Please Choose Drink Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 13), Color.BLACK));
         
         //Tao phan header cua pBodyPanel
         this.setpBodyHeader(new JPanel());
         this.getpBodyHeader().setBackground(BACKGROUND_COLOR);
         this.getpBodyHeader().setLayout(new GridLayout(4, 1, 0, 5));
-        this.getpBodyHeader().setPreferredSize(new Dimension(450, 150));
+        this.getpBodyHeader().setPreferredSize(new Dimension(450, 155));
         
         //Tao pBodySize
         this.setpBodySize(new JPanel());
         this.getpBodySize().setBackground(BACKGROUND_COLOR);
         this.getpBodySize().setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0));
-        emtyBorder = new EmptyBorder(4, -5, 0, 0);
         Border matteBorder = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE);
-        this.getpBodySize().setBorder(BorderFactory.createCompoundBorder(matteBorder, emtyBorder));
+        this.getpBodySize().setBorder(BorderFactory.createCompoundBorder(matteBorder, new EmptyBorder(4, -5, 0, 0)));
         
         this.setlSize(new JLabel("Size          :           "));
         this.getlSize().setFont(new Font("Arial", Font.BOLD, 13));
         this.setSizeRadioButtonList(createSizeRadioButtonList());
         
         this.getpBodySize().add(this.getlSize());
+        this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
         for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
             this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
         }
@@ -300,13 +310,17 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setpBodyQuantity(new JPanel());
         this.getpBodyQuantity().setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         this.getpBodyQuantity().setBackground(BACKGROUND_COLOR);
-        emtyBorder = new EmptyBorder(4, 1, 0, 0);
-        this.getpBodyQuantity().setBorder(BorderFactory.createCompoundBorder(matteBorder, emtyBorder));
+        this.getpBodyQuantity().setBorder(BorderFactory.createCompoundBorder(matteBorder, new EmptyBorder(4, 1, 0, 0)));
         
         this.setlQuantity(new JLabel("Quantity  :             "));
         this.getlQuantity().setFont(new Font("Arial", Font.BOLD, 13));
         
-        this.setTfQuantity(new JTextField(num+"", 3));
+        this.getSellBUS().getDetailBillBUS().resetList();
+        if (this.getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId()) == 0)  {
+            this.setTfQuantity(new JTextField(1+"", 3));
+        } else {
+            this.setTfQuantity(new JTextField(this.getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId())+"", 3));
+        }
         this.getTfQuantity().setEditable(false);
         this.getTfQuantity().setHorizontalAlignment((int) JTextField.CENTER_ALIGNMENT);
         
@@ -320,13 +334,13 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setpBodyPrice(new JPanel());
         this.getpBodyPrice().setBackground(BACKGROUND_COLOR);
         this.getpBodyPrice().setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        emtyBorder = new EmptyBorder(4, 1, 0, 0);
-        this.getpBodyPrice().setBorder(BorderFactory.createCompoundBorder(matteBorder, emtyBorder));
+        this.getpBodyPrice().setBorder(BorderFactory.createCompoundBorder(matteBorder, new EmptyBorder(4, 1, 0, 0)));
         
         this.setlPrice(new JLabel("Price        :              "));
         this.getlPrice().setFont(new Font("Arial", Font.BOLD, 13));
-        
         this.setTfPrice(new JTextField(12));
+        this.setToppingPanelList(this.createToppingPanelList());
+        this.getTfPrice().setText((this.getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), this.getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
         this.getTfPrice().setEditable(false);
         
         this.getpBodyPrice().add(this.getlPrice());
@@ -336,8 +350,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setpBodyStatus(new JPanel());
         this.getpBodyStatus().setBackground(BACKGROUND_COLOR);
         this.getpBodyStatus().setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        emtyBorder = new EmptyBorder(4, -1, 0, 0);
-        this.getpBodyStatus().setBorder(BorderFactory.createCompoundBorder(matteBorder, emtyBorder));
+        this.getpBodyStatus().setBorder(BorderFactory.createCompoundBorder(matteBorder, new EmptyBorder(4, -1, 0, 0)));
         
         this.setlStatus(new JLabel("Status      :            "));
         this.getlStatus().setFont(new Font("Arial", Font.BOLD, 13));
@@ -346,6 +359,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
         this.getpBodyStatus().add(this.getlStatus());
         for (JCheckBox statusCheckBox: this.getStatusCheckBoxList()) {
+            statusCheckBox.setCursor(new Cursor(HAND_CURSOR));
             this.getpBodyStatus().add(statusCheckBox);
         }
         
@@ -369,25 +383,22 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setpBodyCenter(new JPanel());
         this.getpBodyCenter().setBackground(BACKGROUND_COLOR);
         this.getpBodyCenter().setLayout(new BoxLayout(this.getpBodyCenter(), BoxLayout.Y_AXIS));
-        emtyBorder = new EmptyBorder(10, 50, 10, 50);
-        lineBorder = new LineBorder(Color.WHITE);
-        this.getpBodyCenter().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(emtyBorder, lineBorder), "Topping", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
-        
-        this.setToppingPanelList(this.createToppingPanelList());
+        Border lineBorder = new LineBorder(Color.WHITE);
+        this.getpBodyCenter().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 50, 0, 50), lineBorder), "Topping", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
         
         if(this.getToppingPanelList().size() < 3) {
             this.setSize(450, 400);
-            for(JPanel toppingPanel: this.getToppingPanelList()) {
-            this.getpBodyCenter().add(toppingPanel);
+            for(ChoiceMenuOfToppingGUI toppingPanel: this.getToppingPanelList()) {
+                this.getpBodyCenter().add(toppingPanel);
             }               
         } else if (this.getToppingPanelList().size() < 5) {
             this.setSize(450, 500);
-            for(JPanel toppingPanel: this.getToppingPanelList()) {
-            this.getpBodyCenter().add(toppingPanel);
+            for(ChoiceMenuOfToppingGUI toppingPanel: this.getToppingPanelList()) {
+                this.getpBodyCenter().add(toppingPanel);
             }
         } else {
-            for(JPanel toppingPanel: this.getToppingPanelList()) {
-            this.getpBodyCenter().add(toppingPanel);
+            for(ChoiceMenuOfToppingGUI toppingPanel: this.getToppingPanelList()) {
+                this.getpBodyCenter().add(toppingPanel);
             }
         }
         
@@ -406,7 +417,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         //Tao button "check"
         this.setBtnCheck(new JButton("OK"));
         this.getBtnCheck().setPreferredSize(new Dimension(50, 40));
-        this.getBtnCheck().setFont(new Font("Arial", Font.BOLD, 20));
+        this.getBtnCheck().setFont(new Font("Arial", Font.BOLD, 19));
         this.getBtnCheck().setBackground(BACKGROUND_COLOR);
         this.getBtnCheck().setFocusPainted(false);
         this.getBtnCheck().setBorder(null);
@@ -426,7 +437,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
                getBtnCheck().setBackground(BACKGROUND_COLOR);
                getBtnCheck().setForeground(Color.WHITE);
                getBtnCheck().setBorder(null);
-               getBtnCheck().setFont(new Font("Arial", Font.BOLD, 20));
+               getBtnCheck().setFont(new Font("Arial", Font.BOLD, 19));
             }
         });
         
@@ -479,6 +490,9 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         rBtn.setBackground(BACKGROUND_COLOR);
         rBtn.setFocusPainted(false);
         rBtn.setCursor(new Cursor(HAND_CURSOR));
+        rBtn.addActionListener((ActionEvent e) -> {
+            getTfPrice().setText((this.getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText()) + "");
+        });
         return rBtn;
     }
     
@@ -489,62 +503,49 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(HAND_CURSOR));
+        button.addActionListener((ActionEvent e) -> {
+            if(e.getActionCommand().equalsIgnoreCase("quantityAdd")) {
+                getTfQuantity().setText((Integer.parseInt(getTfQuantity().getText()) + 1) + "");
+            } else if(Integer.parseInt(getTfQuantity().getText()) <= 1) {
+                getTfQuantity().setText(1 + "");
+            } else {
+                getTfQuantity().setText((Integer.parseInt(getTfQuantity().getText()) - 1) + "");
+            }
+            getTfPrice().setText((ChoiceMenuOfProductGUI.this.getSellBUS().getProductSizeBUS().getPrice(getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
+        });
         return button;
     }
-    
-    //Tao list panel tooping
-    public JPanel createToppingPanel(String toppingId, String actionCommand1, String actionCommand2) {
-        //Tao khung chua chung
-        JPanel toppingPanel = new JPanel();
-        toppingPanel.setLayout(new GridLayout(1, 2));
-        toppingPanel.setBackground(BACKGROUND_COLOR);
-        toppingPanel.setBorder(new EmptyBorder(0, 5, 2, 5));
         
-        //Them cac thanh phan vao panel topping
-        JLabel toppingName = new JLabel(this.getSellBUS().getToppingBUS().getToppingFromId(toppingId).getToppingName());
-        
-        JPanel pCenter = new JPanel();
-        pCenter.setBackground(BACKGROUND_COLOR);
-        pCenter.setLayout(new GridLayout(1, 3, 5, 0));
-        
-        JButton btnAdd = this.createJButtonFromText("+", actionCommand1);
-        
-        JButton btnSub = this.createJButtonFromText("−", actionCommand2);
-        
-        JTextField tfTopping = new JTextField("0", 5);
-        tfTopping.setEditable(false);
-        tfTopping.setHorizontalAlignment((int) JTextField.CENTER_ALIGNMENT);
-        
-        pCenter.add(btnSub);
-        pCenter.add(tfTopping);
-        pCenter.add(btnAdd);
-        
-        toppingPanel.add(toppingName);
-        toppingPanel.add(pCenter);
-        
-        return toppingPanel;
-    }
-    
-    private Vector<JPanel> createToppingPanelList() {
-       Vector<JPanel> list = new Vector<>();
+    private Vector<ChoiceMenuOfToppingGUI> createToppingPanelList() {
+       Vector<ChoiceMenuOfToppingGUI> list = new Vector<>();
        for(Product_ToppingDTO o: this.getSellBUS().getProductToppingBUS().getProductToppingList()) {
            if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
-               list.add(this.createToppingPanel(o.getToppingId(), o.getToppingId() + "Add", "Sub"));
+               list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this.getSellBUS(), this.getDetailBillId(), this.getTfPrice(), this.getTfQuantity()));
            }
        }
        return list;
     }
     
-    private JButton createJButtonFromText (String text, String actionCommand) {
-        JButton button = new JButton(text);
-        button.setActionCommand(actionCommand);
-        button.setFocusPainted(false);
-        return button;
+    private String getSizeSelected() {
+        for(JRadioButton button: this.getSizeRadioButtonList()) {
+            if(button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return "";
+    }
+    
+    private Double getToTalFromDetailToppingList() {
+        Double total = 0.0;
+        for(ChoiceMenuOfToppingGUI o: this.getToppingPanelList()) {
+            total += Double.parseDouble(o.tfQuantity.getText()) * this.getSellBUS().getToppingBUS().getToppingFromId(o.toppingId).getToppingPrice();
+        }
+        return total;
     }
     
     //main
     public static void main(String[] args) {
         SellBUS s = new SellBUS();
-        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE006", s);
+        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE001", s, "BL0011");
     }
 }
