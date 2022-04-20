@@ -3,33 +3,34 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author ThieuHoang
  */
-public class FormClassify extends JFrame {
+public class FormAccount extends JFrame {
     //khai bao cac bien 
-    private JTable classifyTable;   //cai bang loai san pham
-    private JLabel classifyLabel, infoLabel, idLabel, nameLabel, statusLabel;   //dung de hien thi cac chu nhu "CLASSIFY", "INFOR",...
-    private JTextField searchTextField, idTextField, nameTextField; // cac o de nhap "Name", "id",...
+    private JTable accountTable;   //bang account
+    private JLabel accountLabel, infoLabel, usernameLabel, passwordLabel, staffidLabel, permissionLabel;   //dung de hien thi cac chu nhu "ACCOUNT", "INFOR",...
+    private JTextField searchTextField, usernameTextField, passwordTextField, staffidTextField, permissionTextField; // cac o de nhap "username", "password",...
     private JButton searchButton, saveButton, addButton, editButton, //cac nut chuc nang
             deleteButton, logoutButton, homeButton;
-    private JRadioButton onRadioButton, offRadioButton;
     DefaultTableModel model = new DefaultTableModel();
     
-    // ham nay de viet giao dien 
+     // ham nay de viet giao dien 
     public void MainDisplay(){
         this.setTitle("Coffee Shop");
-        classifyTable = new JTable();
-        classifyLabel = new JLabel("CLASSIFY");
+        accountTable = new JTable();
+        accountLabel = new JLabel("ACCOUNT");
         infoLabel = new JLabel("INFO");
-        idLabel = new JLabel("ID:");
-        nameLabel = new JLabel("Name:");
-        statusLabel = new JLabel("Status:");
+        usernameLabel = new JLabel("Username:");
+        passwordLabel = new JLabel("Password:");
+        staffidLabel = new JLabel("StaffID:");
+        permissionLabel = new JLabel("Permission:");
         searchTextField = new JTextField();
-        idTextField = new JTextField();
-        nameTextField = new JTextField();
+        usernameTextField = new JTextField();
+        passwordTextField = new JTextField();
+        permissionTextField = new JTextField();
+        staffidTextField = new JTextField();
         searchButton = new JButton();
         saveButton = new JButton();
         addButton = new JButton();
@@ -37,16 +38,13 @@ public class FormClassify extends JFrame {
         deleteButton = new JButton();
         logoutButton = new JButton();
         homeButton = new JButton();
-        onRadioButton = new JRadioButton("On");
-        offRadioButton = new JRadioButton("Off");
         
-        classifyLabel.setBounds(615, 30,  130, 30); 
-        classifyLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        accountLabel.setBounds(615, 30,  130, 30); 
+        accountLabel.setFont(new Font("Serif", Font.BOLD, 25));
         
         homeButton.setBounds(1230,20,50, 50);
         homeButton.setIcon(new ImageIcon("Resource\\home-icon.png"));
-        homeButton.setBackground(new Color(190,148,92));
-        homeButton.setBorder(null);
+        homeButton.setBackground(new Color(149,231,231));
         
         saveButton.setBounds(1030, 560, 50, 50);
         saveButton.setIcon(new ImageIcon("Resource\\save-icon.png"));
@@ -72,35 +70,35 @@ public class FormClassify extends JFrame {
         searchButton.setIcon(new ImageIcon("Resource\\search-icon.png"));
         searchButton.setBackground(new Color(149,231,231));
         
-        classifyTable.setBounds(110,95,615,500);
-        classifyTable.setModel(model);
-        model.addColumn("ID");
-        model.addColumn("Name");
+        accountTable.setBounds(110,95,615,500);
+        accountTable.setModel(model);
+        model.addColumn("Username");
+        model.addColumn("Password");
+        model.addColumn("StaffID");
+        model.addColumn("Permission");
         
-        infoLabel.setBounds(1020, 150, 120, 25);
+        infoLabel.setBounds(1010, 150, 120, 25);
         infoLabel.setFont(new Font("Serif", Font.BOLD, 22)); 
         
-        idLabel.setBounds(850, 220, 120, 25);
-        idLabel.setFont(new Font("Serif", Font.BOLD, 22));  
+        usernameLabel.setBounds(840, 220, 120, 25);
+        usernameLabel.setFont(new Font("Serif", Font.BOLD, 22));  
         
-        nameLabel.setBounds(850, 270, 120, 25);
-        nameLabel.setFont(new Font("Serif", Font.BOLD, 22));  
+        passwordLabel.setBounds(840, 270, 120, 25);
+        passwordLabel.setFont(new Font("Serif", Font.BOLD, 22));  
         
-        statusLabel.setBounds(850, 320, 120, 25);
-        statusLabel.setFont(new Font("Serif", Font.BOLD, 22));
+        staffidLabel.setBounds(840, 320, 120, 25);
+        staffidLabel.setFont(new Font("Serif", Font.BOLD, 22));
         
-        idTextField.setBounds(950, 220, 240, 25);
-        nameTextField.setBounds(950, 270, 240, 25);
+        permissionLabel.setBounds(840, 370, 150, 25);
+        permissionLabel.setFont(new Font("Serif", Font.BOLD, 22));
         
+        usernameTextField.setBounds(960, 220, 240, 25);
+        passwordTextField.setBounds(960, 270, 240, 25);
+        staffidTextField.setBounds(960, 320, 240, 25);
+        permissionTextField.setBounds(960, 370, 240, 25);
         searchTextField.setBounds(110, 640, 545, 30);
-
-        onRadioButton.setBounds(950, 320, 50, 25);
-        offRadioButton.setBounds(950, 370, 50, 25);
-        ButtonGroup radiobuttongroup = new ButtonGroup();
-        radiobuttongroup.add(onRadioButton);
-        radiobuttongroup.add(offRadioButton);
         
-        this.add(classifyLabel);
+        this.add(accountLabel);
         this.add(homeButton);
         this.add(saveButton);
         this.add(addButton);
@@ -108,16 +106,17 @@ public class FormClassify extends JFrame {
         this.add(deleteButton);
 //        this.add(logoutButton);
         this.add(searchButton);
-        this.add(classifyTable);
+        this.add(accountTable);
         this.add(infoLabel);
-        this.add(idLabel);
-        this.add(nameLabel);
-        this.add(idTextField);
-        this.add(nameTextField);
+        this.add(usernameLabel);
+        this.add(passwordLabel);
+        this.add(usernameTextField);
+        this.add(passwordTextField);
         this.add(searchTextField);
-        this.add(onRadioButton);
-        this.add(offRadioButton);
-        this.add(statusLabel);
+        this.add(staffidLabel);
+        this.add(staffidTextField);
+        this.add(permissionLabel);
+        this.add(permissionTextField);
         this.setSize(1300,760); 
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(202, 135, 96)); //set mau cho JFrame bang bang mau RGB
@@ -125,16 +124,14 @@ public class FormClassify extends JFrame {
         this.setVisible(true);
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
     }
     
-    
-    public FormClassify(){
+     public FormAccount(){
         MainDisplay();
     }
     
     public static void main(String[] args) {
-        new FormClassify();
+        new FormAccount();
     }
-    
 }
