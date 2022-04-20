@@ -21,7 +21,7 @@ public class BillDAO {
             while(rs.next()) {
                String[] text = rs.getString("BILL_DATE").split("\\s");
                MyDate date = new MyDate(text[0]);
-               BillDTO bill = new BillDTO(rs.getString("BILL_ID"), date, rs.getDouble("BILL_TOTAL"), rs.getDouble("RECEIVED_MONEY"), rs.getDouble("EXCESS_MONEY"), rs.getBoolean("BILL_STATUS"), rs.getString("STAFF_ID"));
+               BillDTO bill = new BillDTO(rs.getString("BILL_ID"), date, rs.getDouble("BILL_TOTAL"), rs.getDouble("RECEIVED_MONEY"), rs.getDouble("EXCESS_MONEY"), rs.getBoolean("BILL_STATUS"), rs.getString("STAFF_ID"), rs.getString("BILL_TYPE"));
                billList.add(bill);
             }
 
@@ -32,11 +32,64 @@ public class BillDAO {
         return billList;
     }
     
+    //Them mot bill vao csdl
+    public void insertBill(BillDTO bill) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call INSERT_BILL(?, ?, ?, ?, ?, ?, ?, ?)}");
+                call.setString(1, bill.getBillId());
+                call.setString(2, bill.getDate().formatDB());
+                call.setDouble(3, bill.getTotal());
+                call.setDouble(4, bill.getReceivedMoney());
+                call.setDouble(5, bill.getExcessMoney());
+                call.setBoolean(6, bill.isBillStatus());
+                call.setString(7, bill.getStaffId());
+                call.setString(8, bill.getBillType());
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at insertBill method from BillDAO class!");
+            System.err.println(e);
+        }
+    }
+    
+    //Xoa mot bill ra khoi csdl
+    public void deleteBill(String billId) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call DELETE_BILL(?)}");
+                call.setString(1, billId);
+                call.executeUpdate();
+                System.out.println("Deleted!");
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at deleteBill method from BillDAO class!");
+            System.err.println(e);
+        }
+    }
+    
+    //main test
     public static void main(String[] args) {
         BillDAO o = new BillDAO();
         Vector<BillDTO> list = o.readBillListFromDatabase();
         for(BillDTO x: list) {
             System.out.println(x.getBillId() + "---" + x.getStaffId() + "--" + x.getDate().toString() + "--" + x.getTotal() + "---" + x.getReceivedMoney() + "--" + x.getExcessMoney());
         }
+        o.deleteBill("BL002");
     }
+    
 }

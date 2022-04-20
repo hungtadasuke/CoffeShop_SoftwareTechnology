@@ -21,7 +21,7 @@ public class ID {
     
     //method
     public static String createBillId() {
-        getBillBUS().reset();
+        getBillBUS().resetList();
         int Id = 1;
         String newBillId;
         for(BillDTO bill: getBillBUS().getBillList()) {
@@ -37,22 +37,24 @@ public class ID {
     }
     
     public static String createDetailBillId(String billId) {
+        return billId + createOrdinalNumber(billId);
+    }
+    
+    public static int createOrdinalNumber(String billId) {
         getDetailBillBUS().resetList();
-        int Id = 1;
-        String newDetailBillId;
+        int num = 1;
         for(Detail_BillDTO detail: getDetailBillBUS().getDetailBillList()) {
-            newDetailBillId = billId + Id;
-            if(detail.getDetailBillId().trim().equalsIgnoreCase(newDetailBillId)) {
-                Id++;
+            if(detail.getBillId().equalsIgnoreCase(billId) && detail.getOrdinalNumber() == num) {
+                num++;
+            } else if(!detail.getBillId().equalsIgnoreCase(billId)) {
             } else {
                 break;
             }
         }
-        newDetailBillId = billId + Id;
-        return newDetailBillId;
+        return num;
     }
     
     public static void main(String[] args) {
-        System.out.println(ID.createDetailBillId("BL001"));
+        System.out.println(createDetailBillId("BL001"));
     }
 }

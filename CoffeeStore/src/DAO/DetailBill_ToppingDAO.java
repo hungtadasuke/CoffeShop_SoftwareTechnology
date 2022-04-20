@@ -25,6 +25,7 @@ public class DetailBill_ToppingDAO {
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
+                System.err.println(e);
             } finally {
                 con.setAutoCommit(true);
             }
@@ -35,11 +36,38 @@ public class DetailBill_ToppingDAO {
         return detailBillToppingList;
     }
     
+    //Them chi tiet bill _ topping vao csdl
+    public void insertDetailBillTopping(BillDetail_ToppingDTO o) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call INSERT_DETAILBILL_TOPPING(?, ?, ?, ?)}");
+                call.setString(1, o.getDetailBillId());
+                call.setString(2, o.getToppingId());
+                call.setInt(3, o.getQuantity());
+                call.setDouble(4, o.getPrice());
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at insertDetailBillTopping method from DetailBill_ToppingDAO class!");
+            System.err.println(e);
+        }
+    }
+    
+    //main test
     public static void main(String[] args) {
         DetailBill_ToppingDAO o = new DetailBill_ToppingDAO();
         Vector<BillDetail_ToppingDTO> list = o.readDetailBillToppingListFromDB();
         for(BillDetail_ToppingDTO x: list) {
             System.out.println(x.getDetailBillId().trim() + "---" + x.getToppingId() + "---" + x.getQuantity() + "---" + x.getPrice());
         }
+        o.insertDetailBillTopping(new BillDetail_ToppingDTO("BL0012", "TP001", 2, 12000));
     }
 }

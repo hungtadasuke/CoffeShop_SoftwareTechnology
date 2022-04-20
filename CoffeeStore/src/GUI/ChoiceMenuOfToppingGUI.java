@@ -1,6 +1,5 @@
 package GUI;
 
-import BUS.SellBUS;
 import java.awt.*;
 import static java.awt.Frame.HAND_CURSOR;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,7 @@ public final class ChoiceMenuOfToppingGUI extends JPanel {
     
     Color BACKGROUND_COLOR = new Color(175, 136, 110);
     //constructor
-    public ChoiceMenuOfToppingGUI(String toppingId, String actionCommand1, String actionCommand2, SellBUS sellBUS, String detailBillId, JTextField Price, JTextField quantity) {
+    public ChoiceMenuOfToppingGUI(String toppingId, String actionCommand1, String actionCommand2, ChoiceMenuOfProductGUI choiceProduct) {
         this.toppingId = toppingId;
         //Tao khung chua chung
         this.setLayout(new GridLayout(1, 2));
@@ -25,20 +24,20 @@ public final class ChoiceMenuOfToppingGUI extends JPanel {
         this.setBorder(new EmptyBorder(0, 5, 2, 5));
         
         //Them cac thanh phan vao panel topping
-        this.toppingName = new JLabel(sellBUS.getToppingBUS().getToppingFromId(toppingId).getToppingName());
+        this.toppingName = new JLabel(choiceProduct.getSellGUI().getSellBUS().getToppingBUS().getToppingFromId(toppingId).getToppingName());
         
         this.pCenter = new JPanel();
         this.pCenter.setBackground(BACKGROUND_COLOR);
         this.pCenter.setLayout(new GridLayout(1, 3, 5, 0));
         
-        this.tfQuantity = new JTextField(sellBUS.getDetailBillToppingBUS().getQuantity(detailBillId, toppingId)+"", 5);
+        this.tfQuantity = new JTextField(choiceProduct.getSellGUI().getSellBUS().getDetailBillToppingBUS().getQuantity(choiceProduct.getDetailBillId(), toppingId)+"", 5);
         this.tfQuantity.setEditable(false);
         this.tfQuantity.setHorizontalAlignment((int) JTextField.CENTER_ALIGNMENT);
         
         this.btnAdd = this.createJButtonFromText("+", actionCommand1);
         this.btnAdd.addActionListener((ActionEvent e) -> {
             tfQuantity.setText(String.valueOf(Integer.parseInt(this.tfQuantity.getText()) + 1));
-            Price.setText(Double.parseDouble(Price.getText()) + sellBUS.getToppingBUS().getToppingFromId(toppingId).getToppingPrice() * Integer.parseInt(quantity.getText()) + "");
+            choiceProduct.getTfPrice().setText(Double.parseDouble(choiceProduct.getTfPrice().getText()) + choiceProduct.getSellGUI().getSellBUS().getToppingBUS().getToppingFromId(toppingId).getToppingPrice() * Integer.parseInt(choiceProduct.getTfQuantity().getText()) + "");
         });
         
         this.btnSub = this.createJButtonFromText("−", actionCommand2);
@@ -47,7 +46,7 @@ public final class ChoiceMenuOfToppingGUI extends JPanel {
                 this.tfQuantity.setText(0 + "");
             } else {
                 this.tfQuantity.setText(String.valueOf(Integer.parseInt(this.tfQuantity.getText()) - 1));
-                Price.setText(Double.parseDouble(Price.getText()) - sellBUS.getToppingBUS().getToppingFromId(toppingId).getToppingPrice() * Integer.parseInt(quantity.getText()) + "");
+                choiceProduct.getTfPrice().setText(Double.parseDouble(choiceProduct.getTfPrice().getText()) - choiceProduct.getSellGUI().getSellBUS().getToppingBUS().getToppingFromId(toppingId).getToppingPrice() * Integer.parseInt(choiceProduct.getTfQuantity().getText()) + "");
             }
         });
         

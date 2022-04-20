@@ -1,6 +1,9 @@
 package GUI;
 
-import BUS.SellBUS;
+import ApplicationHelper.MyDate;
+import DTO.BillDTO;
+import DTO.BillDetail_ToppingDTO;
+import DTO.Detail_BillDTO;
 import DTO.Product_SizeDTO;
 import DTO.Product_ToppingDTO;
 import java.awt.*;
@@ -15,17 +18,27 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     JLabel lHeader, lSize, lQuantity, lPrice, lStatus;
     JButton btnCheck, bAdd, bSub;
     JTextField tfQuantity, tfPrice;
-    SellBUS sellBUS;
     Vector <JRadioButton> sizeRadioButtonList;
     JCheckBox[] statusCheckBoxList;
     Vector <ChoiceMenuOfToppingGUI> toppingPanelList;
     String productId;
     String detailBillId;
     Color BACKGROUND_COLOR = new Color(175, 136, 110);
+    SellGUI sellGUI;
     
     //constructor
-    public ChoiceMenuOfProductGUI(String productId, SellBUS sellBUS, String detailBillId) {
-        this.setSellBUS(sellBUS);
+    public ChoiceMenuOfProductGUI(String productId, SellGUI sellGUI) {
+        this.setSellGUI(sellGUI);
+        this.setProductId(productId);
+        this.setDetailBillId("");
+        this.setTitle("Choice Menu Of Product");
+        this.init();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+    
+    public ChoiceMenuOfProductGUI(String productId, String detailBillId, SellGUI sellGUI) {
+        this.setSellGUI(sellGUI);
         this.setProductId(productId);
         this.setDetailBillId(detailBillId);
         this.setTitle("Choice Menu Of Product");
@@ -49,6 +62,14 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
 
     public void setpBody(JPanel pBody) {
         this.pBody = pBody;
+    }
+
+    public SellGUI getSellGUI() {
+        return sellGUI;
+    }
+
+    public void setSellGUI(SellGUI sellGUI) {
+        this.sellGUI = sellGUI;
     }
 
     public JPanel getpFooter() {
@@ -129,14 +150,6 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
 
     public void setTfPrice(JTextField tfPrice) {
         this.tfPrice = tfPrice;
-    }
-
-    public SellBUS getSellBUS() {
-        return sellBUS;
-    }
-
-    public void setSellBUS(SellBUS sellBUS) {
-        this.sellBUS = sellBUS;
     }
 
     public String getProductId() {
@@ -268,7 +281,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.getpHeader().setLayout(new FlowLayout());
         
         //Tao cac thanh phan
-        this.setlHeader(new JLabel(this.getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductName()));
+        this.setlHeader(new JLabel(this.getSellGUI().getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductName()));
         this.getlHeader().setForeground(Color.WHITE);
         this.getlHeader().setFont(new Font("Arial", Font.BOLD, 19));
         
@@ -304,6 +317,10 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
         for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
             this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
+            if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
+                    && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProductSize().equalsIgnoreCase(this.getSizeRadioButtonList().get(i).getActionCommand())) {
+               this.getSizeRadioButtonList().get(i).setSelected(true);
+            }
         }
         
         //Tao pBodyQuantity
@@ -315,11 +332,11 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setlQuantity(new JLabel("Quantity  :             "));
         this.getlQuantity().setFont(new Font("Arial", Font.BOLD, 13));
         
-        this.getSellBUS().getDetailBillBUS().resetList();
-        if (this.getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId()) == 0)  {
+        this.getSellGUI().getSellBUS().getDetailBillBUS().resetList();
+        if (this.getSellGUI().getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId()) == 0)  {
             this.setTfQuantity(new JTextField(1+"", 3));
         } else {
-            this.setTfQuantity(new JTextField(this.getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId())+"", 3));
+            this.setTfQuantity(new JTextField(this.getSellGUI().getSellBUS().getDetailBillBUS().getQuantity(this.getDetailBillId())+"", 3));
         }
         this.getTfQuantity().setEditable(false);
         this.getTfQuantity().setHorizontalAlignment((int) JTextField.CENTER_ALIGNMENT);
@@ -340,7 +357,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.getlPrice().setFont(new Font("Arial", Font.BOLD, 13));
         this.setTfPrice(new JTextField(12));
         this.setToppingPanelList(this.createToppingPanelList());
-        this.getTfPrice().setText((this.getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), this.getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
+        this.getTfPrice().setText((this.getSellGUI().getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), this.getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
         this.getTfPrice().setEditable(false);
         
         this.getpBodyPrice().add(this.getlPrice());
@@ -361,12 +378,16 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         for (JCheckBox statusCheckBox: this.getStatusCheckBoxList()) {
             statusCheckBox.setCursor(new Cursor(HAND_CURSOR));
             this.getpBodyStatus().add(statusCheckBox);
+            if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
+                    && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProducStatus().trim().equalsIgnoreCase(statusCheckBox.getText())) {
+               statusCheckBox.setSelected(true);
+            }
         }
         
         //Dang ki su kien cho hai nut checkBox
         if(this.getStatusCheckBoxList().length == 2) {
             this.getStatusCheckBoxList()[0].addActionListener((ActionEvent e) -> {
-                getStatusCheckBoxList()[1].setSelected(false);         
+                getStatusCheckBoxList()[1].setSelected(false);
             });
             this.getStatusCheckBoxList()[1].addActionListener((ActionEvent e) -> {
                 getStatusCheckBoxList()[0].setSelected(false);         
@@ -440,18 +461,78 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
                getBtnCheck().setFont(new Font("Arial", Font.BOLD, 19));
             }
         });
+        this.getBtnCheck().addActionListener((ActionEvent e) -> {
+            if(e.getActionCommand().equalsIgnoreCase("AddTakeAWayBill")) {
+                if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())) {
+                    this.insertBill("Take Away");
+                }
+                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill()));
+                ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().add(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size() - 1));
+                nextCardAndUpdateResult();
+                ChoiceMenuOfProductGUI.this.dispose();
+            } else if(e.getActionCommand().equalsIgnoreCase("Edit")) {
+                ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().deleteDetailBill(this.getDetailBillId());
+                insertDetailBill();
+                for(int i = 0; i < ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size(); i++) {
+                    if(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(i).getName().equalsIgnoreCase(this.getDetailBillId().trim())) {
+                        ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().remove(i);
+                        ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(i, ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.getDetailBillId()));
+                    }
+                }
+                ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().removeAll();
+                ChoiceMenuOfProductGUI.this.getSellGUI().addDetailPanelListToPOrderBody();
+                nextCardAndUpdateResult();
+                ChoiceMenuOfProductGUI.this.dispose();
+           }
+        });
         
         //Them cac thanh phan vao pFooterPanel
         this.getpFooter().add(this.getBtnCheck());
     }
     
+    private void insertBill(String billType) {
+        String billId = ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText();
+        String[] date = ChoiceMenuOfProductGUI.this.getSellGUI().getlResultDateNow().getText().split("/");
+        MyDate dateNow = new MyDate();
+        dateNow.setDay(date[0]);
+        dateNow.setMonth(date[1]);
+        dateNow.setYear(date[2]);
+        BillDTO newBill = new BillDTO(billId, dateNow, 0.00, 0.00, 0.00, false, ChoiceMenuOfProductGUI.this.getSellGUI().getStaffId(), billType);
+        ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().insertBill(newBill);
+    }
+    
+    private String insertDetailBill() {
+        String newDetailBillId = ApplicationHelper.ID.createDetailBillId(this.getSellGUI().getlResultBillId().getText());
+        String newBillId = this.getSellGUI().getlResultBillId().getText();
+        String newProductId = this.getProductId();
+        int ordinalNumber = ApplicationHelper.ID.createOrdinalNumber(this.getSellGUI().getlResultBillId().getText());
+        String size = this.getSizeSelected();
+        String status = this.getStatusSelected().toUpperCase();
+        int qty = Integer.parseInt(this.getTfQuantity().getText());
+        Double price = Double.parseDouble(this.getTfPrice().getText());
+        Detail_BillDTO detail = new Detail_BillDTO(newDetailBillId, newBillId, newProductId, ordinalNumber, size, status, qty, price);
+        this.getSellGUI().getSellBUS().getDetailBillBUS().insertDetailBill(detail);
+        insertDetailBillTopping(newDetailBillId);
+        return newDetailBillId;
+    }
+    
+    private void insertDetailBillTopping(String detailBillId) {
+        for(ChoiceMenuOfToppingGUI toppingGUI: this.getToppingPanelList()) {
+            int qty = Integer.parseInt(toppingGUI.tfQuantity.getText());
+            if(qty != 0) {
+                BillDetail_ToppingDTO detailTopping = new BillDetail_ToppingDTO(detailBillId, toppingGUI.toppingId, qty, ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getToppingBUS().getPriceFromId(toppingGUI.toppingId) * qty);
+                this.getSellGUI().getSellBUS().getDetailBillToppingBUS().insertDetailBillTopping(detailTopping);
+            }
+        }
+    }
+    
     private JCheckBox[] createStatusCheckBoxList() {
         JCheckBox[] checkBoxList = null;
-        if(this.getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("BOTH")) {
+        if(this.getSellGUI().getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("BOTH")) {
             checkBoxList = new JCheckBox[2];
             checkBoxList[0] = this.createStatusCheckBox("Hot", "Hot");
             checkBoxList[1] = this.createStatusCheckBox("Cold", "Cold");
-        } else if (this.getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("HOT")) {
+        } else if (this.getSellGUI().getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("HOT")) {
             checkBoxList = new JCheckBox[1];
             checkBoxList[0] = this.createStatusCheckBox("Hot", "Hot");
             checkBoxList[0].setSelected(true);
@@ -474,7 +555,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     private Vector<JRadioButton> createSizeRadioButtonList() {
         Vector<JRadioButton> listTemp = new Vector<>();
         ButtonGroup bg = new ButtonGroup();
-        for(Product_SizeDTO o: this.getSellBUS().getProductSizeBUS().getProductSizeList()) {
+        for(Product_SizeDTO o: this.getSellGUI().getSellBUS().getProductSizeBUS().getProductSizeList()) {
             if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                 JRadioButton rBtn = createSizeRadioButton(o.getSize(), o.getSize());
                 bg.add(rBtn);
@@ -491,7 +572,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         rBtn.setFocusPainted(false);
         rBtn.setCursor(new Cursor(HAND_CURSOR));
         rBtn.addActionListener((ActionEvent e) -> {
-            getTfPrice().setText((this.getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText()) + "");
+            getTfPrice().setText((this.getSellGUI().getSellBUS().getProductSizeBUS().getPrice(this.getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText()) + "");
         });
         return rBtn;
     }
@@ -511,16 +592,16 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
             } else {
                 getTfQuantity().setText((Integer.parseInt(getTfQuantity().getText()) - 1) + "");
             }
-            getTfPrice().setText((ChoiceMenuOfProductGUI.this.getSellBUS().getProductSizeBUS().getPrice(getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
+            getTfPrice().setText((ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getProductSizeBUS().getPrice(getProductId(), getSizeSelected()) + this.getToTalFromDetailToppingList()) * Integer.parseInt(getTfQuantity().getText())  + "");
         });
         return button;
     }
         
     private Vector<ChoiceMenuOfToppingGUI> createToppingPanelList() {
        Vector<ChoiceMenuOfToppingGUI> list = new Vector<>();
-       for(Product_ToppingDTO o: this.getSellBUS().getProductToppingBUS().getProductToppingList()) {
+       for(Product_ToppingDTO o: this.getSellGUI().getSellBUS().getProductToppingBUS().getProductToppingList()) {
            if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
-               list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this.getSellBUS(), this.getDetailBillId(), this.getTfPrice(), this.getTfQuantity()));
+               list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this));
            }
        }
        return list;
@@ -535,17 +616,33 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         return "";
     }
     
+    private String getStatusSelected() {
+        for(JCheckBox o: this.getStatusCheckBoxList()) {
+            if(o.isSelected()) {
+                return o.getText();
+            }
+        }
+        return "";
+    }
+    
     private Double getToTalFromDetailToppingList() {
         Double total = 0.0;
         for(ChoiceMenuOfToppingGUI o: this.getToppingPanelList()) {
-            total += Double.parseDouble(o.tfQuantity.getText()) * this.getSellBUS().getToppingBUS().getToppingFromId(o.toppingId).getToppingPrice();
+            total += Double.parseDouble(o.tfQuantity.getText()) * this.getSellGUI().getSellBUS().getToppingBUS().getToppingFromId(o.toppingId).getToppingPrice();
         }
         return total;
     }
     
+    private void nextCardAndUpdateResult() {
+        CardLayout card = (CardLayout) ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer().getLayout();
+        card.show(ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer(), "OrderBodyTemp");
+        card.show(ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer(), "OrderBody");
+        ChoiceMenuOfProductGUI.this.getSellGUI().getlToTalResult().setText(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().getPriceOfBill(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText()) + "");
+    }
+    
     //main
     public static void main(String[] args) {
-        SellBUS s = new SellBUS();
-        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE001", s, "BL0011");
+        SellGUI sell = new SellGUI("SF004");
+        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE001", "BL0011", sell);
     }
 }

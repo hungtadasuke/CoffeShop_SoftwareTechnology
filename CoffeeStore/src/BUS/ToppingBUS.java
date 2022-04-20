@@ -42,4 +42,14 @@ public class ToppingBUS {
         return null;
     }
     
+    //lay gia topping tu id
+    public Double getPriceFromId(String toppingId) {
+        for(ToppingDTO topping: this.getToppingList()) {
+            if(topping.getToppingId().equalsIgnoreCase(toppingId)) {
+                return topping.getToppingPrice();
+            }
+        }
+        return 0.0;
+    }
+    
 }

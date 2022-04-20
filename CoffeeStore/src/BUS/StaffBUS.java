@@ -32,4 +32,15 @@ public class StaffBUS {
         this.staffList = staffList;
     }
     
+    //method
+    //get staff from id
+    public StaffDTO getStaffFromId(String staffId) {
+        for (StaffDTO staff: this.getStaffList()) {
+            if(staff.getStaffId().equalsIgnoreCase(staffId)) {
+                return staff;
+            }
+        }
+        return null;
+    }
+    
 }

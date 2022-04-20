@@ -47,4 +47,34 @@ public class Detail_BillBUS {
         }
         return num;
     }
+    
+    //insert a detailBill
+    public void insertDetailBill(Detail_BillDTO detail) {
+        this.getDetailBillDAO().insertDetailBill(detail);
+        this.resetList();
+    }
+    
+    //get detail from detailBillId
+    public Detail_BillDTO getDetailBillFromId(String detailBillId) {
+        this.resetList();
+        for(Detail_BillDTO detail: this.getDetailBillList()) {
+            if(detail.getDetailBillId().trim().equalsIgnoreCase(detailBillId)) {
+                return detail;
+            }
+        }
+        return null;
+    }
+    
+    //delete a detail bill
+    public void deleteDetailBill(String detailBillId) {
+        this.getDetailBillDAO().deleteDetailBill(detailBillId);
+        this.resetList();
+    }
+    
+    
+    //main test
+    public static void main(String[] args) {
+        Detail_BillBUS detail = new Detail_BillBUS();
+        System.out.println(detail.getDetailBillFromId("BL0041").getUnitPrice());
+    }
 }

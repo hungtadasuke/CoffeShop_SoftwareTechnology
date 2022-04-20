@@ -58,4 +58,30 @@ public class DetailBillToppingBUS {
         }
         return total;
     }
+    
+    //insert ct topping
+    public void insertDetailBillTopping(BillDetail_ToppingDTO detailTopping) {
+        this.getDetailBillToppingDAO().insertDetailBillTopping(detailTopping);
+        this.reset();
+    }
+    
+    //get detailTopping list from detailBillId
+    public Vector<BillDetail_ToppingDTO> getDetailToppingList(String detailBillId) {
+        this.reset();
+        Vector<BillDetail_ToppingDTO> detailToppingList = new Vector<>();
+        for(BillDetail_ToppingDTO detailTopping: this.getDetailBillToppingList()) {
+            if(detailTopping.getDetailBillId().trim().equalsIgnoreCase(detailBillId)) {
+                detailToppingList.add(detailTopping);
+            }
+        }
+        return detailToppingList;
+    }
+    
+    public static void main(String[] args) {
+        DetailBillToppingBUS o = new DetailBillToppingBUS();
+        Vector<BillDetail_ToppingDTO> list = o.getDetailToppingList("BL004");
+        for(BillDetail_ToppingDTO b: list) {
+            System.out.println(b.getDetailBillId() + "--" + b.getToppingId() + "--" + b.getQuantity() + "--" + b.getPrice());
+        }
+    }
 }

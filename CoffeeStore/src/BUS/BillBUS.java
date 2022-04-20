@@ -33,8 +33,41 @@ public class BillBUS {
     }
     
     //method
-    public void reset() {
+    //reset list
+    public void resetList() {
         this.setBillList(this.billDAO.readBillListFromDatabase());
+    }
+    
+    //them mot bill moi
+    public void insertBill(BillDTO bill) {
+        this.getBillDAO().insertBill(bill);
+        this.setBillList(this.getBillDAO().readBillListFromDatabase());
+    }
+    
+    public boolean checkExists(String billId) {
+        this.resetList();
+        for(BillDTO bill: this.getBillList()) {
+            if(bill.getBillId().equalsIgnoreCase(billId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    //return ve gia cua mot bill khi truyen vao mabill
+    public Double getPriceOfBill(String billId) {
+        this.resetList();
+        for(BillDTO bill: this.getBillList()) {
+            if(bill.getBillId().equalsIgnoreCase(billId)) {
+                return bill.getTotal();
+            }
+        }
+        return 0.0;
+    }
+    
+    public static void main(String[] args) {
+        BillBUS o = new BillBUS();
+        System.out.println(o.checkExists("BL003"));
     }
     
     
