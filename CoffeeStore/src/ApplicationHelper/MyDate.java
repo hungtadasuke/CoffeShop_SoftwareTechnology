@@ -65,4 +65,13 @@ public class MyDate {
         return this.day+"/"+this.month+"/"+this.year;
     }
     
+    public String formatDB() {
+        return this.year + "/" + this.month + "/" + this.day;
+    }
+    
+    public static String format(String date) {
+        String[] text = date.split("/");
+        return text[2] + "-" + text[1] + "-" + text[0];
+    }
+    
 }

@@ -11,9 +11,10 @@ public class BillDTO {
     private Double excessMoney;
     private boolean billStatus;
     private String staffId;
+    private String billType;
     
     //constructor
-    public BillDTO(String billId, MyDate date, Double total, Double receivedMoney, Double excessMoney, boolean billStatus, String staffId) {
+    public BillDTO(String billId, MyDate date, Double total, Double receivedMoney, Double excessMoney, boolean billStatus, String staffId, String billType) {
         this.billId = billId;
         this.date = date;
         this.total = total;
@@ -21,6 +22,7 @@ public class BillDTO {
         this.excessMoney = excessMoney;
         this.billStatus = billStatus;
         this.staffId = staffId;
+        this.billType = billType;
     }
     
     
@@ -79,5 +81,13 @@ public class BillDTO {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getBillType() {
+        return billType;
+    }
+
+    public void setBillType(String billType) {
+        this.billType = billType;
     }
 }

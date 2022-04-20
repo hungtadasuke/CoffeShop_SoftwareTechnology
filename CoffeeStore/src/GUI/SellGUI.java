@@ -1,7 +1,9 @@
 package GUI;
 
 import ApplicationHelper.ID;
+import ApplicationHelper.MyDate;
 import BUS.SellBUS;
+import DTO.BillDetail_ToppingDTO;
 import DTO.ClassifyDTO;
 import DTO.ProductDTO;
 import DTO.TableDTO;
@@ -9,56 +11,168 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.border.*;
 
 public final class SellGUI extends JFrame{
     //attribute
-    private JPanel pOrderInfo, pOderHeader, pOrderBody, pOrderFooter,
+    private JPanel pOrderInfo, pOrderHeader, pOrderBodyContainer, pOrderBody, pOrderBodyTemp, pOrderFooter,
                    pMenus, pHeaderMenus, pBodyMenus, pScrossBar1, pWestSrcossBar1, pClassifyMenu, pSrossBar2, pTable, pItemMenu, pTemp;
     
-    private JScrollPane sOrderBody, sItemMenu, sTemp;
+    private JScrollPane sOrderBody, sOrderBodyTemp, sItemMenu, sTemp;
     
     private ArrayList<JButton> buttonList;
     
-    private ArrayList<JPanel> panelList;
+    private ArrayList<JPanel> panelList, detailPanelList;
     
-    private JButton bNew, bHome, bReset, bSearch;
+    private JButton bNew, bHome, bReset, bSearch, bOk;
     
-    private JLabel lOrder;
+    private JLabel lOrder, lBillId, lResultBillId, lDateNow, lResultDateNow, lStaffId, lResultStaffId, lTableId, lResultTableId, lTotal, lReceived, lExcess, lToTalResult, lExcessResult;
     
     private CardLayout card;
     
-    private JTextField tfSearch;
+    private JTextField tfSearch, tfReceived;
     
     private SellBUS sellBUS;
+    
+    String billID;
+    
+    String staffId;
     
     Color BROWN_COLOR = new Color(145, 91, 54);
     Color BACKGROUND_COLOR = new Color(234, 231, 214);
     Color HOVER_COLOR = new Color(149, 231, 231);
     Color BUTTON_COLOR = new Color(239, 228, 200);
+    Color defaultColor = (Color) this.getBackground();
     
     //constructor
-    public SellGUI(String title) {
-        this.setTitle(title);
+    public SellGUI(String staffId) {
+        this.setStaffId(staffId);
         this.init();
         this.setVisible(true);
     }
-    
+
     //setter and getter
+    public JLabel getlTableId() {
+        return lTableId;
+    }
+
+    public void setlTableId(JLabel lTableId) {
+        this.lTableId = lTableId;
+    }
+
+    public ArrayList<JPanel> getDetailPanelList() {
+        return detailPanelList;
+    }
+
+    public void setDetailPanelList(ArrayList<JPanel> detailPanelList) {
+        this.detailPanelList = detailPanelList;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+    
+    public void setStaffId(String staffId) {    
+        this.staffId = staffId;
+    }
+
+    public JScrollPane getsOrderBodyTemp() {
+        return sOrderBodyTemp;
+    }
+
+    public void setsOrderBodyTemp(JScrollPane sOrderBodyTemp) {
+        this.sOrderBodyTemp = sOrderBodyTemp;
+    }
+
+    public JPanel getpOrderBodyContainer() {
+        return pOrderBodyContainer;
+    }
+
+    public void setpOrderBodyContainer(JPanel pOrderBodyContainer) {
+        this.pOrderBodyContainer = pOrderBodyContainer;
+    }
+
+    public JPanel getpOrderBodyTemp() {
+        return pOrderBodyTemp;
+    }
+
+    public void setpOrderBodyTemp(JPanel pOrderBodyTemp) {
+        this.pOrderBodyTemp = pOrderBodyTemp;
+    }
+    
     public JPanel getpOrderInfo() {
         return pOrderInfo;
+    }
+
+    public JTextField getTfReceived() {
+        return tfReceived;
+    }
+
+    public JLabel getlResultBillId() {
+        return lResultBillId;
+    }
+
+    public void setlResultBillId(JLabel lResultBillId) {
+        this.lResultBillId = lResultBillId;
+    }
+
+    public JLabel getlResultDateNow() {
+        return lResultDateNow;
+    }
+
+    public void setlResultDateNow(JLabel lResultDateNow) {
+        this.lResultDateNow = lResultDateNow;
+    }
+
+    public JLabel getlResultStaffId() {
+        return lResultStaffId;
+    }
+
+    public void setlResultStaffId(JLabel lResultStaffId) {
+        this.lResultStaffId = lResultStaffId;
+    }
+
+    public JLabel getlResultTableId() {
+        return lResultTableId;
+    }
+
+    public void setlResultTableId(JLabel lResultTableId) {
+        this.lResultTableId = lResultTableId;
+    }
+
+    public JLabel getlToTalResult() {
+        return lToTalResult;
+    }
+
+    public void setlToTalResult(JLabel lToTalResult) {
+        this.lToTalResult = lToTalResult;
+    }
+
+    public JLabel getlExcessResult() {
+        return lExcessResult;
+    }
+
+    public void setlExcessResult(JLabel lExcessResult) {
+        this.lExcessResult = lExcessResult;
+    }
+    
+    
+
+    public void setTfReceived(JTextField tfReceived) {
+        this.tfReceived = tfReceived;
     }
 
     public void setpOrderInfo(JPanel pOrderInfo) {
         this.pOrderInfo = pOrderInfo;
     }
 
-    public JPanel getpOderHeader() {
-        return pOderHeader;
+    public JPanel getpOrderHeader() {
+        return pOrderHeader;
     }
 
-    public void setpOderHeader(JPanel pOderHeader) {
-        this.pOderHeader = pOderHeader;
+    public void setpOrderHeader(JPanel pOrderHeader) {
+        this.pOrderHeader = pOrderHeader;
     }
 
     public JPanel getpOrderBody() {
@@ -71,6 +185,14 @@ public final class SellGUI extends JFrame{
 
     public JPanel getpOrderFooter() {
         return pOrderFooter;
+    }
+
+    public String getBillID() {
+        return billID;
+    }
+
+    public void setBillID(String billID) {
+        this.billID = billID;
     }
 
     public void setpOrderFooter(JPanel pOrderFooter) {
@@ -163,6 +285,14 @@ public final class SellGUI extends JFrame{
 
     public void setlOrder(JLabel lOrder) {
         this.lOrder = lOrder;
+    }
+
+    public JButton getbOk() {
+        return bOk;
+    }
+
+    public void setbOk(JButton bOk) {
+        this.bOk = bOk;
     }
 
     public void setCard(CardLayout card) {
@@ -260,9 +390,59 @@ public final class SellGUI extends JFrame{
     public void setPanelList(ArrayList<JPanel> panelList) {
         this.panelList = panelList;
     }
+
+    public JLabel getlBillId() {
+        return lBillId;
+    }
+
+    public void setlBillId(JLabel lBillId) {
+        this.lBillId = lBillId;
+    }
+
+    public JLabel getlDateNow() {
+        return lDateNow;
+    }
+
+    public void setlDateNow(JLabel lDateNow) {
+        this.lDateNow = lDateNow;
+    }
+
+    public JLabel getlStaffId() {
+        return lStaffId;
+    }
+
+    public void setlStaffId(JLabel lStaffId) {
+        this.lStaffId = lStaffId;
+    }
+
+    public JLabel getlTotal() {
+        return lTotal;
+    }
+
+    public void setlTotal(JLabel lTotal) {
+        this.lTotal = lTotal;
+    }
+
+    public JLabel getlReceived() {
+        return lReceived;
+    }
+
+    public void setlReceived(JLabel lReceived) {
+        this.lReceived = lReceived;
+    }
+
+    public JLabel getlExcess() {
+        return lExcess;
+    }
+
+    public void setlExcess(JLabel lExcess) {
+        this.lExcess = lExcess;
+    }
     
     //method
     private void init() {
+        this.setDetailPanelList(new ArrayList<>());
+        this.setSellBUS(new SellBUS());
         //Tao cua so ung dung
         this.createJFrame();
         
@@ -303,27 +483,161 @@ public final class SellGUI extends JFrame{
         this.getpOrderInfo().setLayout(new BorderLayout());
         
         //Header
-        this.setpOderHeader(new JPanel());
-        this.getpOderHeader().setPreferredSize(new Dimension(420, 80));
-        this.getpOderHeader().setBackground(new Color(229, 167, 123));
-        this.getpOderHeader().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        this.setpOrderHeader(new JPanel());
+        this.getpOrderHeader().setPreferredSize(new Dimension(420, 100));
+        this.getpOrderHeader().setBackground(new Color(229, 167, 123));
+        this.getpOrderHeader().setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(2, 10, 2, 2)));
+        this.getpOrderHeader().setLayout(new GridLayout(4, 1, 5, 5));
+        
+        //Tao JLabel lBIllID
+        this.setlBillId(this.createJLabelForOrder("Order  : ", Color.BLACK));
+        this.setBillID(ID.createBillId());
+        this.setlResultBillId(this.createJLabelForOrder(this.getBillID(), Color.BLACK));
+        
+        JPanel billTemp = new JPanel();
+        billTemp.setLayout(new BorderLayout());
+        billTemp.add(this.getlBillId(), BorderLayout.WEST);
+        billTemp.add(this.getlResultBillId(), BorderLayout.CENTER);
+        billTemp.setBackground(new Color(229, 167, 123));
+        
+        //Tao JLabel lDateNow
+        MyDate dateNow = new MyDate();
+        dateNow.getDateNow();
+        this.setlDateNow(this.createJLabelForOrder("Date    : ", Color.BLACK));
+        this.setlResultDateNow(this.createJLabelForOrder(dateNow.toString(), Color.BLACK));
+        
+        
+        JPanel dateTemp = new JPanel();
+        dateTemp.setLayout(new BorderLayout());
+        dateTemp.add(this.getlDateNow(), BorderLayout.WEST);
+        dateTemp.add(this.getlResultDateNow(), BorderLayout.CENTER);
+        dateTemp.setBackground(new Color(229, 167, 123));
+        
+        //Tao JLabel StaffName
+        this.setlStaffId(this.createJLabelForOrder("Staff    : ", Color.BLACK));
+        this.setlResultStaffId(this.createJLabelForOrder(this.getSellBUS().getStaffBUS().getStaffFromId(this.getStaffId()).getStaffName(), Color.BLACK));
+        
+        JPanel staffTemp = new JPanel();
+        staffTemp.setLayout(new BorderLayout());
+        staffTemp.add(this.getlStaffId(), BorderLayout.WEST);
+        staffTemp.add(this.getlResultStaffId(), BorderLayout.CENTER);
+        staffTemp.setBackground(new Color(229, 167, 123));
+        
+        //Tao JLabel TableId
+        this.setlTableId(this.createJLabelForOrder("", Color.BLACK));
+        this.setlResultTableId(this.createJLabelForOrder("", Color.BLACK));
+        
+        JPanel tableTemp = new JPanel();
+        tableTemp.setLayout(new BorderLayout());
+        tableTemp.add(this.getlTableId(), BorderLayout.WEST);
+        tableTemp.add(this.getlResultTableId(), BorderLayout.CENTER);
+        tableTemp.setBackground(new Color(229, 167, 123));
+        
+        //Them cac thanh phan vao Header
+        this.getpOrderHeader().add(billTemp);
+        this.getpOrderHeader().add(dateTemp);
+        this.getpOrderHeader().add(staffTemp);
+        this.getpOrderHeader().add(tableTemp);
         
         //Body
         this.setpOrderBody(new JPanel());
         this.getpOrderBody().setPreferredSize(new Dimension(400, 5000));
         this.getpOrderBody().setBackground(BACKGROUND_COLOR);
-        this.getpOrderBody().setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.getpOrderBody().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.setsOrderBody(new JScrollPane(this.getpOrderBody(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-       
+        
+        this.setpOrderBodyTemp(new JPanel());
+        this.getpOrderBodyTemp().setPreferredSize(new Dimension(400, JPanel.HEIGHT));
+        this.getpOrderBodyTemp().setBackground(BACKGROUND_COLOR);
+        this.setsOrderBodyTemp(new JScrollPane(this.getpOrderBodyTemp(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+        
+        this.setpOrderBodyContainer(new JPanel());
+        this.getpOrderBodyContainer().setLayout(new CardLayout());
+        
+        this.getpOrderBodyContainer().add(this.getsOrderBodyTemp(), "OrderBodyTemp");
+        this.getpOrderBodyContainer().add(this.getsOrderBody(), "OrderBody");
+        
         //Footer
         this.setpOrderFooter(new JPanel());
-        this.getpOrderFooter().setPreferredSize(new Dimension(400, 220));
+        this.getpOrderFooter().setPreferredSize(new Dimension(400, 150));
         this.getpOrderFooter().setBackground(BROWN_COLOR);
-        this.getpOrderFooter().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        this.getpOrderFooter().setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(2, 10, 10, 2)));
+        this.getpOrderFooter().setLayout(new GridLayout(3, 3, 5, 5));
+        
+        //Tao phan JLabel total
+        this.setlTotal(this.createJLabelForOrder("Total:", Color.WHITE));
+        
+        //Tao JLabel lTotalResult
+        this.setlToTalResult(this.createJLabelForOrder("0.00", Color.WHITE));
+        
+        //Tao phan JLabel received
+        this.setlReceived(this.createJLabelForOrder("Received:", Color.WHITE));
+        
+        //Tao panel chua JTextField va tfReceived
+        JPanel panelReceived = new JPanel();
+        panelReceived.setLayout(new BorderLayout(2, 2));
+        panelReceived.setBackground(Color.LIGHT_GRAY);
+        
+        //Tao JTextField tfReceived;
+        this.setTfReceived(new JTextField(10));
+        this.getTfReceived().setFont(new Font("Arial", Font.BOLD, 15));
+        this.getTfReceived().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, Color.BLACK));
+        this.getTfReceived().setCursor(new Cursor(TEXT_CURSOR));
+        this.getTfReceived().setBackground(new Color(235, 238, 236));
+        
+        //Tao button ok
+        this.setbOk(new JButton("OK"));
+        this.getbOk().setPreferredSize(new Dimension(50, 50));
+        this.getbOk().setFocusPainted(false);
+        this.getbOk().setCursor(new Cursor(HAND_CURSOR));
+        this.getbOk().setBorder(BorderFactory.createLoweredBevelBorder());
+        getbOk().setFont(new Font("Arial", Font.BOLD, 15));
+        this.getbOk().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                getbOk().setBackground(HOVER_COLOR);
+                getbOk().setFont(new Font("Arial", Font.BOLD, 18));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                getbOk().setBackground(defaultColor);
+                getbOk().setFont(new Font("Arial", Font.BOLD, 15));
+            }
+        });
+        this.getbOk().addActionListener((ActionEvent e) -> {
+            if(Double.parseDouble(getlToTalResult().getText()) != 0 && !getTfReceived().getText().equals("")) {
+                if (Double.parseDouble(getTfReceived().getText()) < Double.parseDouble(getlToTalResult().getText())) {
+                    JOptionPane.showMessageDialog(SellGUI.this, "Invalid Received Money! Please Check Again!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Double excess = Double.parseDouble(getTfReceived().getText()) - Double.parseDouble(getlToTalResult().getText());
+                    getlExcessResult().setText(excess + "");
+                }
+            }
+        });
+        
+        //Them cac thanh phan vao panelReceived
+        panelReceived.add(this.getbOk(), BorderLayout.EAST);
+        panelReceived.add(this.getTfReceived(), BorderLayout.WEST);
+        
+        
+        //Tao phan JLabel excess
+        this.setlExcess(this.createJLabelForOrder("Excess Cash:", Color.WHITE));
+        
+        //Tao JLabel lExcessResult
+        this.setlExcessResult(this.createJLabelForOrder("0.00", Color.WHITE));
+                
+        //Them cac thanh phan vao footer
+        this.getpOrderFooter().add(this.getlTotal());
+        this.getpOrderFooter().add(this.getlToTalResult());
+        this.getpOrderFooter().add(this.getlReceived());
+        this.getpOrderFooter().add(panelReceived);
+        this.getpOrderFooter().add(this.getlExcess());
+        this.getpOrderFooter().add(this.getlExcessResult());
         
         //Them cac thanh phan vao panel pOderInfo
-        this.getpOrderInfo().add(this.getpOderHeader(), BorderLayout.NORTH);
-        this.getpOrderInfo().add(this.getsOrderBody(), BorderLayout.CENTER);
+        this.getpOrderInfo().add(this.getpOrderHeader(), BorderLayout.NORTH);
+        this.getpOrderInfo().add(this.getpOrderBodyContainer(), BorderLayout.CENTER);
         this.getpOrderInfo().add(this.getpOrderFooter(), BorderLayout.SOUTH);
     }
     
@@ -442,7 +756,6 @@ public final class SellGUI extends JFrame{
         //hien thi menu classify
         this.setButtonList(new ArrayList<>());
         this.setPanelList(new ArrayList<>());
-        this.setSellBUS(new SellBUS());
         this.createClassifyButtonList();
         this.addComponentsInButtonListToJPanel(this.getButtonList(), this.getpClassifyMenu());
 
@@ -451,7 +764,7 @@ public final class SellGUI extends JFrame{
         this.getpScrossBar2().setPreferredSize(new Dimension(JFrame.MAXIMIZED_HORIZ, 40));
         this.getpScrossBar2().setBackground(BROWN_COLOR);
         Border matteBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK);
-        Border emptyBorder = BorderFactory.createEmptyBorder(0, 180, 0, 0);
+        Border emptyBorder = BorderFactory.createEmptyBorder(0, 170, 0, 0);
         this.getpScrossBar2().setBorder(BorderFactory.createCompoundBorder(matteBorder, emptyBorder));
         this.getpScrossBar2().setLayout(new BorderLayout());
         
@@ -459,7 +772,7 @@ public final class SellGUI extends JFrame{
         this.setlOrder(new JLabel("Order"));
         this.getlOrder().setFont(new Font("Arial", Font.ITALIC, 24));
         this.getlOrder().setForeground(Color.BLACK);
-        this.getlOrder().setPreferredSize(new Dimension(200, 40));
+        this.getlOrder().setPreferredSize(new Dimension(220, 40));
         
         //set jtextfield search
         this.setTfSearch(new JTextField("search product here"));
@@ -581,8 +894,8 @@ public final class SellGUI extends JFrame{
                 getCard().show(getpBodyMenus(), "Temp");
                 getCard().show(getpBodyMenus(), "Item");
             } else if (!e.getActionCommand().equals("")) {
-                ///////////////////////////////////////
-                ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), getSellBUS(), ID.createDetailBillId("BL001"));
+                ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), this);
+                choiceMenu.getBtnCheck().setActionCommand("AddTakeAWayBill");
             }
         });
         return o;
@@ -607,6 +920,21 @@ public final class SellGUI extends JFrame{
             public void mouseExited(MouseEvent e) {
                 o.setFont(new Font("Arial", Font.BOLD, 17));
             }
+        });
+        o.addActionListener((ActionEvent e) -> {
+            String billId = this.getlResultBillId().getText();
+            Double received, excess;
+            if(this.getTfReceived().getText().equals("")) {
+                received = 0.0;
+                excess = 0.0;
+            } else {
+                received = Double.parseDouble(this.getTfReceived().getText());
+                excess = Double.parseDouble(this.getlExcessResult().getText());
+            }
+            
+            this.getSellBUS().getBillBUS().updateBill(billId, true, received, excess);
+            int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
+            
         });
         return o;
     }
@@ -729,10 +1057,154 @@ public final class SellGUI extends JFrame{
             panel.add(o);
         }
     }
+    
+    private JLabel createJLabelForOrder(String text, Color color) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 15));
+        label.setForeground(color);
+        return label;
+    }
+    
+    public JPanel createDetailBillPanel(String detailBillId) {
+        this.getSellBUS().getDetailBillBUS().resetList();
+        JPanel detailPanel = new JPanel();
+        detailPanel.setBackground(new Color(208, 187, 173));
+        detailPanel.setLayout(new BorderLayout());
+        detailPanel.setName(detailBillId.trim());
+        detailPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        detailPanel.setCursor(new Cursor(HAND_CURSOR));
+        detailPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JPanel newDetail = (JPanel) e.getSource();
+                ChoiceMenuOfProductGUI edit = new ChoiceMenuOfProductGUI(getSellBUS().getDetailBillBUS().getDetailBillFromId(newDetail.getName()).getProductId(), newDetail.getName(), SellGUI.this);
+                edit.getBtnCheck().setActionCommand("Edit");
+            }
+            
+        });
+        
+        //tao nut xoa chi tiet hoa don
+        JButton delete = new JButton(new ImageIcon("Resource\\tp_minus.png"));
+        delete.setPreferredSize(new Dimension(20, JPanel.HEIGHT));
+        delete.setBackground(Color.LIGHT_GRAY);
+        delete.setActionCommand(detailBillId);
+        delete.setFocusPainted(false);
+        delete.setBorder(BorderFactory.createLoweredBevelBorder());
+        delete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JButton button = (JButton) e.getSource();
+                button.setBackground(new Color(210, 210, 209));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                JButton button = (JButton) e.getSource();
+                button.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        delete.addActionListener((ActionEvent e) -> {
+            this.getSellBUS().getDetailBillBUS().deleteDetailBill(detailBillId);
+            for(JPanel detail: getDetailPanelList()) {
+                if(detail.getName().equalsIgnoreCase(detailBillId)) {
+                    getDetailPanelList().remove(detail);
+                    break;
+                }
+            }
+            this.getpOrderBody().removeAll();
+            this.addDetailPanelListToPOrderBody();
+            CardLayout cardNew = (CardLayout) this.getpOrderBodyContainer().getLayout();
+            cardNew.show(this.getpOrderBodyContainer(), "OrderBodyTemp");
+            cardNew.show(this.getpOrderBodyContainer(), "OrderBody");
+            this.getlToTalResult().setText(this.getSellBUS().getBillBUS().getPriceOfBill(this.getlResultBillId().getText()) + "");
+        });
+        
+        //Tao panel dang box layout de hien thi thong tin
+        JPanel pWest = new JPanel();
+        pWest.setLayout(new BoxLayout(pWest, BoxLayout.Y_AXIS));
+        pWest.setPreferredSize(new Dimension(JPanel.WIDTH, JPanel.HEIGHT));
+        pWest.setBackground(new Color(208, 187, 173));
+        pWest.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        //Add cac thanh phan vao detailPanel
+        detailPanel.add(delete, BorderLayout.EAST);
+        detailPanel.add(pWest, BorderLayout.CENTER);
+        
+        //Add product name + qty + price
+        JPanel pHeaderWest = new JPanel();
+        pHeaderWest.setLayout(new BorderLayout());
+        pHeaderWest.setBackground(new Color(208, 187, 173));
+        
+        JLabel jProductName = new JLabel(this.getSellBUS().getProductBUS().getProductFromId(this.getSellBUS().getDetailBillBUS().getDetailBillFromId(detailBillId).getProductId()).getProductName());
+        jProductName.setFont(new Font("Arial", Font.BOLD, 15));
+        jProductName.setPreferredSize(new Dimension(220, JPanel.HEIGHT));
+        
+        JLabel jQty = new JLabel("X " + this.getSellBUS().getDetailBillBUS().getQuantity(detailBillId));
+        jQty.setFont(new Font("Arial", Font.BOLD, 15));
+        
+        JLabel jTotalPrice = new JLabel("VND" + this.getSellBUS().getDetailBillBUS().getDetailBillFromId(detailBillId).getUnitPrice());
+        jTotalPrice.setFont(new Font("Arial", Font.BOLD, 15));
+        jTotalPrice.setPreferredSize(new Dimension(100, JPanel.HEIGHT));
+        
+        pHeaderWest.add(jProductName, BorderLayout.WEST);
+        pHeaderWest.add(jQty, BorderLayout.CENTER);
+        pHeaderWest.add(jTotalPrice, BorderLayout.EAST);
+        
+        
+        pWest.add(pHeaderWest);
+        
+        //Add product size + status
+        JPanel pSizeAndStatus = new JPanel();
+        pSizeAndStatus.setLayout(new GridLayout(1, 2));
+        pSizeAndStatus.setBackground(new Color(208, 187, 173));
+        
+        JLabel jSize = new JLabel("─ Size: " + this.getSellBUS().getDetailBillBUS().getDetailBillFromId(detailBillId).getProductSize());
+        JLabel jStatus = new JLabel("─ Status: " + this.getSellBUS().getDetailBillBUS().getDetailBillFromId(detailBillId).getProducStatus());
+        
+        pSizeAndStatus.add(jSize);
+        pSizeAndStatus.add(jStatus);
+        
+        pWest.add(pSizeAndStatus);
+        
+        Vector<BillDetail_ToppingDTO> detailToppingList = this.getSellBUS().getDetailBillToppingBUS().getDetailToppingList(detailBillId);
+        detailPanel.setPreferredSize(new Dimension(400, (detailToppingList.size() + 2) * 25));
+        
+        if(!detailToppingList.isEmpty()) {
+            for(BillDetail_ToppingDTO detailTopping: detailToppingList) {
+                JPanel pDetailTopping = new JPanel();
+                pDetailTopping.setBackground(new Color(208, 187, 173));
+                pDetailTopping.setLayout(new BorderLayout());
+                
+                //Tao JLabel Topping name
+                JLabel lToppingName = new JLabel("─ " + this.getSellBUS().getToppingBUS().getToppingFromId(detailTopping.getToppingId()).getToppingName());
+                lToppingName.setPreferredSize(new Dimension(220, JPanel.HEIGHT));
+                //Tao JLabel topping qty
+                JLabel lToppingQty = new JLabel("X " + detailTopping.getQuantity());
+                
+                //Tao JLabel detailTopping price
+                JLabel lDetailToppingPrice = new JLabel("VND" + detailTopping.getPrice());
+                lDetailToppingPrice.setPreferredSize(new Dimension(100, JPanel.HEIGHT));
+                
+                pDetailTopping.add(lToppingName, BorderLayout.WEST);
+                pDetailTopping.add(lToppingQty, BorderLayout.CENTER);
+                pDetailTopping.add(lDetailToppingPrice, BorderLayout.EAST);
+                
+                pWest.add(pDetailTopping);
+            }
+        }
+        
+        return detailPanel;
+    }
+    
+    public void addDetailPanelListToPOrderBody() {
+        for(JPanel detail: this.getDetailPanelList()) {
+            this.getpOrderBody().add(detail);
+        }
+    }
         
     //main
     public static void main (String[] args) {
-        SellGUI gui = new SellGUI("Sell Form");
+        SellGUI gui = new SellGUI("SF005");
     }
     
 }

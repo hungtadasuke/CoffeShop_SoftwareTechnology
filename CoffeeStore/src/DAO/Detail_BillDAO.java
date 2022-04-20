@@ -25,6 +25,7 @@ public class Detail_BillDAO {
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
+                System.err.println(e);
             } finally {
                 con.setAutoCommit(true);
             }
@@ -34,13 +35,67 @@ public class Detail_BillDAO {
         }
         return detailBillList;
     }
+    //Them mot chi tiet bill vao csdl
+    public void insertDetailBill(Detail_BillDTO detailBill) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call INSERT_DETAIL_BILL(?, ?, ?, ?, ?, ?, ?, ?)}");
+                call.setString(1, detailBill.getDetailBillId());
+                call.setString(2, detailBill.getBillId());
+                call.setString(3, detailBill.getProductId());
+                call.setInt(4, detailBill.getOrdinalNumber());
+                call.setDouble(5, detailBill.getUnitPrice());
+                call.setString(6, detailBill.getProductSize());
+                call.setString(7, detailBill.getProducStatus());
+                call.setInt(8, detailBill.getQuantity());
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at insertDetailBill method from Detail_BillDAO class!");
+            System.err.println(e);
+        }
+    }
     
+    //Xoa mot chi tiet bill ra khoi database
+    public void deleteDetailBill(String detailBillId) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call DELETE_DETAIL_BILL(?)}");
+                call.setString(1, detailBillId);
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at deleteDetailBill method from Detail_BillDAO class!");
+            System.err.println(e);
+        }
+    }
+    
+    
+    
+    //main test
     public static void main(String[] args) {
         Detail_BillDAO o = new Detail_BillDAO();
         Vector<Detail_BillDTO> list = o.readDetailBillListFromDatabase();
         for(Detail_BillDTO x: list) {
             System.out.println(x.getBillId() + "--" + x.getDetailBillId().trim() + "--" + x.getOrdinalNumber()+ "--" + x.getProductSize()+ "--" + x.getProducStatus()+ "--" + x.getQuantity() + "--" + x.getUnitPrice());
         }
+        o.deleteDetailBill("BL0013");
     }
     
     

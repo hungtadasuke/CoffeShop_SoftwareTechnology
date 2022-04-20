@@ -22,7 +22,9 @@ public class Detail_BillDTO {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-    
+
+    public Detail_BillDTO() {
+    }
     
     //setter and getter
     public String getDetailBillId() {
