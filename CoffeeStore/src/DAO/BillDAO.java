@@ -82,6 +82,33 @@ public class BillDAO {
         }
     }
     
+    //update bill
+    public void updateBill(String billId, boolean status, Double receivedMoney, Double excessMoney) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                    CallableStatement call = con.prepareCall("{call UPDATE_BILL (?, ?, ?, ?)}");
+                    call.setString(1, billId);
+                    call.setBoolean(2, status);
+                    call.setDouble(3, receivedMoney);
+                    call.setDouble(4, excessMoney);
+                    call.executeUpdate();
+                    System.out.println("Sucess!");
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at updateBill method from BillDAO class!");
+            System.err.println(e);
+        }
+        
+    }
+    
     //main test
     public static void main(String[] args) {
         BillDAO o = new BillDAO();
@@ -89,7 +116,7 @@ public class BillDAO {
         for(BillDTO x: list) {
             System.out.println(x.getBillId() + "---" + x.getStaffId() + "--" + x.getDate().toString() + "--" + x.getTotal() + "---" + x.getReceivedMoney() + "--" + x.getExcessMoney());
         }
-        o.deleteBill("BL002");
+        o.updateBill("BL003", true, 100000.0, 30000.0);
     }
     
 }

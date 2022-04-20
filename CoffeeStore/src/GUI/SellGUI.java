@@ -5,7 +5,6 @@ import ApplicationHelper.MyDate;
 import BUS.SellBUS;
 import DTO.BillDetail_ToppingDTO;
 import DTO.ClassifyDTO;
-import DTO.Detail_BillDTO;
 import DTO.ProductDTO;
 import DTO.TableDTO;
 import java.awt.*;
@@ -921,6 +920,21 @@ public final class SellGUI extends JFrame{
             public void mouseExited(MouseEvent e) {
                 o.setFont(new Font("Arial", Font.BOLD, 17));
             }
+        });
+        o.addActionListener((ActionEvent e) -> {
+            String billId = this.getlResultBillId().getText();
+            Double received, excess;
+            if(this.getTfReceived().getText().equals("")) {
+                received = 0.0;
+                excess = 0.0;
+            } else {
+                received = Double.parseDouble(this.getTfReceived().getText());
+                excess = Double.parseDouble(this.getlExcessResult().getText());
+            }
+            
+            this.getSellBUS().getBillBUS().updateBill(billId, true, received, excess);
+            int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
+            
         });
         return o;
     }

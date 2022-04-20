@@ -71,6 +71,16 @@ public class Detail_BillBUS {
         this.resetList();
     }
     
+    public Vector<Detail_BillDTO> getDetailBillListFromBillId(String billId) {
+        this.resetList();
+        Vector<Detail_BillDTO> detailList = new Vector<>();
+        for(Detail_BillDTO detailBill: this.getDetailBillList()) {
+            if(detailBill.getBillId().equalsIgnoreCase(billId)) {
+                detailList.add(detailBill);
+            }
+        }
+        return detailList;
+    }
     
     //main test
     public static void main(String[] args) {
