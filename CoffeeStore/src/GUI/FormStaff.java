@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FormStaff extends JFrame {
     //khai bao cac bien 
-    private JTable staffTable;   //cai bang loai san pham
+    private JTable staffTable;   //bang hien thi nhan vien
     private JLabel staffLabel, infoLabel, idLabel, nameLabel, birthdayLabel, addressLabel,
             phoneLabel, positionLabel;   //dung de hien thi cac chu nhu "STAFF", "INFOR",...
     private JTextField searchTextField, idTextField, nameTextField, birthdayTextField,
@@ -21,7 +21,7 @@ public class FormStaff extends JFrame {
     
     // ham nay de viet giao dien 
     public void MainDisplay(){
-        this.setName("Coffee Shop");
+        this.setTitle("Coffee Shop");
         staffTable = new JTable();
         staffLabel = new JLabel("STAFF");
         infoLabel = new JLabel("INFO");
@@ -51,21 +51,21 @@ public class FormStaff extends JFrame {
         
         homeButton.setBounds(1230,20,50, 50);
         homeButton.setIcon(new ImageIcon("Resource\\home-icon.png"));
-        homeButton.setBackground(new Color(190,148,92));
+        homeButton.setBackground(new Color(149,231,231));
         
-        saveButton.setBounds(950, 470, 50, 140);
+        saveButton.setBounds(1030, 560, 50, 50);
         saveButton.setIcon(new ImageIcon("Resource\\save-icon.png"));
         saveButton.setBackground(new Color(149,231,231));
         
-        addButton.setBounds(1030, 470, 50, 50);
+        addButton.setBounds(960, 630, 50, 50);
         addButton.setIcon(new ImageIcon("Resource\\add-1-icon.png"));
         addButton.setBackground(new Color(149,231,231));
         
-        editButton.setBounds(1100, 470, 50, 50);
+        editButton.setBounds(1030, 630, 50, 50);
         editButton.setIcon(new ImageIcon("Resource\\edit-icon.png"));
         editButton.setBackground(new Color(149,231,231));
         
-        deleteButton.setBounds(1030, 560, 50, 50);
+        deleteButton.setBounds(1100, 630, 50, 50);
         deleteButton.setIcon(new ImageIcon("Resource\\trash-icon.png"));
         deleteButton.setBackground(new Color(149,231,231));  
         
@@ -121,7 +121,7 @@ public class FormStaff extends JFrame {
         this.add(addButton);
         this.add(editButton);
         this.add(deleteButton);
-        this.add(logoutButton);
+//        this.add(logoutButton);
         this.add(searchButton);
         this.add(staffTable);
         this.add(infoLabel);
@@ -140,7 +140,7 @@ public class FormStaff extends JFrame {
         this.add(positionTextField);
         this.setSize(1300,760);
         this.setLocationRelativeTo(null);
-        this.getContentPane().setBackground(new Color(190,148,92)); //set mau cho JFrame bang bang mau RGB
+        this.getContentPane().setBackground(new Color(202, 135, 96)); //set mau cho JFrame bang bang mau RGB
         this.setLayout(null);
         this.setVisible(true);
         this.setResizable(true);
