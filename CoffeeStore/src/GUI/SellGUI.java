@@ -934,6 +934,9 @@ public final class SellGUI extends JFrame{
             
             this.getSellBUS().getBillBUS().updateBill(billId, true, received, excess);
             int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
+            if(result == JOptionPane.YES_OPTION) {
+                this.getSellBUS().printBill(billId);
+            }
             
         });
         return o;
