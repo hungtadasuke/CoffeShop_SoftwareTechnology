@@ -1,16 +1,18 @@
 package DTO;
 
+import ApplicationHelper.MyDate;
+
 public class StaffDTO {
     //attribute
     private String staffId;
     private String staffName;
-    private String staffBirthday;
+    private MyDate staffBirthday;
     private String staffAddress;
     private String numberPhone;
     private String position;
     
     //constructor
-    public StaffDTO(String staffId, String staffName, String staffBirthday, String staffAddress, String numberPhone, String position) {
+    public StaffDTO(String staffId, String staffName, MyDate staffBirthday, String staffAddress, String numberPhone, String position) {
         this.staffId = staffId;
         this.staffName = staffName;
         this.staffBirthday = staffBirthday;
@@ -36,11 +38,11 @@ public class StaffDTO {
         this.staffName = staffName;
     }
 
-    public String getStaffBirthday() {
+    public MyDate getStaffBirthday() {
         return staffBirthday;
     }
 
-    public void setStaffBirthday(String staffBirthday) {
+    public void setStaffBirthday(MyDate staffBirthday) {
         this.staffBirthday = staffBirthday;
     }
 

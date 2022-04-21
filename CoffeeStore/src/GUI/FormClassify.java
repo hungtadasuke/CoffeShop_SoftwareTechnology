@@ -11,22 +11,22 @@ import javax.swing.table.DefaultTableModel;
 public class FormClassify extends JFrame {
     //khai bao cac bien 
     private JTable classifyTable;   //cai bang loai san pham
-    private JLabel classifyLabel, infoLabel, idLabel, nameLabel;   //dung de hien thi cac chu nhu "CLASSIFY", "INFOR",...
+    private JLabel classifyLabel, infoLabel, idLabel, nameLabel, statusLabel;   //dung de hien thi cac chu nhu "CLASSIFY", "INFOR",...
     private JTextField searchTextField, idTextField, nameTextField; // cac o de nhap "Name", "id",...
     private JButton searchButton, saveButton, addButton, editButton, //cac nut chuc nang
             deleteButton, logoutButton, homeButton;
+    private JRadioButton onRadioButton, offRadioButton;
     DefaultTableModel model = new DefaultTableModel();
-    //test label
-    private JLabel testLabel;
     
     // ham nay de viet giao dien 
     public void MainDisplay(){
-        this.setName("Coffee Shop");
+        this.setTitle("Coffee Shop");
         classifyTable = new JTable();
         classifyLabel = new JLabel("CLASSIFY");
         infoLabel = new JLabel("INFO");
         idLabel = new JLabel("ID:");
         nameLabel = new JLabel("Name:");
+        statusLabel = new JLabel("Status:");
         searchTextField = new JTextField();
         idTextField = new JTextField();
         nameTextField = new JTextField();
@@ -37,6 +37,8 @@ public class FormClassify extends JFrame {
         deleteButton = new JButton();
         logoutButton = new JButton();
         homeButton = new JButton();
+        onRadioButton = new JRadioButton("On");
+        offRadioButton = new JRadioButton("Off");
         
         classifyLabel.setBounds(615, 30,  130, 30); 
         classifyLabel.setFont(new Font("Serif", Font.BOLD, 25));
@@ -44,22 +46,23 @@ public class FormClassify extends JFrame {
         homeButton.setBounds(1230,20,50, 50);
         homeButton.setIcon(new ImageIcon("Resource\\home-icon.png"));
         homeButton.setBackground(new Color(190,148,92));
+        homeButton.setBorder(null);
         
-        saveButton.setBounds(950, 470, 50, 140);
+        saveButton.setBounds(1030, 560, 50, 50);
         saveButton.setIcon(new ImageIcon("Resource\\save-icon.png"));
         saveButton.setBackground(new Color(149,231,231));
         
-        addButton.setBounds(1030, 470, 50, 50);
+        addButton.setBounds(960, 630, 50, 50);
         addButton.setIcon(new ImageIcon("Resource\\add-1-icon.png"));
         addButton.setBackground(new Color(149,231,231));
         
-        editButton.setBounds(1100, 470, 50, 50);
+        editButton.setBounds(1030, 630, 50, 50);
         editButton.setIcon(new ImageIcon("Resource\\edit-icon.png"));
         editButton.setBackground(new Color(149,231,231));
         
-        deleteButton.setBounds(1030, 560, 50, 50);
+        deleteButton.setBounds(1100, 630, 50, 50);
         deleteButton.setIcon(new ImageIcon("Resource\\trash-icon.png"));
-        deleteButton.setBackground(new Color(149,231,231));  
+        deleteButton.setBackground(new Color(149,231,231));
         
         logoutButton.setBounds(1100, 560, 50, 50);
         logoutButton.setIcon(new ImageIcon("Resource\\close-icon.png"));
@@ -81,19 +84,29 @@ public class FormClassify extends JFrame {
         idLabel.setFont(new Font("Serif", Font.BOLD, 22));  
         
         nameLabel.setBounds(850, 270, 120, 25);
-        nameLabel.setFont(new Font("Serif", Font.BOLD, 22));   
+        nameLabel.setFont(new Font("Serif", Font.BOLD, 22));  
+        
+        statusLabel.setBounds(850, 320, 120, 25);
+        statusLabel.setFont(new Font("Serif", Font.BOLD, 22));
         
         idTextField.setBounds(950, 220, 240, 25);
         nameTextField.setBounds(950, 270, 240, 25);
         
         searchTextField.setBounds(110, 640, 545, 30);
+
+        onRadioButton.setBounds(950, 320, 50, 25);
+        offRadioButton.setBounds(950, 370, 50, 25);
+        ButtonGroup radiobuttongroup = new ButtonGroup();
+        radiobuttongroup.add(onRadioButton);
+        radiobuttongroup.add(offRadioButton);
+        
         this.add(classifyLabel);
         this.add(homeButton);
         this.add(saveButton);
         this.add(addButton);
         this.add(editButton);
         this.add(deleteButton);
-        this.add(logoutButton);
+//        this.add(logoutButton);
         this.add(searchButton);
         this.add(classifyTable);
         this.add(infoLabel);
@@ -102,9 +115,12 @@ public class FormClassify extends JFrame {
         this.add(idTextField);
         this.add(nameTextField);
         this.add(searchTextField);
+        this.add(onRadioButton);
+        this.add(offRadioButton);
+        this.add(statusLabel);
         this.setSize(1300,760); 
         this.setLocationRelativeTo(null);
-        this.getContentPane().setBackground(new Color(190,148,92)); //set mau cho JFrame bang bang mau RGB
+        this.getContentPane().setBackground(new Color(202, 135, 96)); //set mau cho JFrame bang bang mau RGB
         this.setLayout(null);
         this.setVisible(true);
         this.setResizable(true);

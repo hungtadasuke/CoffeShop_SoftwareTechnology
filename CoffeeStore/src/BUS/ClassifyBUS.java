@@ -12,7 +12,7 @@ public class ClassifyBUS {
     //constructor
     public ClassifyBUS() {
         this.classifyDAO = new ClassifyDAO();
-        this.classifyList = new Vector<>();
+        this.classifyList = classifyDAO.readClassifyListFromDatabase();
     }
     
     //setter and getter
@@ -35,8 +35,18 @@ public class ClassifyBUS {
     
     //method
     //process get classify list from ClassifyDAO class
-    public void getClassifyListFromDAO() {
+    public void resetClassifyList() {
         this.setClassifyList(this.getClassifyDAO().readClassifyListFromDatabase());
+    }
+    
+    public ClassifyDTO getClassifyFromId (String id) {
+        ClassifyDTO classify = null;
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyId().equalsIgnoreCase(id)) {
+                return o;
+            }
+        }
+        return classify;
     }
     
 }
