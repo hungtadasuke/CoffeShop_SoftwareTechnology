@@ -744,6 +744,7 @@ public final class SellGUI extends JFrame{
         
         //add components to pScrossBar1
         this.getpScrossBar1().add(this.getpWestSrcossBar1(), BorderLayout.WEST);
+         
         this.getpScrossBar1().add(this.getbNew(), BorderLayout.EAST);
         
         
@@ -861,7 +862,7 @@ public final class SellGUI extends JFrame{
         //End: pMenus
     }
     
-    private JButton createChooseDrinkJButton(String text, String actioncommand) {
+    private JButton createChooseDrinkJButton(String text, String actioncommand, Border border) {
         JButton o = new JButton();
         o.setText(text);
         o.setActionCommand(actioncommand);
@@ -869,7 +870,7 @@ public final class SellGUI extends JFrame{
         o.setFocusPainted(false);
         o.setFont(new Font("Arial", Font.LAYOUT_NO_LIMIT_CONTEXT, 17));
         o.setPreferredSize(new Dimension(158, 90));
-        o.setBorder(BorderFactory.createRaisedBevelBorder());
+        o.setBorder(border);
         o.setCursor(new Cursor(HAND_CURSOR));
         o.addMouseListener(new MouseAdapter() {
             @Override
@@ -895,7 +896,7 @@ public final class SellGUI extends JFrame{
                 getCard().show(getpBodyMenus(), "Item");
             } else if (!e.getActionCommand().equals("")) {
                 ChoiceMenuOfProductGUI choiceMenu = new ChoiceMenuOfProductGUI(e.getActionCommand(), this);
-                choiceMenu.getBtnCheck().setActionCommand("AddTakeAWayBill");
+                choiceMenu.getBtnCheck().setActionCommand("AddBill");
             }
         });
         return o;
@@ -923,23 +924,47 @@ public final class SellGUI extends JFrame{
         });
         o.addActionListener((ActionEvent e) -> {
             String billId = this.getlResultBillId().getText();
-            Double received, excess;
-            if(this.getTfReceived().getText().equals("")) {
-                received = 0.0;
-                excess = 0.0;
-            } else {
-                received = Double.parseDouble(this.getTfReceived().getText());
-                excess = Double.parseDouble(this.getlExcessResult().getText());
-            }
-            
-            this.getSellBUS().getBillBUS().updateBill(billId, true, received, excess);
-            int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
-            if(result == JOptionPane.YES_OPTION) {
-                this.getSellBUS().printBill(billId);
+            if(this.getSellBUS().getBillBUS().getBillFromId(billId) != null && !this.getSellBUS().getDetailBillBUS().getDetailBillListFromBillId(billId).isEmpty()) {
+                Double received, excess;
+                if(this.getTfReceived().getText().equals("")) {
+                    received = 0.0;
+                    excess = 0.0;
+                } else {
+                    received = Double.parseDouble(this.getTfReceived().getText());
+                    excess = Double.parseDouble(this.getlExcessResult().getText());
+                }
+
+                this.getSellBUS().getBillBUS().updateBill(billId, true, received, excess);
+                if(!this.getlResultTableId().getText().equalsIgnoreCase("")) {
+                    this.getSellBUS().getTableBUS().updateStatusTable(this.getlResultTableId().getText(), true);
+                }
+                int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION) {
+                    this.getSellBUS().printBill(billId);
+                }
+                this.setNewOrder();
             }
             
         });
         return o;
+    }
+    
+    private void setNewOrder() {
+        this.getlResultBillId().setText(ID.createBillId());
+        this.getlTableId().setText("");
+        this.getlResultTableId().setText("");
+        this.getlToTalResult().setText("0.0");
+        this.getTfReceived().setText("");
+        this.getlExcessResult().setText("0.0");
+        
+        this.getDetailPanelList().clear();
+        
+        this.getpOrderBody().removeAll();
+        
+        CardLayout cardTemp = (CardLayout) this.getpOrderBodyContainer().getLayout();
+        cardTemp.show(this.getpOrderBodyContainer(), "OrderBodyTemp");
+        cardTemp.show(this.getpOrderBodyContainer(), "OrderBody");
+        
     }
     
     private void addComponentsInButtonListToJPanel(ArrayList<JButton> list, JPanel jpanel) {
@@ -950,15 +975,17 @@ public final class SellGUI extends JFrame{
     
     private void createClassifyButtonList() {
         this.getButtonList().clear();
-        this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table"));
+        Border mix = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
+        Border line = BorderFactory.createTitledBorder(mix, "Menu", TitledBorder.RIGHT, TitledBorder.BELOW_TOP, new Font("Arial", Font.ITALIC, 10), Color.BLACK);
+        this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table", line));
         for(ClassifyDTO classify: this.getSellBUS().getClassifyBUS().getClassifyList()) {
             if(classify.isClassifyBusiness()) {
-                this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId()));
+                this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId(), line));
             }
         }
         if(this.getButtonList().size() < 11) {
             for(int i = this.getButtonList().size(); i < 11; i++) {
-                this.getButtonList().add(this.createChooseDrinkJButton("", ""));
+                this.getButtonList().add(this.createChooseDrinkJButton("", "", BorderFactory.createRaisedSoftBevelBorder()));
             }
         }
         this.getButtonList().add(this.createPaymentJButton());
@@ -968,7 +995,7 @@ public final class SellGUI extends JFrame{
         this.getButtonList().clear();
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
             if(product.isProductBusiness() && product.getClassifyId().equalsIgnoreCase(classifyId)) {      
-                this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId()));
+                this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
             }
         }
     }
@@ -978,7 +1005,7 @@ public final class SellGUI extends JFrame{
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
             if(!search.equals("") && (product.isProductBusiness() && (product.getProductName().toLowerCase().contains(search) || product.getProductName().toUpperCase().contains(search) || product.getProductName().contains(search)))
                 && this.getSellBUS().getClassifyBUS().getClassifyFromId(product.getClassifyId()).isClassifyBusiness()) {
-                    this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId()));
+                    this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
             }
         }
     }
@@ -991,7 +1018,7 @@ public final class SellGUI extends JFrame{
         return o;
     }
     
-    private JPanel createTablePanel(String title, int numbetSeat, boolean avaliable) {
+    private JPanel createTablePanel(String title, int numberSeat, boolean avaliable) {
         
         //tao khung chua
         JPanel table = new JPanel();
@@ -1004,23 +1031,35 @@ public final class SellGUI extends JFrame{
         //tao cac thanh phan ben trong panel table
         //header
         JEditorPane header = new JEditorPane();
+        //center
+        JLabel center = new JLabel(new ImageIcon("Resource\\table-icon.png"));
+        center.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SellGUI.this.getpOrderBody().removeAll();
+                SellGUI.this.getDetailPanelList().clear();
+            }
+        });
+        JButton pFooter = new JButton("Choose");
         header.setContentType("text/html");
         header.setBackground(new Color(238, 238, 238));
         header.setPreferredSize(new Dimension(130, 20));
+        String titleTrue = "<html><font size = 3><b>" + "Seat: " + numberSeat + "--" + "Status: " + "<font color=blue>" + "true" + "</font>" + "</b></font></html>";
+        String titleFalse = "<html><font size = 3><b>" + "Seat: " + numberSeat + "--" + "Status: " + "<font color=red>" + "fasle" + "</font>" + "</b></font></html>";
         if(avaliable) {
-            header.setText("<html><font size = 3><b>" + "Seat: " + numbetSeat + "--" + "Status: " + "<font color=blue>" + avaliable + "</font>" + "</b></font></html>");
+            header.setText(titleTrue);
+            pFooter.setBackground(Color.LIGHT_GRAY);
         } else {
-            header.setText("<html><font size = 3><b>" + "Seat: " + numbetSeat + "--" + "Status: " + "<font color=red>" + avaliable + "</font>" + "</b></font></html>");
+            header.setText(titleFalse);
+            center.setEnabled(false);
+            pFooter.setText("Choosed");
+            pFooter.setBackground(HOVER_COLOR);
         }
         
-        //center
-        JLabel center = new JLabel(new ImageIcon("Resource\\table-icon.png"));
         
         //footer
-        JButton pFooter = new JButton("Choose");
         pFooter.setActionCommand(title);
         pFooter.setPreferredSize(new Dimension(130, 30));
-        pFooter.setBackground(Color.LIGHT_GRAY);
         pFooter.setFocusPainted(false);
         pFooter.setBorder(BorderFactory.createRaisedBevelBorder());
         pFooter.setCursor(new Cursor(HAND_CURSOR));
@@ -1034,11 +1073,37 @@ public final class SellGUI extends JFrame{
             
             @Override
             public void mouseExited(MouseEvent e) {
-                pFooter.setBackground(Color.LIGHT_GRAY);
-                pFooter.setFont(new Font("Arial", Font.BOLD, 15));
+                JButton button = (JButton) e.getSource();
+                if(button.getText().equalsIgnoreCase("Choose")) {
+                    pFooter.setBackground(Color.LIGHT_GRAY);
+                    pFooter.setFont(new Font("Arial", Font.BOLD, 15));
+                }
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JButton button = (JButton) e.getSource();
+                if(button.getText().equalsIgnoreCase("Choose")) {
+                    center.setEnabled(false);
+                    pFooter.setText("Choosed");
+                    pFooter.setBackground(HOVER_COLOR);
+                    header.setText(titleFalse);
+                    getlTableId().setText("Table  : ");
+                    getlResultTableId().setText(button.getActionCommand());
+                    getlResultBillId().setText(ID.createBillId());
+                    getpOrderBody().removeAll();
+                    getDetailPanelList().clear();
+                    nextCardOrder();
+                } else {
+                    center.setEnabled(true);
+                    pFooter.setText("Choose");
+                    pFooter.setBackground(Color.LIGHT_GRAY);
+                    header.setText(titleTrue);
+                    getlTableId().setText("");
+                    getlResultTableId().setText("");
+                }
             }
         });
-        
         //add cac thanh phan vao panel table
         table.add(header, BorderLayout.NORTH);
         table.add(center, BorderLayout.CENTER);
@@ -1116,9 +1181,7 @@ public final class SellGUI extends JFrame{
             }
             this.getpOrderBody().removeAll();
             this.addDetailPanelListToPOrderBody();
-            CardLayout cardNew = (CardLayout) this.getpOrderBodyContainer().getLayout();
-            cardNew.show(this.getpOrderBodyContainer(), "OrderBodyTemp");
-            cardNew.show(this.getpOrderBodyContainer(), "OrderBody");
+            nextCardOrder();
             this.getlToTalResult().setText(this.getSellBUS().getBillBUS().getPriceOfBill(this.getlResultBillId().getText()) + "");
         });
         
@@ -1199,12 +1262,18 @@ public final class SellGUI extends JFrame{
         return detailPanel;
     }
     
+    private void nextCardOrder() {
+        CardLayout cardNew = (CardLayout) this.getpOrderBodyContainer().getLayout();
+        cardNew.show(this.getpOrderBodyContainer(), "OrderBodyTemp");
+        cardNew.show(this.getpOrderBodyContainer(), "OrderBody");
+    }
+    
     public void addDetailPanelListToPOrderBody() {
         for(JPanel detail: this.getDetailPanelList()) {
             this.getpOrderBody().add(detail);
         }
     }
-        
+    
     //main
     public static void main (String[] args) {
         SellGUI gui = new SellGUI("SF005");

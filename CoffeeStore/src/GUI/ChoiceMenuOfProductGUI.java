@@ -6,6 +6,7 @@ import DTO.BillDetail_ToppingDTO;
 import DTO.Detail_BillDTO;
 import DTO.Product_SizeDTO;
 import DTO.Product_ToppingDTO;
+import DTO.SpotBillDTO;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -376,7 +377,6 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
         this.getpBodyStatus().add(this.getlStatus());
         for (JCheckBox statusCheckBox: this.getStatusCheckBoxList()) {
-            statusCheckBox.setCursor(new Cursor(HAND_CURSOR));
             this.getpBodyStatus().add(statusCheckBox);
             if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
                     && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProducStatus().trim().equalsIgnoreCase(statusCheckBox.getText())) {
@@ -462,7 +462,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
             }
         });
         this.getBtnCheck().addActionListener((ActionEvent e) -> {
-            if(e.getActionCommand().equalsIgnoreCase("AddTakeAWayBill")) {
+            if(e.getActionCommand().equalsIgnoreCase("AddBill") && ChoiceMenuOfProductGUI.this.getSellGUI().getlResultTableId().getText().equals("")) {
                 if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())) {
                     this.insertBill("Take Away");
                 }
@@ -470,7 +470,15 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
                 ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().add(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size() - 1));
                 nextCardAndUpdateResult();
                 ChoiceMenuOfProductGUI.this.dispose();
-            } else if(e.getActionCommand().equalsIgnoreCase("Edit")) {
+            } else if(e.getActionCommand().equalsIgnoreCase("AddBill") && !ChoiceMenuOfProductGUI.this.getSellGUI().getlResultTableId().getText().equals("")) {
+                if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())) {
+                    this.insertBill("Spot");
+                }
+                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill()));
+                ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().add(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size() - 1));
+                nextCardAndUpdateResult();
+                ChoiceMenuOfProductGUI.this.dispose();
+            } else {
                 ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().deleteDetailBill(this.getDetailBillId());
                 insertDetailBill();
                 for(int i = 0; i < ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size(); i++) {
@@ -499,6 +507,15 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         dateNow.setYear(date[2]);
         BillDTO newBill = new BillDTO(billId, dateNow, 0.00, 0.00, 0.00, false, ChoiceMenuOfProductGUI.this.getSellGUI().getStaffId(), billType);
         ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().insertBill(newBill);
+        if(billType.equalsIgnoreCase("Spot")) {
+            insertSpotBill();
+        }
+    }
+    
+    private void insertSpotBill() {
+        this.getSellGUI().getSellBUS().getSpotBillBUS().insertSpotBill(new SpotBillDTO(this.getSellGUI().getlResultBillId().getText(), this.getSellGUI().getlResultTableId().getText()));
+        //set status table
+        this.getSellGUI().getSellBUS().getTableBUS().updateStatusTable(this.getSellGUI().getlResultTableId().getText(), false);
     }
     
     private String insertDetailBill() {
@@ -531,6 +548,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         if(this.getSellGUI().getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("BOTH")) {
             checkBoxList = new JCheckBox[2];
             checkBoxList[0] = this.createStatusCheckBox("Hot", "Hot");
+            checkBoxList[0].setSelected(true);
             checkBoxList[1] = this.createStatusCheckBox("Cold", "Cold");
         } else if (this.getSellGUI().getSellBUS().getProductBUS().getProductFromId(this.getProductId()).getProductStatus().contains("HOT")) {
             checkBoxList = new JCheckBox[1];
@@ -549,6 +567,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         checkBox.setBackground(BACKGROUND_COLOR);
         checkBox.setFocusPainted(false);
         checkBox.setActionCommand(actionCommand);
+        checkBox.setCursor(new Cursor(HAND_CURSOR));
         return checkBox;
     }
     

@@ -36,4 +36,15 @@ public class TableBUS {
     public void resetTableList() {
         this.setTableList(this.getTableDAO().readTableListFromDatabase());
     }
+    
+    //update status a table
+    public void updateStatusTable(String tableId, boolean status) {
+        this.getTableDAO().updateStatustable(tableId, status);
+        this.resetTableList();
+    }
+    
+    public static void main(String[] args) {
+        TableBUS o = new TableBUS();
+        o.updateStatusTable("TB001", true);
+    }
 }

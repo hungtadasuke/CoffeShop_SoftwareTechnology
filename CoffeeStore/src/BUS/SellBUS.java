@@ -6,12 +6,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -149,7 +151,7 @@ public class SellBUS {
             Cell cell = null;
             
             //Merge cell in excel
-            CellRangeAddress range = new CellRangeAddress(0, 0, 0, 10);
+            CellRangeAddress range = new CellRangeAddress(0, 0, 0, 8);
             sheet.addMergedRegion(range);
             
             //Tao mot doi tuong cell style
@@ -176,7 +178,7 @@ public class SellBUS {
             cell.setCellStyle(styleId);
             
             //Tao ten cua hang
-            range = new CellRangeAddress(1, 2, 0, 10);
+            range = new CellRangeAddress(1, 2, 0, 8);
             sheet.addMergedRegion(range);
             
             row = sheet.createRow(1);
@@ -193,7 +195,7 @@ public class SellBUS {
             cell.setCellStyle(styleStoreName);
             
             //Tao dia chi
-            range = new CellRangeAddress(3, 3, 0, 10);
+            range = new CellRangeAddress(3, 3, 0, 8);
             sheet.addMergedRegion(range);
             
             CellStyle styleAddress = workBook.createCellStyle();
@@ -207,7 +209,7 @@ public class SellBUS {
             cell.setCellValue("CMT8");
             cell.setCellStyle(styleAddress);
             
-            range = new CellRangeAddress(4, 4, 0, 10);
+            range = new CellRangeAddress(4, 4, 0, 8);
             sheet.addMergedRegion(range);
             
             row = sheet.createRow(4);
@@ -215,7 +217,7 @@ public class SellBUS {
             cell.setCellValue("770 Cach Mang Thang Tam, 5 Ward, Tan Binh District");
             cell.setCellStyle(styleAddress);
             
-            range = new CellRangeAddress(5, 5, 0, 10);
+            range = new CellRangeAddress(5, 5, 0, 8);
             sheet.addMergedRegion(range);
             
             row = sheet.createRow(5);
@@ -242,7 +244,7 @@ public class SellBUS {
             cell.setCellValue("Date:");
             cell.setCellStyle(styleBold);
             
-            range = new CellRangeAddress(6, 6, 1, 5);
+            range = new CellRangeAddress(6, 6, 1, 4);
             sheet.addMergedRegion(range);
             
             cell = row.createCell(1, CellType.STRING);
@@ -254,10 +256,9 @@ public class SellBUS {
             cell.setCellValue("Staff:");
             cell.setCellStyle(styleBold);
             
-            range = new CellRangeAddress(7, 7, 1, 5);
+            range = new CellRangeAddress(7, 7, 1, 4);
             sheet.addMergedRegion(range);
-            
-            StaffBUS staffBUS = new StaffBUS();
+           
             cell = row.createCell(1, CellType.STRING);
             cell.setCellValue(this.getStaffBUS().getStaffFromId(this.getBillBUS().getBillFromId(billId).getStaffId()).getStaffName());
             cell.setCellStyle(styleNormal);
@@ -267,7 +268,7 @@ public class SellBUS {
             cell.setCellValue("Type:");
             cell.setCellStyle(styleBold);
             
-            range = new CellRangeAddress(8, 8, 1, 5);
+            range = new CellRangeAddress(8, 8, 1, 4);
             sheet.addMergedRegion(range);
             
             cell = row.createCell(1, CellType.STRING);
@@ -279,11 +280,19 @@ public class SellBUS {
             cell.setCellValue("Table:");
             cell.setCellStyle(styleBold);
             
-            range = new CellRangeAddress(9, 9, 1, 5);
+            range = new CellRangeAddress(9, 9, 1, 4);
             sheet.addMergedRegion(range);
             
+            cell = row.createCell(1, CellType.STRING);
+            if(this.getSpotBillBUS().getSpotBillFromId(billId) != null) {
+                cell.setCellValue(this.getSpotBillBUS().getSpotBillFromId(billId).getTableId());
+            } else {
+                cell.setCellValue("");
+            }
+            cell.setCellStyle(styleNormal);
+            
             //Tao menu item
-            range = new CellRangeAddress(10, 10, 0, 10);
+            range = new CellRangeAddress(10, 10, 0, 8);
             sheet.addMergedRegion(range);
             
             CellStyle menuItemTitle = workBook.createCellStyle();
@@ -298,7 +307,7 @@ public class SellBUS {
             cell.setCellValue("Num");
             cell.setCellStyle(menuItemTitle);
             
-            range = new CellRangeAddress(11, 11, 1, 6);
+            range = new CellRangeAddress(11, 11, 1, 4);
             sheet.addMergedRegion(range);
             
             cell = row.createCell(1, CellType.STRING);
@@ -306,14 +315,14 @@ public class SellBUS {
             cell.setCellStyle(menuItemTitle);
             
             
-            cell = row.createCell(7, CellType.STRING);
+            cell = row.createCell(5, CellType.STRING);
             cell.setCellValue("Qty");
             cell.setCellStyle(menuItemTitle);
             
-            range = new CellRangeAddress(11, 11, 8, 10);
+            range = new CellRangeAddress(11, 11, 6, 8);
             sheet.addMergedRegion(range);
             
-            cell = row.createCell(8, CellType.STRING);
+            cell = row.createCell(6, CellType.STRING);
             cell.setCellValue("Price(VND)");
             cell.setCellStyle(menuItemTitle);
             
@@ -335,58 +344,149 @@ public class SellBUS {
                 cell.setCellValue((num++) + ".");
                 cell.setCellStyle(productStyle);
                 
-                range = new CellRangeAddress(i, i, 1, 6);
+                range = new CellRangeAddress(i, i, 1, 4);
                 sheet.addMergedRegion(range);
                 
                 cell = row.createCell(1, CellType.STRING);
                 cell.setCellValue(this.getProductBUS().getProductFromId(detail.getProductId()).getProductName());
                 cell.setCellStyle(productStyle);
                 
-                cell = row.createCell(7, CellType.NUMERIC);
+                cell = row.createCell(5, CellType.NUMERIC);
                 cell.setCellValue(detail.getQuantity());
                 cell.setCellStyle(productStyle);
                 
-                range = new CellRangeAddress(i, i, 8, 10);
+                range = new CellRangeAddress(i, i, 6, 8);
                 sheet.addMergedRegion(range);
                 
-                cell = row.createCell(8, CellType.NUMERIC);
+                cell = row.createCell(6, CellType.NUMERIC);
                 cell.setCellValue(detail.getUnitPrice());
                 cell.setCellStyle(productStyle);
+                
+                row = sheet.createRow(++i);
+                range = new CellRangeAddress(i, i, 1, 4);
+                sheet.addMergedRegion(range);
+                
+                cell = row.createCell(1, CellType.STRING);
+                cell.setCellValue(" - Size: " + detail.getProductSize() + " - Status: " + detail.getProducStatus());
                 
                 for(BillDetail_ToppingDTO detailTopping: this.getDetailBillToppingBUS().getDetailToppingList(detail.getDetailBillId().trim())) {
                     row = sheet.createRow(++i);
                     
-                    range = new CellRangeAddress(i, i, 1, 6);
+                    range = new CellRangeAddress(i, i, 1, 4);
                     sheet.addMergedRegion(range);
                     
                     cell = row.createCell(1, CellType.STRING);
                     cell.setCellValue(" - " + this.getToppingBUS().getToppingFromId(detailTopping.getToppingId()).getToppingName());
                     cell.setCellStyle(toppingStyle);
                     
-                    cell = row.createCell(7, CellType.NUMERIC);
+                    cell = row.createCell(5, CellType.NUMERIC);
                     cell.setCellValue(detailTopping.getQuantity());
                     cell.setCellStyle(toppingStyle);
                     
-                    range = new CellRangeAddress(i, i, 8, 10);
+                    range = new CellRangeAddress(i, i, 6, 8);
                     sheet.addMergedRegion(range);
                     
-                    cell = row.createCell(8, CellType.NUMERIC);
+                    cell = row.createCell(6, CellType.NUMERIC);
                     cell.setCellValue(detailTopping.getPrice());
                     cell.setCellStyle(toppingStyle);
                 }
                 i++; 
             }
             
-            //Phan tong gia footer
-            i++;
-            row = sheet.createRow(++i);
-            range = new CellRangeAddress(i, i, 8, 10);
+            range = new CellRangeAddress(i, i, 0, 8);
             sheet.addMergedRegion(range);
             
-            cell = row.createCell(8, CellType.STRING);
-            cell.setCellValue("Total:  " + this.getBillBUS().getBillFromId(billId).getTotal());
+            //Phan tong gia footer
+            row = sheet.createRow(++i);
             
+            range = new CellRangeAddress(i, i, 5, 6);
+            sheet.addMergedRegion(range);
             
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Total:");
+            cell.setCellStyle(styleBold);
+            
+            range = new CellRangeAddress(i, i, 7, 8);
+            sheet.addMergedRegion(range);
+            
+            CellStyle resultTotalStyle = workBook.createCellStyle();
+            XSSFFont font6 = workBook.createFont();
+            font6.setFontHeight(13);
+            font6.setBold(true);
+            resultTotalStyle.setFont(font6);
+            resultTotalStyle.setAlignment(HorizontalAlignment.RIGHT);
+            
+            cell = row.createCell(7, CellType.NUMERIC);
+            cell.setCellValue(this.getBillBUS().getBillFromId(billId).getTotal());
+            cell.setCellStyle(resultTotalStyle);
+            
+            //Tao dong received money
+            row = sheet.createRow(++i);
+            
+            range = new CellRangeAddress(i, i, 5, 6);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Received:");
+            cell.setCellStyle(styleBold);
+            
+            range = new CellRangeAddress(i, i, 7, 8);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(7, CellType.STRING);
+            cell.setCellValue(this.getBillBUS().getBillFromId(billId).getReceivedMoney());
+            cell.setCellStyle(resultTotalStyle);
+            
+            //Tao dong excess money
+            row = sheet.createRow(++i);
+            
+            range = new CellRangeAddress(i, i, 5, 6);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Excess Cash:");
+            cell.setCellStyle(styleBold);
+            
+            range = new CellRangeAddress(i, i, 7, 8);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(7, CellType.STRING);
+            cell.setCellValue(this.getBillBUS().getBillFromId(billId).getExcessMoney());
+            cell.setCellStyle(resultTotalStyle);
+            
+            //Tao dong hotline
+            i++;
+            
+            range = new CellRangeAddress(i, i, 0, 8);
+            sheet.addMergedRegion(range);
+            
+            row = sheet.createRow(++i);
+            
+            range = new CellRangeAddress(i, i, 2, 6);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue("Hotline: 19002209");
+            cell.setCellStyle(menuItemTitle);
+            
+            //Tao dong cam on quy khach
+            row = sheet.createRow(++i);
+            
+            range = new CellRangeAddress(i, i, 2, 6);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue("Thank You Please Come Again!");
+            cell.setCellStyle(menuItemTitle);
+            
+            CellRangeAddress rangeBig = new CellRangeAddress(0, ++i, 0, 8);
+            RegionUtil.setBorderRight(BorderStyle.THIN, rangeBig, sheet);
+            RegionUtil.setBorderLeft(BorderStyle.DOUBLE, rangeBig, sheet);
+            RegionUtil.setBorderTop(BorderStyle.DOUBLE, rangeBig, sheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, rangeBig, sheet);
+            
+            range = new CellRangeAddress(i, i, 0, 8);
+            sheet.addMergedRegion(range);
             
             String path = "D://NetBeansProjects//Software Technology - Coffee Shop//ExcelBill//" + billId + ".xlsx";
             //Tao mot doi tuong file tren dia
@@ -408,6 +508,6 @@ public class SellBUS {
     
     public static void main(String[] args) {
         SellBUS sell = new SellBUS();
-        sell.printBill("BL002");
+        sell.printBill("BL001");
     }
 }
