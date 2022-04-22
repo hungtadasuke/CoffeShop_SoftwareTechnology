@@ -46,12 +46,8 @@ public class FormTopping extends JFrame {
         //cài đặt tọa độ, kích thước, icon, nền background cho button
         homeButton.setBounds(1230,20,50, 50);
         homeButton.setIcon(new ImageIcon("Resource\\home-icon.png"));
-<<<<<<< HEAD
-        homeButton.setBackground(new Color(190,148,92));
-        homeButton.setBorder(null);
-=======
+        
         homeButton.setBackground(new Color(149,231,231));
->>>>>>> hoang
         
         saveButton.setBounds(1030, 560, 50, 50);
         saveButton.setIcon(new ImageIcon("Resource\\save-icon.png"));

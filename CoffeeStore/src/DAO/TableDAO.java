@@ -1,5 +1,6 @@
 package DAO;
 
+import ApplicationHelper.DatabaseHelper;
 import DTO.TableDTO;
 import java.sql.*;
 import java.util.Vector;
@@ -23,5 +24,27 @@ public class TableDAO {
             System.err.println(e);
         }
         return tableList;
+    }
+    
+    //update status of a table
+    public void updateStatustable(String tableId, boolean Status) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call UPDATE_TABLE_STATUS (?, ?)}");
+                call.setString(1, tableId);
+                call.setBoolean(2, Status);
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at updateStatustable method from TableDAO class!");
+            System.err.println(e);
+        }
     }
 }

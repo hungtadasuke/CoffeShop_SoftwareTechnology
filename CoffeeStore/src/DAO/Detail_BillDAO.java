@@ -1,5 +1,6 @@
 package DAO;
 
+import ApplicationHelper.DatabaseHelper;
 import DTO.Detail_BillDTO;
 import java.sql.*;
 import java.util.Vector;

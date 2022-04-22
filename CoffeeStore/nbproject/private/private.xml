@@ -10,24 +10,35 @@
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/BillDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/TableDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/ApplicationHelper/ID.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/ApplicationHelper/DatabaseHelper.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/ChoiceMenuOfProductGUI.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/ToppingDAO.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DTO/AccountDTO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/StaffBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/FormAccount.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/ClassifyBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DTO/ToppingDTO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/ProductBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/FormBill.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/Product_ToppingBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/Product_SizeBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/ApplicationHelper/MyDate.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/SpotBillBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/SpotBillDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/ClassifyDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/BillBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/DetailBillToppingBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/DetailBill_ToppingDAO.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DTO/BillDetail_ToppingDTO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DTO/TableDTO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/SellGUI.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/TableBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/SellBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DTO/SpotBillDTO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/Detail_BillBUS.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/FormTopping.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/Detail_BillDAO.java</file>
-            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/DatabaseHelper.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/FormStaff.java</file>
         </group>
     </open-files>
 </project-private>
