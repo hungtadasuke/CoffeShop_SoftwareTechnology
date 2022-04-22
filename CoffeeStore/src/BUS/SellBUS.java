@@ -1,7 +1,9 @@
 package BUS;
 
+import DTO.BillDTO;
 import DTO.BillDetail_ToppingDTO;
 import DTO.Detail_BillDTO;
+import DTO.SpotBillDTO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -506,8 +508,13 @@ public class SellBUS {
         }
     }
     
-    public static void main(String[] args) {
-        SellBUS sell = new SellBUS();
-        sell.printBill("BL001");
+    //find bill doesn't payment of a table
+    public BillDTO getBillDoesNotPaymentOfATable(String tableId) {
+        for(SpotBillDTO spotBill: this.getSpotBillBUS().getSpotBillList()) {
+            if(spotBill.getTableId().equalsIgnoreCase(tableId) && !this.getBillBUS().getBillFromId(spotBill.getBillId()).isBillStatus()) {
+                return this.getBillBUS().getBillFromId(spotBill.getBillId());
+            }
+        }
+        return null;
     }
 }

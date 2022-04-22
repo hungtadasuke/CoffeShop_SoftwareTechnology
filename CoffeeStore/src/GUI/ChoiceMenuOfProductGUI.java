@@ -516,6 +516,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.getSellGUI().getSellBUS().getSpotBillBUS().insertSpotBill(new SpotBillDTO(this.getSellGUI().getlResultBillId().getText(), this.getSellGUI().getlResultTableId().getText()));
         //set status table
         this.getSellGUI().getSellBUS().getTableBUS().updateStatusTable(this.getSellGUI().getlResultTableId().getText(), false);
+        this.getSellGUI().resetpTable();
     }
     
     private String insertDetailBill() {

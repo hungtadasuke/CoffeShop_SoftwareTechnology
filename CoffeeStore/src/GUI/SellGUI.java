@@ -23,7 +23,9 @@ public final class SellGUI extends JFrame{
     
     private ArrayList<JButton> buttonList;
     
-    private ArrayList<JPanel> panelList, detailPanelList;
+    private ArrayList<JPanel> detailPanelList;
+    
+    private ArrayList<TablePanelGUI> panelList;
     
     private JButton bNew, bHome, bReset, bSearch, bOk;
     
@@ -383,11 +385,11 @@ public final class SellGUI extends JFrame{
         this.pItemMenu = pItemMenu;
     }
 
-    public ArrayList<JPanel> getPanelList() {
+    public ArrayList<TablePanelGUI> getPanelList() {
         return panelList;
     }
 
-    public void setPanelList(ArrayList<JPanel> panelList) {
+    public void setPanelList(ArrayList<TablePanelGUI> panelList) {
         this.panelList = panelList;
     }
 
@@ -834,9 +836,7 @@ public final class SellGUI extends JFrame{
         this.getpTable().setBorder(new EmptyBorder(4, 0, 0, 0));
         
         //create table panel list
-        this.getpTable().removeAll();
-        this.createTablePanelList();
-        this.addComponentsInPanelListToJPanel(getPanelList(), getpTable());
+        this.createpTable();
         
         this.setpItemMenu(this.createItemMenuJPanel());
 
@@ -924,7 +924,7 @@ public final class SellGUI extends JFrame{
         });
         o.addActionListener((ActionEvent e) -> {
             String billId = this.getlResultBillId().getText();
-            if(this.getSellBUS().getBillBUS().getBillFromId(billId) != null && !this.getSellBUS().getDetailBillBUS().getDetailBillListFromBillId(billId).isEmpty()) {
+            if(this.getSellBUS().getBillBUS().getBillFromId(billId) != null) {
                 Double received, excess;
                 if(this.getTfReceived().getText().equals("")) {
                     received = 0.0;
@@ -943,6 +943,7 @@ public final class SellGUI extends JFrame{
                     this.getSellBUS().printBill(billId);
                 }
                 this.setNewOrder();
+                this.resetAndNextCardTable();
             }
             
         });
@@ -950,7 +951,9 @@ public final class SellGUI extends JFrame{
     }
     
     private void setNewOrder() {
+        //Tao mot billID moi hien thi len man hinh
         this.getlResultBillId().setText(ID.createBillId());
+        
         this.getlTableId().setText("");
         this.getlResultTableId().setText("");
         this.getlToTalResult().setText("0.0");
@@ -1018,110 +1021,16 @@ public final class SellGUI extends JFrame{
         return o;
     }
     
-    private JPanel createTablePanel(String title, int numberSeat, boolean avaliable) {
-        
-        //tao khung chua
-        JPanel table = new JPanel();
-        table.setPreferredSize(new Dimension(130, 190));
-        table.setLayout(new BorderLayout());
-        Border raisedBevel = BorderFactory.createRaisedBevelBorder();
-        Border compound = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), raisedBevel);
-        table.setBorder(BorderFactory.createTitledBorder(compound, title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
-        
-        //tao cac thanh phan ben trong panel table
-        //header
-        JEditorPane header = new JEditorPane();
-        //center
-        JLabel center = new JLabel(new ImageIcon("Resource\\table-icon.png"));
-        center.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                SellGUI.this.getpOrderBody().removeAll();
-                SellGUI.this.getDetailPanelList().clear();
-            }
-        });
-        JButton pFooter = new JButton("Choose");
-        header.setContentType("text/html");
-        header.setBackground(new Color(238, 238, 238));
-        header.setPreferredSize(new Dimension(130, 20));
-        String titleTrue = "<html><font size = 3><b>" + "Seat: " + numberSeat + "--" + "Status: " + "<font color=blue>" + "true" + "</font>" + "</b></font></html>";
-        String titleFalse = "<html><font size = 3><b>" + "Seat: " + numberSeat + "--" + "Status: " + "<font color=red>" + "fasle" + "</font>" + "</b></font></html>";
-        if(avaliable) {
-            header.setText(titleTrue);
-            pFooter.setBackground(Color.LIGHT_GRAY);
-        } else {
-            header.setText(titleFalse);
-            center.setEnabled(false);
-            pFooter.setText("Choosed");
-            pFooter.setBackground(HOVER_COLOR);
-        }
-        
-        
-        //footer
-        pFooter.setActionCommand(title);
-        pFooter.setPreferredSize(new Dimension(130, 30));
-        pFooter.setFocusPainted(false);
-        pFooter.setBorder(BorderFactory.createRaisedBevelBorder());
-        pFooter.setCursor(new Cursor(HAND_CURSOR));
-        pFooter.setFont(new Font("Arial", Font.BOLD, 15));
-        pFooter.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                pFooter.setBackground(HOVER_COLOR);
-                pFooter.setFont(new Font("Arial", Font.BOLD, 18));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                JButton button = (JButton) e.getSource();
-                if(button.getText().equalsIgnoreCase("Choose")) {
-                    pFooter.setBackground(Color.LIGHT_GRAY);
-                    pFooter.setFont(new Font("Arial", Font.BOLD, 15));
-                }
-            }
-            
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JButton button = (JButton) e.getSource();
-                if(button.getText().equalsIgnoreCase("Choose")) {
-                    center.setEnabled(false);
-                    pFooter.setText("Choosed");
-                    pFooter.setBackground(HOVER_COLOR);
-                    header.setText(titleFalse);
-                    getlTableId().setText("Table  : ");
-                    getlResultTableId().setText(button.getActionCommand());
-                    getlResultBillId().setText(ID.createBillId());
-                    getpOrderBody().removeAll();
-                    getDetailPanelList().clear();
-                    nextCardOrder();
-                } else {
-                    center.setEnabled(true);
-                    pFooter.setText("Choose");
-                    pFooter.setBackground(Color.LIGHT_GRAY);
-                    header.setText(titleTrue);
-                    getlTableId().setText("");
-                    getlResultTableId().setText("");
-                }
-            }
-        });
-        //add cac thanh phan vao panel table
-        table.add(header, BorderLayout.NORTH);
-        table.add(center, BorderLayout.CENTER);
-        table.add(pFooter, BorderLayout.SOUTH);
-        
-        
-        return table;
-    }
-    
     private void createTablePanelList() {
         this.getPanelList().clear();
         for(TableDTO table: this.getSellBUS().getTableBUS().getTableList()) {
-            this.getPanelList().add(this.createTablePanel(table.getTableId(), table.getTableType(), table.isTableStatus()));
+            this.getPanelList().add(new TablePanelGUI(table.getTableId(), this));
         }
     }
     
-    private void addComponentsInPanelListToJPanel(ArrayList<JPanel> panelList, JPanel panel) {
-        for(JPanel o: panelList) {
+    private void addComponentsInTablePanelListToJPanel(ArrayList<TablePanelGUI> panelList, JPanel panel) {
+        panel.removeAll();
+        for(TablePanelGUI o: panelList) {
             panel.add(o);
         }
     }
@@ -1147,8 +1056,8 @@ public final class SellGUI extends JFrame{
                 JPanel newDetail = (JPanel) e.getSource();
                 ChoiceMenuOfProductGUI edit = new ChoiceMenuOfProductGUI(getSellBUS().getDetailBillBUS().getDetailBillFromId(newDetail.getName()).getProductId(), newDetail.getName(), SellGUI.this);
                 edit.getBtnCheck().setActionCommand("Edit");
-            }
-            
+                        
+            }    
         });
         
         //tao nut xoa chi tiet hoa don
@@ -1174,7 +1083,7 @@ public final class SellGUI extends JFrame{
         delete.addActionListener((ActionEvent e) -> {
             this.getSellBUS().getDetailBillBUS().deleteDetailBill(detailBillId);
             for(JPanel detail: getDetailPanelList()) {
-                if(detail.getName().equalsIgnoreCase(detailBillId)) {
+                if(detail.getName().equalsIgnoreCase(detailBillId.trim())) {
                     getDetailPanelList().remove(detail);
                     break;
                 }
@@ -1183,6 +1092,7 @@ public final class SellGUI extends JFrame{
             this.addDetailPanelListToPOrderBody();
             nextCardOrder();
             this.getlToTalResult().setText(this.getSellBUS().getBillBUS().getPriceOfBill(this.getlResultBillId().getText()) + "");
+            resetAndNextCardTable();
         });
         
         //Tao panel dang box layout de hien thi thong tin
@@ -1262,7 +1172,7 @@ public final class SellGUI extends JFrame{
         return detailPanel;
     }
     
-    private void nextCardOrder() {
+    public void nextCardOrder() {
         CardLayout cardNew = (CardLayout) this.getpOrderBodyContainer().getLayout();
         cardNew.show(this.getpOrderBodyContainer(), "OrderBodyTemp");
         cardNew.show(this.getpOrderBodyContainer(), "OrderBody");
@@ -1273,6 +1183,25 @@ public final class SellGUI extends JFrame{
             this.getpOrderBody().add(detail);
         }
     }
+    
+    public void resetAndNextCardTable() {
+        this.resetpTable();
+        this.getCard().show(this.getpBodyMenus(), "Temp");
+        this.getCard().show(this.getpBodyMenus(), "Table");
+    }
+    
+    public void resetpTable() {
+        this.createTablePanelList();
+        this.addComponentsInTablePanelListToJPanel(this.getPanelList(), this.getpTable());
+    }
+    
+    private void createpTable() {
+        this.getpTable().removeAll();
+        this.createTablePanelList();
+        this.addComponentsInTablePanelListToJPanel(this.getPanelList(), this.getpTable());
+    }
+    
+    
     
     //main
     public static void main (String[] args) {

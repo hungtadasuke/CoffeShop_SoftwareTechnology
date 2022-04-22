@@ -43,6 +43,17 @@ public class TableBUS {
         this.resetTableList();
     }
     
+    //get table from id
+    public TableDTO getTableFromId(String tableId) {
+        this.resetTableList();
+        for(TableDTO table: this.getTableList()) {
+            if(table.getTableId().equalsIgnoreCase(tableId)) {
+                return table;
+            }
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         TableBUS o = new TableBUS();
         o.updateStatusTable("TB001", true);
