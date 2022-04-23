@@ -13,11 +13,11 @@ import javax.swing.border.TitledBorder;
 
 public final class TablePanelGUI extends JPanel {
     //attribute
-    SellGUI sellGUI;
-    TableDTO table;
-    JEditorPane header;
-    JLabel center;
-    JButton footer;
+    private SellGUI sellGUI;
+    private TableDTO table;
+    private JEditorPane header;
+    private JLabel center;
+    private JButton footer;
     
     //constructor
     public TablePanelGUI(String tableId, SellGUI sellGUI) {
@@ -57,24 +57,30 @@ public final class TablePanelGUI extends JPanel {
         this.getCenter().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //reset
-                getSellGUI().getDetailPanelList().clear();
-                getSellGUI().getpOrderBody().removeAll();
-                
-                //set
-                BillDTO billNow = getSellGUI().getSellBUS().getBillDoesNotPaymentOfATable(tableId);
-                for(Detail_BillDTO detail: getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillListFromBillId(billNow.getBillId())) {
-                    getSellGUI().getDetailPanelList().add(getSellGUI().createDetailBillPanel(detail.getDetailBillId().trim()));
+                if(getFooter().getText().equalsIgnoreCase("Full")) {
+                    //xoa don hang mang ve trong truong hop dang tao don mang ve khong bam thanh toan ma bam vao mot ban nao do xem bill
+                    if(getSellGUI().getlResultTableId().getText().equalsIgnoreCase("")) {
+                        getSellGUI().getSellBUS().getBillBUS().deleteBill(getSellGUI().getlResultBillId().getText());
+                    }
+
+                    //reset
+                    getSellGUI().getDetailPanelList().clear();
+                    getSellGUI().getpOrderBody().removeAll();
+
+                    //set
+                    BillDTO billNow = getSellGUI().getSellBUS().getBillDoesNotPaymentOfATable(tableId);
+                    for(Detail_BillDTO detail: getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillListFromBillId(billNow.getBillId())) {
+                        getSellGUI().getDetailPanelList().add(getSellGUI().createDetailBillPanel(detail.getDetailBillId().trim()));
+                    }
+                    getSellGUI().addDetailPanelListToPOrderBody();
+                    getSellGUI().nextCardOrder();
+
+                    //set lai cac thong tin
+                    getSellGUI().getlResultBillId().setText(billNow.getBillId());
+                    getSellGUI().getlTableId().setText("Table  : ");
+                    getSellGUI().getlResultTableId().setText(tableId);
+                    getSellGUI().getlToTalResult().setText(billNow.getTotal() + "");
                 }
-                getSellGUI().addDetailPanelListToPOrderBody();
-                getSellGUI().nextCardOrder();
-                
-                //set lai cac thong tin
-                getSellGUI().getlResultBillId().setText(billNow.getBillId());
-                getSellGUI().getlTableId().setText("Table  : ");
-                getSellGUI().getlResultTableId().setText(tableId);
-                getSellGUI().getlToTalResult().setText(billNow.getTotal() + "");
-                
             }
         });
         
@@ -109,6 +115,19 @@ public final class TablePanelGUI extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 JButton button = (JButton) e.getSource();
                 if(button.getText().equalsIgnoreCase("Choose")) {
+                    //xoa don hang mang ve trong truong hop dang tao don mang ve khong bam thanh toan ma bam vao choose mot table nao do
+                    if(getSellGUI().getlResultTableId().getText().equalsIgnoreCase("")) {
+                        getSellGUI().getSellBUS().getBillBUS().deleteBill(getSellGUI().getlResultBillId().getText());
+                    }
+                    
+                    //reset
+                    getSellGUI().getDetailPanelList().clear();
+                    getSellGUI().getpOrderBody().removeAll();
+                    
+                    getSellGUI().nextCardOrder();
+                    
+                    getSellGUI().getlToTalResult().setText("0.00");
+                    
                     getCenter().setIcon(new ImageIcon("Resource\\table-choosed-icon.png"));
                     getFooter().setText("Choosed");
                     getFooter().setBackground(getSellGUI().HOVER_COLOR);

@@ -15,17 +15,17 @@ import javax.swing.border.*;
 
 public final class ChoiceMenuOfProductGUI extends JFrame{
     //components
-    JPanel pHeader, pBody, pFooter, pBodyHeader, pBodySize, pBodyQuantity, pBodyPrice, pBodyStatus, pBodyCenter;
-    JLabel lHeader, lSize, lQuantity, lPrice, lStatus;
-    JButton btnCheck, bAdd, bSub;
-    JTextField tfQuantity, tfPrice;
-    Vector <JRadioButton> sizeRadioButtonList;
-    JCheckBox[] statusCheckBoxList;
-    Vector <ChoiceMenuOfToppingGUI> toppingPanelList;
-    String productId;
-    String detailBillId;
-    Color BACKGROUND_COLOR = new Color(175, 136, 110);
-    SellGUI sellGUI;
+    private JPanel pHeader, pBody, pFooter, pBodyHeader, pBodySize, pBodyQuantity, pBodyPrice, pBodyStatus, pBodyCenter;
+    private JLabel lHeader, lSize, lQuantity, lPrice, lStatus;
+    private JButton btnCheck, bAdd, bSub;
+    private JTextField tfQuantity, tfPrice;
+    private Vector <JRadioButton> sizeRadioButtonList;
+    private JCheckBox[] statusCheckBoxList;
+    private Vector <ChoiceMenuOfToppingGUI> toppingPanelList;
+    private String productId;
+    private String detailBillId;
+    private static Color BACKGROUND_COLOR = new Color(175, 136, 110);
+    private SellGUI sellGUI;
     
     //constructor
     public ChoiceMenuOfProductGUI(String productId, SellGUI sellGUI) {
