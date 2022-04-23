@@ -17,7 +17,7 @@ import javax.swing.border.*;
 public final class SellGUI extends JFrame{
     //attribute
     private JPanel pOrderInfo, pOrderHeader, pOrderBodyContainer, pOrderBody, pOrderBodyTemp, pOrderFooter,
-                   pMenus, pHeaderMenus, pBodyMenus, pScrossBar1, pWestSrcossBar1, pClassifyMenu, pSrossBar2, pTable, pItemMenu, pTemp;
+                   pMenus, pHeaderMenus, pBodyMenus, pScrossBar1, pEastScrossBar1, pClassifyMenu, pSrossBar2, pTable, pItemMenu, pTemp;
     
     private JScrollPane sOrderBody, sOrderBodyTemp, sItemMenu, sTemp;
     
@@ -27,7 +27,7 @@ public final class SellGUI extends JFrame{
     
     private ArrayList<TablePanelGUI> panelList;
     
-    private JButton bNew, bHome, bReset, bSearch, bOk;
+    private JButton bNew, bDel, bHome, bSearch, bOk;
     
     private JLabel lOrder, lBillId, lResultBillId, lDateNow, lResultDateNow, lStaffId, lResultStaffId, lTableId, lResultTableId, lTotal, lReceived, lExcess, lToTalResult, lExcessResult;
     
@@ -37,9 +37,9 @@ public final class SellGUI extends JFrame{
     
     private SellBUS sellBUS;
     
-    String billID;
+    private String billID;
     
-    String staffId;
+    private String staffId;
     
     Color BROWN_COLOR = new Color(145, 91, 54);
     Color BACKGROUND_COLOR = new Color(234, 231, 214);
@@ -141,6 +141,22 @@ public final class SellGUI extends JFrame{
 
     public void setlResultTableId(JLabel lResultTableId) {
         this.lResultTableId = lResultTableId;
+    }
+
+    public JPanel getpEastScrossBar1() {
+        return pEastScrossBar1;
+    }
+
+    public void setpEastScrossBar1(JPanel pEastScrossBar1) {
+        this.pEastScrossBar1 = pEastScrossBar1;
+    }
+
+    public JButton getbDel() {
+        return bDel;
+    }
+
+    public void setbDel(JButton bDel) {
+        this.bDel = bDel;
     }
 
     public JLabel getlToTalResult() {
@@ -343,22 +359,6 @@ public final class SellGUI extends JFrame{
 
     public void setsTemp(JScrollPane sTemp) {
         this.sTemp = sTemp;
-    }
-
-    public JPanel getpWestSrcossBar1() {
-        return pWestSrcossBar1;
-    }
-
-    public void setpWestSrcossBar1(JPanel pWestSrcossBar1) {
-        this.pWestSrcossBar1 = pWestSrcossBar1;
-    }
-
-    public JButton getbReset() {
-        return bReset;
-    }
-
-    public void setbReset(JButton bReset) {
-        this.bReset = bReset;
     }
 
     public JPanel getpTable() {
@@ -662,12 +662,8 @@ public final class SellGUI extends JFrame{
         this.getpScrossBar1().setBorder(BorderFactory.createMatteBorder(2, 0, 2, 2, Color.BLACK));
         this.getpScrossBar1().setLayout(new BorderLayout());
         
-        //set pWestScrossBar1
-        this.setpWestSrcossBar1(new JPanel());
-        this.getpWestSrcossBar1().setPreferredSize(new Dimension(100, 40));
-        this.getpWestSrcossBar1().setLayout(new BorderLayout());
-        this.getpWestSrcossBar1().setBorder(new EmptyBorder(0, 5, 0, 0));
-        this.getpWestSrcossBar1().setBackground(BROWN_COLOR);
+        //set pEastScrossBar1
+        this.setpEastScrossBar1(new JPanel(new BorderLayout()));
         
         //Set button "New"
         this.setbNew(new JButton("New"));
@@ -697,11 +693,64 @@ public final class SellGUI extends JFrame{
                getbNew().setBorder(null);
            }
         });
+        this.getbNew().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getBillBUS().checkExists(this.getlResultBillId().getText()) == false) {
+                int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Create A New Bill?", "Create A New Bill", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION) {
+                    if(this.getlResultTableId().getText().equalsIgnoreCase("")) {
+                        this.getSellBUS().getBillBUS().deleteBill(this.getlResultBillId().getText());
+                    }
+                    setNewOrder();
+                    resetAndNextCardTable();
+                }
+                
+            }
+        });
+        
+        //Set button pDel
+        this.setbDel(new JButton("Del"));
+        this.getbDel().setActionCommand("Del");
+        this.getbDel().setPreferredSize(new Dimension(70, 20));
+        this.getbDel().setBackground(BROWN_COLOR);
+        this.getbDel().setForeground(Color.WHITE);
+        this.getbDel().setFont(new Font("Arial", Font.BOLD, 22));
+        this.getbDel().setBorder(null);
+        //delete khung bao jbutton moi khi nhap vao (mac dinh)
+        this.getbDel().setFocusPainted(false);
+        //Di chuot vao doi tuong va doi thanh hinh ban tay
+        this.getbDel().setCursor(new Cursor(HAND_CURSOR));
+        //Su ly su kien chuot cho "Del" JButton
+        this.getbDel().addMouseListener(new MouseAdapter() {
+           @Override
+           public void mouseEntered(MouseEvent e) {
+               getbDel().setBackground(HOVER_COLOR);
+               getbDel().setForeground(Color.BLACK);
+               getbDel().setBorder(BorderFactory.createRaisedBevelBorder());
+           }
+           
+           @Override
+           public void mouseExited(MouseEvent e) {
+               getbDel().setBackground(BROWN_COLOR);
+               getbDel().setForeground(Color.WHITE);
+               getbDel().setBorder(null);
+           }
+        });
+        this.getbDel().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getBillBUS().checkExists(this.getlResultBillId().getText()) == false) {
+                int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Delete This Bill?", "Delete", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION) {
+                    getSellBUS().getBillBUS().deleteBill(getlResultBillId().getText());
+                    setNewOrder();
+                    resetAndNextCardTable();
+                }
+            }
+        });
+        
         
         //set button has home icon
         this.setbHome(new JButton(new ImageIcon("Resource\\iconHome.png")));
         this.getbHome().setActionCommand("Home");
-        this.getbHome().setPreferredSize(new Dimension(50, 40));
+        this.getbHome().setPreferredSize(new Dimension(40, 40));
         this.getbHome().setBorder(null);
         this.getbHome().setContentAreaFilled(false);
         this.getbHome().setCursor(new Cursor(HAND_CURSOR));
@@ -719,35 +768,14 @@ public final class SellGUI extends JFrame{
             }
         });
         
-        //set reset button
-        this.setbReset(new JButton(new ImageIcon("Resource\\reset-icon.png")));
-        this.getbReset().setActionCommand("Reset");
-        this.getbReset().setPreferredSize(new Dimension(50, 40));
-        this.getbReset().setFocusPainted(false);
-        this.getbReset().setContentAreaFilled(false);
-        this.getbReset().setBorder(null);
-        this.getbReset().setCursor(new Cursor(HAND_CURSOR));
-        //xu ly su kien chuot cho "Reset" JButton
-        this.getbReset().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                getbReset().setIcon(new ImageIcon("Resource\\reset-icon-hover.png"));
-            }
-            
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                getbReset().setIcon(new ImageIcon("Resource\\reset-icon.png"));
-            }
-        });
-        
-        //add button home icon, button reset icon to pWestScrossBar1
-        this.getpWestSrcossBar1().add(this.getbHome(), BorderLayout.WEST);
-        this.getpWestSrcossBar1().add(this.getbReset(), BorderLayout.CENTER);
+        //add button New and Del to pEastScrossBar1
+        this.getpEastScrossBar1().add(this.getbDel(), BorderLayout.WEST);
+        this.getpEastScrossBar1().add(this.getbNew(), BorderLayout.EAST);
         
         //add components to pScrossBar1
-        this.getpScrossBar1().add(this.getpWestSrcossBar1(), BorderLayout.WEST);
+        this.getpScrossBar1().add(this.getbHome(), BorderLayout.WEST);
          
-        this.getpScrossBar1().add(this.getbNew(), BorderLayout.EAST);
+        this.getpScrossBar1().add(this.getpEastScrossBar1(), BorderLayout.EAST);
         
         
         //pClassifyMenu
@@ -978,9 +1006,11 @@ public final class SellGUI extends JFrame{
     
     private void createClassifyButtonList() {
         this.getButtonList().clear();
+        this.getpClassifyMenu().removeAll();
         Border mix = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
         Border line = BorderFactory.createTitledBorder(mix, "Menu", TitledBorder.RIGHT, TitledBorder.BELOW_TOP, new Font("Arial", Font.ITALIC, 10), Color.BLACK);
         this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table", line));
+        this.getSellBUS().getClassifyBUS().resetClassifyList();
         for(ClassifyDTO classify: this.getSellBUS().getClassifyBUS().getClassifyList()) {
             if(classify.isClassifyBusiness()) {
                 this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId(), line));
@@ -996,6 +1026,7 @@ public final class SellGUI extends JFrame{
     
     private void createProductButtonList(String classifyId) {
         this.getButtonList().clear();
+        this.getSellBUS().getProductBUS().resetProductList();
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
             if(product.isProductBusiness() && product.getClassifyId().equalsIgnoreCase(classifyId)) {      
                 this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
@@ -1092,7 +1123,9 @@ public final class SellGUI extends JFrame{
             this.addDetailPanelListToPOrderBody();
             nextCardOrder();
             this.getlToTalResult().setText(this.getSellBUS().getBillBUS().getPriceOfBill(this.getlResultBillId().getText()) + "");
-            resetAndNextCardTable();
+            if(this.getDetailPanelList().isEmpty() && !this.getlResultTableId().getText().equalsIgnoreCase(""))  {
+                resetAndNextCardTable();
+            }
         });
         
         //Tao panel dang box layout de hien thi thong tin

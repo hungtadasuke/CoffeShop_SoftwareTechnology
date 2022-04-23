@@ -1,7 +1,10 @@
 package BUS;
 
+import ApplicationHelper.MyDate;
 import DAO.BillDAO;
 import DTO.BillDTO;
+import java.text.*;
+import java.util.Date;
 import java.util.Vector;
 
 
@@ -84,8 +87,92 @@ public class BillBUS {
         return null;
     }
     
-    public static void main(String[] args) {
+    //delete bill
+    public void deleteBill(String billId) {
+        this.getBillDAO().deleteBill(billId);
+        this.resetList();
+    }
+    
+    //get bill list from bill type and time
+    public Vector<BillDTO> getBillList(String billType, String dateStart, String dateEnd) throws ParseException {
+        Vector<BillDTO> list = new Vector<>();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date DateStart = sdf.parse(dateStart);
+            Date DateEnd = sdf.parse(dateEnd);
+            for(BillDTO bill: this.getBillList()) {
+                Date DateCheck = sdf.parse(MyDate.format(bill.getDate().toString()));
+                if(bill.isBillStatus() && bill.getBillType().equalsIgnoreCase(billType) && DateCheck.compareTo(DateStart) == 1 && DateCheck.compareTo(DateEnd) == -1) {
+                    list.add(bill);
+                } else if (bill.isBillStatus() && bill.getBillType().equalsIgnoreCase(billType) && (DateCheck.compareTo(DateStart) == 0 || DateCheck.compareTo(DateEnd) == 0)) {
+                    list.add(bill);
+                }
+            }
+        } catch (ParseException e) {
+            System.err.println("Error at getBillList from billType and time of BillBUS class!");
+            System.err.println(e);
+        }
+        return list;
+    }
+    
+    //get count bills from bill tyoe and time
+    public int getCountBill(String billType, String dateStart, String dateEnd) throws ParseException {
+        int count = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date DateStart = sdf.parse(dateStart);
+            Date DateEnd = sdf.parse(dateEnd);
+            for(BillDTO bill: this.getBillList()) {
+                Date DateCheck = sdf.parse(MyDate.format(bill.getDate().toString()));
+                if(bill.isBillStatus() && bill.getBillType().equalsIgnoreCase(billType) && DateCheck.compareTo(DateStart) == 1 && DateCheck.compareTo(DateEnd) == -1) {
+                    count++;
+                } else if(bill.isBillStatus() && bill.getBillType().equalsIgnoreCase(billType) && (DateCheck.compareTo(DateStart) == 0 || DateCheck.compareTo(DateEnd) == 0)){
+                    count++;
+                }
+            }
+        } catch (ParseException e) {
+            System.err.println("Error at getCountBill from billType and time of BillBUS class!");
+            System.err.println(e);
+        }
+        return count;
+    }
+    
+    //get total bills from bill type and time
+    public Double getTotalOfBillList(String dateStart, String dateEnd) throws ParseException {
+        Double total = 0.0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date DateStart = sdf.parse(dateStart);
+            Date DateEnd = sdf.parse(dateEnd);
+            Date DateCheck;
+            for(BillDTO bill: this.getBillList()) {
+                DateCheck = sdf.parse(MyDate.format(bill.getDate().toString()));
+                if(bill.isBillStatus() && DateCheck.compareTo(DateStart) == 1 && DateCheck.compareTo(DateEnd) == -1) {
+                    total += bill.getTotal();
+                } else if (bill.isBillStatus() && (DateCheck.compareTo(DateStart) == 0 || DateCheck.compareTo(DateEnd) == 0)) {
+                    total += bill.getTotal();
+                }
+            }
+        } catch (ParseException e) {
+            System.err.println("Error at getTotalOfBillList from billType and time of BillBUS class!");
+            System.err.println(e);
+        }
+        return total;
+    }
+    
+    //get sum count of bill from time
+    public int getSumCountBill(String dayStart, String dayEnd) throws ParseException {
+        return this.getCountBill("Spot", dayStart, dayEnd) + this.getCountBill("Take Away", dayStart, dayEnd);
+    }
+    
+    public static void main(String[] args) throws ParseException {
         BillBUS o = new BillBUS();
+        for(BillDTO bill: o.getBillList("Spot", "2022-04-23", "2023-04-23")) {
+            System.out.println(bill.getBillId());
+        }
+        System.out.println(o.getCountBill("Take Away", "2022-04-23", "2023-04-23"));
+        System.out.println(o.getTotalOfBillList("2022-04-22", "2022-04-22"));
+        System.out.println(o.getSumCountBill("2022-04-23", "2022-04-23"));
     }
     
     
