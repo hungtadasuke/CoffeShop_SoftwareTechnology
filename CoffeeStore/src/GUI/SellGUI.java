@@ -471,6 +471,10 @@ public final class SellGUI extends JFrame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing (WindowEvent e) {
+                //Dang bam bill mang ve ma thoat ra :))) thi xoa bill mang ve do. Khi mo lai ung dung thi bam lai
+                if(getlResultTableId().getText().equalsIgnoreCase("")) {
+                    getSellBUS().getBillBUS().deleteBill(getlResultBillId().getText());
+                }
                 System.exit(0);
             }
         });
