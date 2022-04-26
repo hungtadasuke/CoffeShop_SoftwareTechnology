@@ -2,11 +2,18 @@ package GUI;
 
 import ApplicationHelper.MyDate;
 import BUS.SellBUS;
+import BUS.StatisticBUS;
+import DTO.StatisticProductDTO;
+import DTO.StatisticToppingDTO;
 import java.awt.*;
 import static java.awt.Frame.HAND_CURSOR;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -33,7 +40,9 @@ public final class StatisticGUI extends JFrame{
     
     private SellBUS sellBUS;
     
-    private String permision, staffID;
+    private StatisticBUS statisticBUS;
+    
+    private String staffID, print;
     
     private static String[] yearString = new String[] {"2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031"};
     private static String[] monthString = new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
@@ -44,8 +53,10 @@ public final class StatisticGUI extends JFrame{
     Color defaultColor = (Color) this.getBackground();
     
     //constructor
-    public StatisticGUI(String permision, String staffID) {
-        this.setPermision(permision);
+    public StatisticGUI(String staffID) {
+        this.setSellBUS(new SellBUS());
+        this.setStaffID(staffID);
+        this.setStatisticBUS(new StatisticBUS());
         this.init();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -68,6 +79,14 @@ public final class StatisticGUI extends JFrame{
         this.pBody = pBody;
     }
 
+    public String getPrint() {
+        return print;
+    }
+
+    public void setPrint(String print) {
+        this.print = print;
+    }
+
     public JPanel getpFooter() {
         return pFooter;
     }
@@ -86,6 +105,14 @@ public final class StatisticGUI extends JFrame{
 
     public JPanel getpBodyLeftHeader() {
         return pBodyLeftHeader;
+    }
+
+    public StatisticBUS getStatisticBUS() {
+        return statisticBUS;
+    }
+
+    public void setStatisticBUS(StatisticBUS statisticBUS) {
+        this.statisticBUS = statisticBUS;
     }
 
     public void setpBodyLeftHeader(JPanel pBodyLeftHeader) {
@@ -372,14 +399,6 @@ public final class StatisticGUI extends JFrame{
         StatisticGUI.monthString = monthString;
     }
 
-    public String getPermision() {
-        return permision;
-    }
-
-    public void setPermision(String permision) {
-        this.permision = permision;
-    }
-
     public JLabel getlFrom() {
         return lFrom;
     }
@@ -486,6 +505,27 @@ public final class StatisticGUI extends JFrame{
         //create "Search" button
         this.setbSearch(this.createJButton("Search", 100, 37, Color.LIGHT_GRAY));
         
+        this.getbSearch().addActionListener((ActionEvent e) -> {
+            String dateStart = this.getCbYearStart().getSelectedItem() + "-" + this.getCbMonthStart().getSelectedItem() + "-" + this.getCbDayStart().getSelectedItem();
+            String dateEnd = this.getCbYearEnd().getSelectedItem() + "-" + this.getCbMonthEnd().getSelectedItem() + "-" + this.getCbDayEnd().getSelectedItem();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date dateS = null;
+            Date dateE = null;
+            try {
+                dateS = sdf.parse(dateStart);
+                dateE = sdf.parse(dateEnd);
+            } catch (ParseException ex) {
+                System.err.println("Error at event bSearch in StatisticGUI!");
+                System.err.println(e);
+            }
+            if(dateS.compareTo(dateE) == -1 || dateS.compareTo(dateE) == 0) {
+                fillStatisticProductDataToTable(this.getTfSearch().getText(), dateStart, dateEnd);
+                fillStatisticToppingDataToTable(this.getTfSearch().getText(), dateStart, dateEnd);
+            } else {
+                JOptionPane.showMessageDialog(StatisticGUI.this, "Error! Invalid End Date!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
         //add components to pHeader
         this.getpHeader().add(this.getbHome(), BorderLayout.WEST);
         
@@ -523,9 +563,11 @@ public final class StatisticGUI extends JFrame{
             if(e.getSource().equals(getbProduct())) {
                 CardLayout card = (CardLayout) getpBodyRight().getLayout();
                 card.show(getpBodyRight(), "Product");
+                this.setPrint("Product");
             } else if(e.getSource().equals(getbTopping())) {
                 CardLayout card = (CardLayout) getpBodyRight().getLayout();
                 card.show(getpBodyRight(), "Topping");
+                this.setPrint("Topping");
             }
         });
         return button;
@@ -592,7 +634,7 @@ public final class StatisticGUI extends JFrame{
         this.setCbYearEnd(new JComboBox(StatisticGUI.getYearString()));
         this.getCbYearEnd().setActionCommand("Year End");
         
-        if(this.getPermision().equalsIgnoreCase("Manage")){
+        if(this.getSellBUS().getStaffBUS().getStaffFromId(this.getStaffID()).getPosition().equalsIgnoreCase("Manager")){
             this.setDateNowForComBoBox(this.getCbDayStart(), this.getCbMonthStart(), this.getCbYearStart());
             this.setDateNowForComBoBox(this.getCbDayEnd(), this.getCbMonthEnd(), this.getCbYearEnd());
 
@@ -607,7 +649,7 @@ public final class StatisticGUI extends JFrame{
                 setDate(this.getCbDayEnd(), this.getCbMonthEnd(), this.getCbYearEnd());
             });
             this.getCbYearEnd().addActionListener((ActionEvent e) -> {
-            setDate(this.getCbDayEnd(), this.getCbMonthEnd(), this.getCbYearEnd());
+                setDate(this.getCbDayEnd(), this.getCbMonthEnd(), this.getCbYearEnd());
         });
         } else {
             setSeenModelForStaff();
@@ -642,6 +684,27 @@ public final class StatisticGUI extends JFrame{
             }
             
         });
+        this.getbFind().addActionListener((ActionEvent e) -> {
+            String dateStart = getCbYearStart().getSelectedItem() + "-" + getCbMonthStart().getSelectedItem() + "-" + getCbDayStart().getSelectedItem();
+            String dateEnd = getCbYearEnd().getSelectedItem() + "-" + getCbMonthEnd().getSelectedItem() + "-" + getCbDayEnd().getSelectedItem();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date dateS = null;
+            Date dateE = null;
+            try {
+                dateS = sdf.parse(dateStart);
+                dateE = sdf.parse(dateEnd);
+            } catch (ParseException ex) {
+                System.err.println("Error at event Find!");
+                System.err.println(ex);
+            }
+            if(dateS.compareTo(dateE) == -1 || dateS.compareTo(dateE) == 0 ) {
+                fillStatisticProductDataToTable(dateStart, dateEnd);
+                fillStatisticToppingDataToTable(dateStart, dateEnd);
+                setFromTo();
+            } else {
+                JOptionPane.showMessageDialog(StatisticGUI.this, "Error! Invalid End Date!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         
         this.getpBodyLeftFooter().add(this.getlFisnish());
         this.getpBodyLeftFooter().add(this.createJPanelCB(this.getlDayEnd(), this.getCbDayEnd()));
@@ -669,36 +732,49 @@ public final class StatisticGUI extends JFrame{
         
         this.setsProduct(new JScrollPane(this.getTbProduct()));
         this.getsProduct().setPreferredSize(new Dimension(JPanel.WIDTH, JPanel.HEIGHT));
-        this.getsProduct().getViewport().setBackground(BACKGROUND_COLOR);
+        this.getsProduct().getViewport().setBackground(new Color(230, 222, 178));
         
         this.setsTopping(new JScrollPane(this.getTbTopping()));
-        this.getsTopping().getViewport().setBackground(BACKGROUND_COLOR);
+        this.getsTopping().getViewport().setBackground(new Color(230, 222, 178));
         
         this.getpBodyRight().add(this.getsProduct(), "Product");
         this.getpBodyRight().add(this.getsTopping(), "Topping");
         
+        this.setPrint("Product");
+        
         //set colums in table product
-        this.getProductModel().addColumn("Classify");
-        this.getProductModel().addColumn("ProductID");
         this.getProductModel().addColumn("ProductName");
+        this.getProductModel().addColumn("Price/S");
         this.getProductModel().addColumn("QtyS");
-        this.getProductModel().addColumn("Price/Product");
-        this.getProductModel().addColumn("Sales");
+        this.getProductModel().addColumn("SalesS");
+        this.getProductModel().addColumn("Price/M");
         this.getProductModel().addColumn("QtyM");
-        this.getProductModel().addColumn("Price/Product");
-        this.getProductModel().addColumn("Sales");
+        this.getProductModel().addColumn("SalesM");
+        this.getProductModel().addColumn("Price/L");
         this.getProductModel().addColumn("QtyL");
-        this.getProductModel().addColumn("Price/Product");
-        this.getProductModel().addColumn("Sales");
+        this.getProductModel().addColumn("SalesL");
+        this.getProductModel().addColumn("CountSum");
+        this.getProductModel().addColumn("SalesSum");
         
         this.getTbProduct().getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-        this.getTbProduct().getColumnModel().getColumn(2).setPreferredWidth(180);
+        this.getTbProduct().getColumnModel().getColumn(0).setPreferredWidth(180);
+        this.getTbProduct().setBackground(BACKGROUND_COLOR);
         
         //set colums in table topping
         this.getToppingModel().addColumn("ToppingID");
         this.getToppingModel().addColumn("ToppingName");
         this.getToppingModel().addColumn("Price/Topping");
+        this.getToppingModel().addColumn("Quantity");
         this.getToppingModel().addColumn("Sales");
+        
+        this.getTbTopping().setBackground(BACKGROUND_COLOR);
+        
+        //Khoi dong chuc nang se mac dinh la thong ke cua ngay hien tai
+        MyDate date = new MyDate();
+        date.getDateNow();
+        String dateNow = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+        this.fillStatisticProductDataToTable(dateNow, dateNow);
+        this.fillStatisticToppingDataToTable(dateNow, dateNow);
         
         //add
         this.getpBody().add(this.getpBodyLeft(), BorderLayout.WEST);
@@ -767,6 +843,20 @@ public final class StatisticGUI extends JFrame{
                 getbPrint().setIcon(new ImageIcon("Resource\\print-icon.png"));
             }
         });
+        this.getbPrint().addActionListener((ActionEvent e) -> {
+            if(this.getPrint().equalsIgnoreCase("Topping")) {
+                int result = JOptionPane.showConfirmDialog(StatisticGUI.this, "Do You Want To Print This Toppings Statistic?", "Print Toppings Statistic", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION) {
+                    this.getStatisticBUS().printToppingStatistic(this.getTbTopping(), this.getlFrom().getText().split("\\s")[1], this.getlTo().getText().split("\\s")[1], this.getStaffID());
+                }
+            } else {
+                int result = JOptionPane.showConfirmDialog(StatisticGUI.this, "Do You Want To Print This Products Statistic?", "Print Products Statistic", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION) {
+                   this.getStatisticBUS().printProductStatistic(this.getTbProduct(), this.getlFrom().getText().split("\\s")[1], this.getlTo().getText().split("\\s")[1], this.getStaffID());
+                }
+            }
+            JOptionPane.showMessageDialog(StatisticGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
+        });
         
         tempContainer.add(this.getbProduct());
         tempContainer.add(this.getbTopping());
@@ -819,6 +909,8 @@ public final class StatisticGUI extends JFrame{
         }
         if(Integer.parseInt(temp) <= dayOfMonth) {
             day.setSelectedItem(temp);
+        } else {
+            day.setSelectedItem(dayOfMonth + "");
         }
     }
     
@@ -852,8 +944,60 @@ public final class StatisticGUI extends JFrame{
         this.getCbYearEnd().setEnabled(false);
     }
     
+    //method fill data statistic of product to table
+    private void fillStatisticProductDataToTable(String dateStart, String dateEnd) {
+        this.getProductModel().setRowCount(0);
+        for(StatisticProductDTO statistic: this.getStatisticBUS().getSatisticProductDTO(dateStart, dateEnd)) {
+            this.getProductModel().addRow(new Object[] {this.getSellBUS().getProductBUS().getProductFromId(statistic.getProductId()).getProductName(),
+                                                        this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statistic.getProductId(), "S"), statistic.getSalesOfSize()[0][0], 
+                                                        statistic.getSalesOfSize()[1][0], this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statistic.getProductId(), "M"),
+                                                        statistic.getSalesOfSize()[0][1], statistic.getSalesOfSize()[1][1],
+                                                        this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statistic.getProductId(), "L"), statistic.getSalesOfSize()[0][2],
+                                                        statistic.getSalesOfSize()[1][2], statistic.getSalesOfSize()[0][3], statistic.getSalesOfSize()[1][3]});                                         
+        }
+    }
+    
+    //method fill date statistic of topping to table
+    private void fillStatisticToppingDataToTable(String dateStart, String dateEnd) {
+        this.getToppingModel().setRowCount(0);
+        for(StatisticToppingDTO statisticTopping: this.getStatisticBUS().getStatisticToppingList(dateStart, dateEnd)) {
+            this.getToppingModel().addRow(new Object[] {statisticTopping.getToppingId(), this.getSellBUS().getToppingBUS().getToppingFromId(statisticTopping.getToppingId()).getToppingName(),
+            this.getSellBUS().getToppingBUS().getPriceFromId(statisticTopping.getToppingId()), statisticTopping.getQuantity(), statisticTopping.getSales()});
+        }
+    }
+    
+    //method fill data statistic of product to table from keyWord and date
+    private void fillStatisticProductDataToTable(String keyWord, String dateStart, String dateEnd) {
+        this.getProductModel().setRowCount(0);
+        for(StatisticProductDTO statisticProduct: this.getStatisticBUS().getStatisticProductList(keyWord, dateStart, dateEnd)) {
+            this.getProductModel().addRow(new Object[] {this.getSellBUS().getProductBUS().getProductFromId(statisticProduct.getProductId()).getProductName(),
+                                                        this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statisticProduct.getProductId(), "S"), statisticProduct.getSalesOfSize()[0][0], 
+                                                        statisticProduct.getSalesOfSize()[1][0], this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statisticProduct.getProductId(), "M"),
+                                                        statisticProduct.getSalesOfSize()[0][1], statisticProduct.getSalesOfSize()[1][1],
+                                                        this.getSellBUS().getProductSizeBUS().getPriceToStatistic(statisticProduct.getProductId(), "L"), statisticProduct.getSalesOfSize()[0][2],
+                                                        statisticProduct.getSalesOfSize()[1][2], statisticProduct.getSalesOfSize()[0][3], statisticProduct.getSalesOfSize()[1][3]}); 
+        }
+    }
+    
+    //method fill data statistic of topping to table from keyWord and date
+    private void fillStatisticToppingDataToTable(String keyWord, String dateStart, String dateEnd) {
+        this.getToppingModel().setRowCount(0);
+        for(StatisticToppingDTO statisticTopping: this.getStatisticBUS().getStatisticToppingList(keyWord, dateStart, dateEnd)) {
+            this.getToppingModel().addRow(new Object[] {statisticTopping.getToppingId(), this.getSellBUS().getToppingBUS().getToppingFromId(statisticTopping.getToppingId()).getToppingName(),
+            this.getSellBUS().getToppingBUS().getPriceFromId(statisticTopping.getToppingId()), statisticTopping.getQuantity(), statisticTopping.getSales()});
+        }
+    }
+    
+    //set lFrom and lTo
+    private void setFromTo() {
+        String dateFrom = this.getCbDayStart().getSelectedItem() + "/" + this.getCbMonthStart().getSelectedItem() + "/" + this.getCbYearStart().getSelectedItem();
+        String dateTo = this.getCbDayEnd().getSelectedItem() + "/" + this.getCbMonthEnd().getSelectedItem() + "/" + this.getCbYearEnd().getSelectedItem();
+        this.getlFrom().setText("From: " + dateFrom);
+        this.getlTo().setText("To: " + dateTo);
+    }
+    
     //main
     public static void main(String[] args) {
-        StatisticGUI statistic = new StatisticGUI("Manage", "SF001");
+        StatisticGUI statistic = new StatisticGUI("SF001");
     }
 }

@@ -22,7 +22,7 @@ public final class SalesGUI extends JFrame{
     private JScrollPane sTakeAway, sSpot, sTempSpot, sTempTakeAway;
     private JLabel lFrom, lTo, lCountSpotBill, lCountTakeAwayBill, lCountBetween, lSales;
     private Vector<JPanel> billPanel;
-    private String permision, staffID;
+    private String staffID;
     
     Color BROWN_COLOR = new Color(145, 91, 54);
     Color BACKGROUND_COLOR = new Color(234, 231, 214);
@@ -34,9 +34,8 @@ public final class SalesGUI extends JFrame{
     private static String[] monthString = new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
     
     //constructor
-    public SalesGUI(String permision, String staffID) {
+    public SalesGUI(String staffID) {
         this.setStaffID(staffID);
-        this.setPermision(permision);
         this.init();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -49,14 +48,6 @@ public final class SalesGUI extends JFrame{
 
     public void setcbDayStart(JComboBox cbcbDayStart) {
         this.cbcbDayStart = cbcbDayStart;
-    }
-
-    public String getPermision() {
-        return permision;
-    }
-
-    public void setPermision(String permision) {
-        this.permision = permision;
     }
 
     public String getStaffID() {
@@ -448,7 +439,7 @@ public final class SalesGUI extends JFrame{
 
         
 
-        if(this.getPermision().equalsIgnoreCase("Manage")) {
+        if(this.getSellBUS().getStaffBUS().getStaffFromId(this.getStaffID()).getPosition().equalsIgnoreCase("Manager")) {
             MyDate date = new MyDate();
             date.getDateNow();
             int dayOfMonth = MyDate.getArrDaysOfMonth()[MyDate.checkLeapYear(Integer.parseInt(date.getYear()))][Integer.parseInt(date.getMonth())];
@@ -540,6 +531,8 @@ public final class SalesGUI extends JFrame{
                 createpBillList(this.getpTakeAway(), "Take Away");
                 nextCard(this.getpTakeAwayContainer(), "Take Away");
                 resetpFooter();
+            } else {
+                JOptionPane.showMessageDialog(SalesGUI.this, "Error! Invalid End Date!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         pSearch.add(this.getbSearch());
@@ -686,13 +679,14 @@ public final class SalesGUI extends JFrame{
             }
         });
         this.getbPrint().addActionListener((ActionEvent e) -> {
-            int result = JOptionPane.showConfirmDialog(SalesGUI.this, "Are You Want To Print This Sales?", "Print Sales", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(SalesGUI.this, "Do You Want To Print This Sales?", "Print Sales", JOptionPane.YES_NO_OPTION);
             if(result == JOptionPane.YES_OPTION) {
                 this.getSellBUS().printSales(getStaffID(), getlFrom().getText().split("\\s")[1], getlTo().getText().split("\\s")[1], 
                                              Integer.parseInt(getlCountSpotBill().getText().split("\\s")[1]),
                                              Integer.parseInt(getlCountTakeAwayBill().getText().split("\\s")[1]),
                                              Integer.parseInt(getlCountBetween().getText().split("\\s")[1]),
                                              Double.parseDouble(getlSales().getText().split("\\s")[1]));
+                JOptionPane.showMessageDialog(SalesGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
             }
         });
         
@@ -787,6 +781,8 @@ public final class SalesGUI extends JFrame{
         }
         if (Integer.parseInt(dayChoose) <= temp) {
             getcbDayStart().setSelectedItem(dayChoose);
+        } else {
+            getcbDayStart().setSelectedItem(temp + "");
         }
     }
     
@@ -799,6 +795,8 @@ public final class SalesGUI extends JFrame{
         }
         if(Integer.parseInt(dayChoose) <= temp) {
             getcbDayEnd().setSelectedItem(dayChoose);
+        } else {
+            getcbDayEnd().setSelectedItem(temp + "");
         }
     }
     
@@ -908,7 +906,7 @@ public final class SalesGUI extends JFrame{
     
     //main
     public static void main(String[] args) {
-        SalesGUI sales = new SalesGUI("Manage", "SF001");
+        SalesGUI sales = new SalesGUI("SF001");
     }
     
 }

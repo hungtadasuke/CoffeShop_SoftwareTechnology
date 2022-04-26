@@ -200,6 +200,25 @@ public class BillBUS {
         return list;
     }
     
+    //Lay danh sach cac don hang mang ve chua thanh toan
+    private Vector<BillDTO> getTakeAwayBillDoesNotPayMent() {
+        Vector<BillDTO> list = new Vector<>();
+        this.resetList();
+        for(BillDTO bill: this.getBillList()) {
+            if(bill.getBillType().equalsIgnoreCase("Take Away") && !bill.isBillStatus()) {
+                list.add(bill);
+            }
+        }
+        return list;
+    }
+    
+    //Xoa nhung don hang mang ve chua thanh toan khi gap su co he thong
+    public void deleteTakeAwayBillDoesNotPayment() {
+        for(BillDTO bill: this.getTakeAwayBillDoesNotPayMent()) {
+            this.deleteBill(bill.getBillId());
+        }
+    }
+    
     public static void main(String[] args) throws ParseException {
         BillBUS o = new BillBUS();
         for(BillDTO bill: o.getBillList("2022-04-22", "2022-04-22")) {

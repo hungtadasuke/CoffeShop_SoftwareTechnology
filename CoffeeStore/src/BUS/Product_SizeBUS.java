@@ -48,4 +48,29 @@ public class Product_SizeBUS {
         return 0.0;
     }
     
+    //check exists of a size of a product
+    public boolean checkSize(String productId, String size) {
+        this.resetProductSizeList();
+        for(Product_SizeDTO o: this.getProductSizeList()) {
+            if(o.getProductId().equalsIgnoreCase(productId) && o.getSize().equalsIgnoreCase(size)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String getPriceToStatistic(String productId, String size) {
+        for(Product_SizeDTO o: this.getProductSizeList()) {
+            if(o.getProductId().equalsIgnoreCase(productId) && o.getSize().equalsIgnoreCase(size)) {
+                return String.valueOf(o.getPrice());
+            }
+        }
+        return "X";
+    }
+    
+    public static void main(String[] args) {
+        Product_SizeBUS o = new Product_SizeBUS();
+        System.out.println(o.checkSize("SM001", "S"));
+    }
+    
 }

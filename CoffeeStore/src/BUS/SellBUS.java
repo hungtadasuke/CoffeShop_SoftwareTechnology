@@ -490,7 +490,7 @@ public class SellBUS {
             range = new CellRangeAddress(i, i, 0, 8);
             sheet.addMergedRegion(range);
             
-            String path = "D://NetBeansProjects//Software Technology - Coffee Shop//ExcelBill//" + billId + ".xlsx";
+            String path = "./ExcelBill/" + billId + ".xlsx";
             //Tao mot doi tuong file tren dia
             File f = new File(path);
             //Mo file
@@ -708,7 +708,7 @@ public class SellBUS {
             
             
             
-            String path = "D://NetBeansProjects//Software Technology - Coffee Shop//ExcelSales//" + "SalesFrom" + dateStart.replace("/", "") + "To" + dateFinish.replace("/", "") + ".xlsx";
+            String path = "./ExcelSales/" + "SalesFrom" + dateStart.replace("/", "") + "To" + dateFinish.replace("/", "") + ".xlsx";
             //Tao mot doi tuong file tren disk
             File file = new File(path);
             //Mo file
