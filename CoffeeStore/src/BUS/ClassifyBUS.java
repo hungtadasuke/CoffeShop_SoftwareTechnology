@@ -49,4 +49,15 @@ public class ClassifyBUS {
         return classify;
     }
     
+    //get classify name from id
+    public String getClassifyName(String classifyId) {
+        this.resetClassifyList();
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyId().equalsIgnoreCase(classifyId)) {
+                return o.getClassifyName();
+            }
+        }
+        return null;
+    }
+    
 }

@@ -1,31 +1,41 @@
 package GUI;
 
 import ApplicationHelper.MyDate;
+import BUS.SellBUS;
+import DTO.BillDTO;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-public class SalesGUI extends JFrame{
+public final class SalesGUI extends JFrame{
     //attribute
     private JComboBox cbcbDayStart, cbMonthStart, cbYearStart, cbDayEnd, cbcbMonthEnd, cbYearEnd;
-    private JButton bSearch, bHome;
-    private JPanel pScrossBarSales, pBodySales, pInfo, pTakeAway, pSpot, pTempSpot, pTempTakeAway, pFooterSales, pTakeAwayContainer, pSotContainer;
+    private JButton bSearch, bHome, bPrint;
+    private JPanel pScrossBarSales, pBodySales, pInfo, pTakeAway, pSpot, pTempSpot, pTempTakeAway, pFooterSales, pTakeAwayContainer, pSpotContainer;
     private JScrollPane sTakeAway, sSpot, sTempSpot, sTempTakeAway;
     private JLabel lFrom, lTo, lCountSpotBill, lCountTakeAwayBill, lCountBetween, lSales;
+    private Vector<JPanel> billPanel;
+    private String staffID;
     
-    private static Color BROWN_COLOR = new Color(145, 91, 54);
-    private static Color BACKGROUND_COLOR = new Color(234, 231, 214);
-    private static Color HOVER_COLOR = new Color(149, 231, 231);
+    Color BROWN_COLOR = new Color(145, 91, 54);
+    Color BACKGROUND_COLOR = new Color(234, 231, 214);
+    Color HOVER_COLOR = new Color(149, 231, 231);
+    private SellBUS sellBUS;
     Color defaultColor = (Color) this.getBackground();
     
     private static String[] yearString = new String[] {"2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031"};
     private static String[] monthString = new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
     
     //constructor
-    public SalesGUI() {
+    public SalesGUI(String staffID) {
+        this.setStaffID(staffID);
         this.init();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -38,6 +48,14 @@ public class SalesGUI extends JFrame{
 
     public void setcbDayStart(JComboBox cbcbDayStart) {
         this.cbcbDayStart = cbcbDayStart;
+    }
+
+    public String getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 
     public JComboBox getcbMonthStart() {
@@ -204,12 +222,12 @@ public class SalesGUI extends JFrame{
         this.pTakeAwayContainer = pTakeAwayContainer;
     }
 
-    public JPanel getpSotContainer() {
-        return pSotContainer;
+    public JPanel getpSpotContainer() {
+        return pSpotContainer;
     }
 
-    public void setpSotContainer(JPanel pSotContainer) {
-        this.pSotContainer = pSotContainer;
+    public void setpSpotContainer(JPanel pSpotContainer) {
+        this.pSpotContainer = pSpotContainer;
     }
 
     public JLabel getlFrom() {
@@ -275,6 +293,30 @@ public class SalesGUI extends JFrame{
     public static void setMonthString(String[] monthString) {
         SalesGUI.monthString = monthString;
     }
+
+    public Vector<JPanel> getBillPanel() {
+        return billPanel;
+    }
+
+    public void setBillPanel(Vector<JPanel> billPanel) {
+        this.billPanel = billPanel;
+    }
+
+    public SellBUS getSellBUS() {
+        return sellBUS;
+    }
+
+    public void setSellBUS(SellBUS sellBUS) {
+        this.sellBUS = sellBUS;
+    }
+
+    public JButton getbPrint() {
+        return bPrint;
+    }
+
+    public void setbPrint(JButton bPrint) {
+        this.bPrint = bPrint;
+    }
     
     //method
     private void init() {
@@ -312,6 +354,8 @@ public class SalesGUI extends JFrame{
                 System.exit(0);
             }
         });
+        this.setBillPanel(new Vector<>());
+        this.setSellBUS(new SellBUS());
     }
     
     //set scrossbar
@@ -384,43 +428,51 @@ public class SalesGUI extends JFrame{
         lStart.setFont(new Font("Arial", Font.BOLD, 16));
         lStart.setPreferredSize(new Dimension(150, 30));
         
-        //add components for center
-        MyDate date = new MyDate();
-        date.getDateNow();
-        
-        this.setcbYearStart(new JComboBox(SalesGUI.getYearString()));
-        this.getcbYearStart().setSelectedItem(date.getYear());
+        //add components for center  
         this.setcbDayStart(new JComboBox());
-        
-        int dayOfMonth = MyDate.getArrDaysOfMonth()[MyDate.checkLeapYear(Integer.parseInt(date.getYear()))][Integer.parseInt(date.getMonth())];
-        for(int i = 1; i <= dayOfMonth; i++) {
-            this.getcbDayStart().addItem(String.format("%02d", i));
-        }
-        this.getcbDayStart().setSelectedItem(date.getDay());
+        this.setcbYearStart(new JComboBox(SalesGUI.getYearString()));
         this.setcbMonthStart(new JComboBox(SalesGUI.getMonthString()));
-        this.getcbMonthStart().setSelectedItem(date.getMonth());
-        this.getcbMonthStart().addActionListener((ActionEvent e) -> {
-            jComboBoxStartEvent(e);
-        });
-        this.getcbYearStart().addActionListener((ActionEvent e) -> {
-            jComboBoxStartEvent(e);
-        });
         
-        this.setcbYearEnd(new JComboBox(SalesGUI.getYearString()));
-        this.getcbYearEnd().setSelectedItem(date.getYear());
         this.setcbDayEnd(new JComboBox());
-        for(int i = 1; i <= dayOfMonth; i++) {
-            this.getcbDayEnd().addItem(String.format("%02d", i));
-        }
-        this.getcbDayEnd().setSelectedItem(date.getDay());
-        this.getcbYearEnd().addActionListener((ActionEvent e) -> {
-            jComboBoxEndEvent(e);
-        });
         this.setcbMonthEnd(new JComboBox(SalesGUI.getMonthString()));
-        this.getcbMonthEnd().setSelectedItem(date.getMonth());
-        this.getcbMonthEnd().addActionListener((ActionEvent e) -> {
-            jComboBoxEndEvent(e);
-        });
+        this.setcbYearEnd(new JComboBox(SalesGUI.getYearString()));
+
+        
+
+        if(this.getSellBUS().getStaffBUS().getStaffFromId(this.getStaffID()).getPosition().equalsIgnoreCase("Manager")) {
+            MyDate date = new MyDate();
+            date.getDateNow();
+            int dayOfMonth = MyDate.getArrDaysOfMonth()[MyDate.checkLeapYear(Integer.parseInt(date.getYear()))][Integer.parseInt(date.getMonth())];
+            for(int i = 1; i <= dayOfMonth; i++) {
+                this.getcbDayStart().addItem(String.format("%02d", i));
+            }
+            for(int i = 1; i <= dayOfMonth; i++) {
+                this.getcbDayEnd().addItem(String.format("%02d", i));
+            }
+
+            this.getcbDayStart().setSelectedItem(date.getDay());
+            this.getcbYearStart().setSelectedItem(date.getYear());
+            this.getcbMonthStart().setSelectedItem(date.getMonth());
+
+            this.getcbDayEnd().setSelectedItem(date.getDay());
+            this.getcbMonthEnd().setSelectedItem(date.getMonth());
+            this.getcbYearEnd().setSelectedItem(date.getYear());
+
+            this.getcbMonthEnd().addActionListener((ActionEvent e) -> {
+                jComboBoxEndEvent(e);
+            }); 
+            this.getcbYearEnd().addActionListener((ActionEvent e) -> {
+                jComboBoxEndEvent(e);
+            });
+            this.getcbMonthStart().addActionListener((ActionEvent e) -> {
+                jComboBoxStartEvent(e);
+            });
+            this.getcbYearStart().addActionListener((ActionEvent e) -> {
+                jComboBoxStartEvent(e);
+            });
+        } else {
+            this.setSennModelForStaff();
+        }
         
         pCenterInfo.add(lStart);
         pCenterInfo.add(this.createDatePanel("○ Day", this.getcbDayStart()));
@@ -461,7 +513,29 @@ public class SalesGUI extends JFrame{
                 getbSearch().setBackground(defaultColor);
             }
         });
-        pSearch.add(bSearch);
+        this.getbSearch().addActionListener((ActionEvent e) -> {
+            String dateStart = (String) this.getcbYearStart().getSelectedItem() + "-" + (String) this.getcbMonthStart().getSelectedItem() + "-" + (String) this.getcbDayStart().getSelectedItem();
+            String dateEnd = (String) this.getcbYearEnd().getSelectedItem() + "-" + (String) this.getcbMonthEnd().getSelectedItem() + "-" + (String) this.getcbDayEnd().getSelectedItem();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Date date1 = null;
+            Date date2 = null;
+            try {
+                date1 = sdf.parse(dateStart);
+                date2 = sdf.parse(dateEnd);
+            } catch (ParseException ex) {
+                System.err.println(ex);
+            }
+            if(date1.compareTo(date2) == -1 || date1.compareTo(date2) == 0) {
+                createpBillList(this.getpSpot(), "Spot");
+                nextCard(this.getpSpotContainer(), "Spot");
+                createpBillList(this.getpTakeAway(), "Take Away");
+                nextCard(this.getpTakeAwayContainer(), "Take Away");
+                resetpFooter();
+            } else {
+                JOptionPane.showMessageDialog(SalesGUI.this, "Error! Invalid End Date!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        pSearch.add(this.getbSearch());
         
         pFooterInfo.add(pSearch);
         
@@ -471,13 +545,17 @@ public class SalesGUI extends JFrame{
         this.getpInfo().add(pFooterInfo, BorderLayout.SOUTH);
         
         //Center
-        this.setpSotContainer(new JPanel());
-        this.getpSotContainer().setLayout(new CardLayout());
+        this.setpSpotContainer(new JPanel());
+        this.getpSpotContainer().setLayout(new CardLayout());
         
         this.setpSpot(new JPanel());
         this.getpSpot().setPreferredSize(new Dimension(575, 5000));
+        this.getpSpot().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.getpSpot().setBackground(BACKGROUND_COLOR);
         this.setsSpot(new JScrollPane(this.getpSpot(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+        
+        //set pSpotBill default la ngay hien tai
+        this.createpBillList(this.getpSpot(), "Spot");
         
         //Temp
         JLabel empty1 = new JLabel("(Empty)");
@@ -485,6 +563,7 @@ public class SalesGUI extends JFrame{
         
         this.setpTempSpot(new JPanel());
         this.getpTempSpot().setPreferredSize(new Dimension(575, 560));
+        this.getpTempSpot().setBackground(BACKGROUND_COLOR);
         this.getpTempSpot().setLayout(new BorderLayout());
         this.getpTempSpot().setBorder(new EmptyBorder(0, 250, 0, 0));
         this.getpTempSpot().add(empty1);
@@ -495,6 +574,7 @@ public class SalesGUI extends JFrame{
         
         this.setpTempTakeAway(new JPanel());
         this.getpTempTakeAway().setPreferredSize(new Dimension(575, 560));
+        this.getpTempTakeAway().setBackground(BACKGROUND_COLOR);
         this.getpTempTakeAway().setLayout(new BorderLayout());
         this.getpTempTakeAway().setBorder(new EmptyBorder(0, 250, 0, 0));
         this.getpTempTakeAway().add(empty2);
@@ -506,19 +586,23 @@ public class SalesGUI extends JFrame{
         
         this.setpTakeAway(new JPanel());
         this.getpTakeAway().setPreferredSize(new Dimension(575, 5000));
+        this.getpTakeAway().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.getpTakeAway().setBackground(BACKGROUND_COLOR);
         this.setsTakeAway(new JScrollPane(this.getpTakeAway(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         
-        this.getpSotContainer().add(this.getsSpot(), "Spot");
-        this.getpSotContainer().add(this.getsTempSpot(), "Temp");
+        //set pTakeAwayBill default la ngay hien tai
+        this.createpBillList(this.getpTakeAway(), "Take Away");
+        
+        this.getpSpotContainer().add(this.getsSpot(), "Spot");
+        this.getpSpotContainer().add(this.getsTempSpot(), "Temp");
        
         this.getpTakeAwayContainer().add(this.getsTakeAway(), "Take Away");
         this.getpTakeAwayContainer().add(this.getsTempTakeAway(), "Temp");
         
         //Add
         this.getpBodySales().add(this.getpInfo(), BorderLayout.WEST);
-        this.getpBodySales().add(this.createJPanelBill(this.getpSotContainer(), "Spot Bill"), BorderLayout.CENTER);
-        this.getpBodySales().add(this.createJPanelBill(this.getpTakeAwayContainer(), "Take-Away Bill"), BorderLayout.EAST);
+        this.getpBodySales().add(this.createJPanelBill(this.getpSpotContainer(), "Spot Bill"), BorderLayout.CENTER);
+        this.getpBodySales().add(this.createJPanelBill(this.getpTakeAwayContainer(), "Take Away Bill"), BorderLayout.EAST);
     }
     
     //set footer
@@ -543,9 +627,11 @@ public class SalesGUI extends JFrame{
         pFromTo.setBackground(BROWN_COLOR);
         pFromTo.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK), BorderFactory.createEmptyBorder(0, 10, 0, 0)));
         
-        this.setlFrom(new JLabel("From: 23/04/2021"));
+        MyDate date = new MyDate();
+        date.getDateNow();
+        this.setlFrom(new JLabel("From: " + date.toString()));
         this.getlFrom().setFont(new Font("Arial", Font.BOLD, 16));
-        this.setlTo(new JLabel("To: 23/04/2022"));
+        this.setlTo(new JLabel("To: " + date.toString()));
         this.getlTo().setFont(new Font("Arial", Font.BOLD, 16));
         
         pFromTo.add(this.getlFrom());
@@ -553,17 +639,17 @@ public class SalesGUI extends JFrame{
         
         //JLabel countSpot, countTA, countBetween and Sales
         JPanel pCount = new JPanel();
-        pCount.setPreferredSize(new Dimension(820, 80));
-        pCount.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 30));
+        pCount.setPreferredSize(new Dimension(720, 80));
+        pCount.setLayout(new GridLayout(1, 4));
         pCount.setBackground(BROWN_COLOR);
         
-        this.setlCountSpotBill(new JLabel("SPotBill: 10000"));
+        this.setlCountSpotBill(new JLabel());
         this.getlCountSpotBill().setFont(new Font("Arial", Font.BOLD, 16));
-        this.setlCountTakeAwayBill(new JLabel("Take-AwayBill: 34543"));
+        this.setlCountTakeAwayBill(new JLabel());
         this.getlCountTakeAwayBill().setFont(new Font("Arial", Font.BOLD, 16));
-        this.setlCountBetween(new JLabel("Sum: 44543"));
+        this.setlCountBetween(new JLabel());
         this.getlCountBetween().setFont(new Font("Arial", Font.BOLD, 16));
-        this.setlSales(new JLabel("Sales(VND): 345678987.0"));
+        this.setlSales(new JLabel());
         this.getlSales().setFont(new Font("Arial", Font.BOLD, 16));
         
         pCount.add(this.getlCountSpotBill());
@@ -571,11 +657,44 @@ public class SalesGUI extends JFrame{
         pCount.add(this.getlCountBetween());
         pCount.add(this.getlSales());
         
+        this.resetpFooter();
+        
+        //button print
+        this.setbPrint(new JButton(new ImageIcon("Resource\\print-icon.png")));
+        this.getbPrint().setPreferredSize(new Dimension(100, 40));
+        this.getbPrint().setFocusPainted(false);
+        this.getbPrint().setCursor(new Cursor(HAND_CURSOR));
+        this.getbPrint().setBackground(BROWN_COLOR);
+        this.getbPrint().setBorder(null);
+        this.getbPrint().setContentAreaFilled(false);
+        this.getbPrint().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                getbPrint().setIcon(new ImageIcon("Resource\\print-icon-hover.png"));
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                getbPrint().setIcon(new ImageIcon("Resource\\print-icon.png"));
+            }
+        });
+        this.getbPrint().addActionListener((ActionEvent e) -> {
+            int result = JOptionPane.showConfirmDialog(SalesGUI.this, "Do You Want To Print This Sales?", "Print Sales", JOptionPane.YES_NO_OPTION);
+            if(result == JOptionPane.YES_OPTION) {
+                this.getSellBUS().printSales(getStaffID(), getlFrom().getText().split("\\s")[1], getlTo().getText().split("\\s")[1], 
+                                             Integer.parseInt(getlCountSpotBill().getText().split("\\s")[1]),
+                                             Integer.parseInt(getlCountTakeAwayBill().getText().split("\\s")[1]),
+                                             Integer.parseInt(getlCountBetween().getText().split("\\s")[1]),
+                                             Double.parseDouble(getlSales().getText().split("\\s")[1]));
+                JOptionPane.showMessageDialog(SalesGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
+            }
+        });
         
         //add
         this.getpFooterSales().add(lDollar);
         this.getpFooterSales().add(pFromTo);
         this.getpFooterSales().add(pCount);
+        this.getpFooterSales().add(this.getbPrint());
         
     }
     
@@ -610,14 +729,35 @@ public class SalesGUI extends JFrame{
         panel.setLayout(new BorderLayout());
         
         //set components
-        //header
+        //Header
+        JPanel header = new JPanel();
+        header.setPreferredSize(new Dimension(JPanel.WIDTH, 40));
+        header.setBackground(new Color(117, 74, 43, 46));
+        header.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), new EmptyBorder(0, 10, 0, -15)));
+        header.setLayout(new GridLayout(1, 4));
+        JLabel lBillId = new JLabel("ID");
+        lBillId.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lBillDate = new JLabel("Date");
+        lBillDate.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lStaffId = new JLabel("StaffId");
+        lStaffId.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lTotal = new JLabel("Total");
+        lTotal.setFont(new Font("Arial", Font.BOLD, 15));
+        
+        //add components to header
+        header.add(lBillId);
+        header.add(lBillDate);
+        header.add(lStaffId);
+        header.add(lTotal);
+        
+        //center
         container.setPreferredSize(new Dimension(JPanel.WIDTH, 564));
         
         //footer
         JPanel footer = new JPanel();
         footer.setPreferredSize(new Dimension(JPanel.WIDTH, 40));
         footer.setBackground(new Color(117, 74, 43, 46));
-        footer.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), new EmptyBorder(3, 0, 0, 0)));
+        footer.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), new EmptyBorder(3, 0, 0, 0)));
         
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 18));
@@ -625,7 +765,8 @@ public class SalesGUI extends JFrame{
         footer.add(label);
         
         //add components to panel
-        panel.add(container, BorderLayout.NORTH);
+        panel.add(header, BorderLayout.NORTH);
+        panel.add(container, BorderLayout.CENTER);
         panel.add(footer, BorderLayout.SOUTH);
         
         return panel;
@@ -640,6 +781,8 @@ public class SalesGUI extends JFrame{
         }
         if (Integer.parseInt(dayChoose) <= temp) {
             getcbDayStart().setSelectedItem(dayChoose);
+        } else {
+            getcbDayStart().setSelectedItem(temp + "");
         }
     }
     
@@ -652,12 +795,118 @@ public class SalesGUI extends JFrame{
         }
         if(Integer.parseInt(dayChoose) <= temp) {
             getcbDayEnd().setSelectedItem(dayChoose);
+        } else {
+            getcbDayEnd().setSelectedItem(temp + "");
         }
+    }
+    
+    private JPanel createBillPanelFromBillDTO(BillDTO bill, Color color) {
+        JPanel pBill = new JPanel();
+        pBill.setPreferredSize(new Dimension(575, 40));
+        pBill.setBorder(new EmptyBorder(0, 10, 0, 0));
+        pBill.setBackground(color);
+        pBill.setLayout(new GridLayout(1, 4));
+        JLabel lBillId = new JLabel(bill.getBillId());
+        lBillId.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lBillDate = new JLabel(bill.getDate().toString());
+        lBillDate.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lStaffId = new JLabel(bill.getStaffId());
+        lStaffId.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel lTotal = new JLabel(bill.getTotal() + "");
+        lTotal.setFont(new Font("Arial", Font.BOLD, 15));
+        
+        //add
+        pBill.add(lBillId);
+        pBill.add(lBillDate);
+        pBill.add(lStaffId);
+        pBill.add(lTotal);
+        
+        return pBill;
+    }
+    
+    //set lai pSpot hoac pTakeAway sau do reset lai tren mang hinh
+    private void createpBillList(JPanel pBill, String type) {
+        //set ngay bat dau va ngay ket thuc
+        pBill.removeAll();
+        String dateStart = (String) this.getcbYearStart().getSelectedItem() + "-" + (String) this.getcbMonthStart().getSelectedItem() + "-" + (String) this.getcbDayStart().getSelectedItem();
+        String dateEnd = (String) this.getcbYearEnd().getSelectedItem() + "-" + (String) this.getcbMonthEnd().getSelectedItem() + "-" + (String) this.getcbDayEnd().getSelectedItem();
+        int i = 0;
+        try {
+            for(BillDTO bill: this.getSellBUS().getBillBUS().getBillList(type, dateStart, dateEnd)) {
+                if (i%2 == 0) {
+                    pBill.add(this.createBillPanelFromBillDTO(bill, Color.WHITE));
+                } else {
+                    pBill.add(this.createBillPanelFromBillDTO(bill, BACKGROUND_COLOR));
+                }
+                i++;
+            }
+            int height = i*40 + 1000;
+            pBill.setPreferredSize(new Dimension(JPanel.WIDTH, height));
+        } catch (ParseException e) {
+            System.err.println("Error at createpBillList method of SalesGUI class!");
+            System.err.println(e);
+        }
+    }
+    
+    private void nextCard(JPanel panel, String type) {
+        CardLayout card = (CardLayout) panel.getLayout();
+        card.show(panel, "Temp");
+        card.show(panel, type);
+    }
+    
+    private void resetpFooter() {
+        String dateStart1 = (String) this.getcbDayStart().getSelectedItem() + "/" + (String) this.getcbMonthStart().getSelectedItem() + "/" + (String) this.getcbYearStart().getSelectedItem();
+        String dateSEnd1 = (String) this.getcbDayEnd().getSelectedItem() + "/" + (String) this.getcbMonthEnd().getSelectedItem() + "/" + (String) this.getcbYearEnd().getSelectedItem();
+        this.getlFrom().setText("From: " + dateStart1);
+        this.getlTo().setText("To: " + dateSEnd1);
+        
+        String dateStart2 = (String) this.getcbYearStart().getSelectedItem() + "-" + (String) this.getcbMonthStart().getSelectedItem() + "-" + (String) this.getcbDayStart().getSelectedItem();
+        String dateEnd2 = (String) this.getcbYearEnd().getSelectedItem() + "-" + (String) this.getcbMonthEnd().getSelectedItem() + "-" + (String) this.getcbDayEnd().getSelectedItem();
+        
+        try {
+            this.getlCountSpotBill().setText("SpotBill: " + this.getSellBUS().getBillBUS().getCountBill("Spot", dateStart2, dateEnd2) + "");
+            this.getlCountTakeAwayBill().setText("TakeAwayBill: " + this.getSellBUS().getBillBUS().getCountBill("Take Away", dateStart2, dateEnd2) + "");
+            this.getlCountBetween().setText("Sum: " + this.getSellBUS().getBillBUS().getSumCountBill(dateStart2, dateEnd2) + "");
+            this.getlSales().setText("Sales(VND): " + this.getSellBUS().getBillBUS().getTotalOfBillList(dateStart2, dateEnd2) + "");
+        } catch (ParseException e) {
+            System.err.println("Error at resetpFooter method of SalesGUI class!");
+            System.err.println(e);
+        }
+    }
+    
+    //Neu la nhan vien chi duoc xem doanh thu cua ngay hom do
+    private void setSennModelForStaff() {
+        MyDate date = new MyDate();
+        date.getDateNow();
+        
+        //Date start
+        this.getcbDayStart().addItem(date.getDay());
+        this.getcbDayStart().setEnabled(false);
+        
+        this.getcbMonthStart().removeAllItems();
+        this.getcbMonthStart().addItem(date.getMonth());
+        this.getcbMonthStart().setEnabled(false);
+        
+        this.getcbYearStart().removeAllItems();
+        this.getcbYearStart().addItem(date.getYear());
+        this.getcbYearStart().setEnabled(false);
+        
+        //Date finish
+        this.getcbDayEnd().addItem(date.getDay());
+        this.getcbDayEnd().setEnabled(false);
+        
+        this.getcbMonthEnd().removeAllItems();
+        this.getcbMonthEnd().addItem(date.getMonth());
+        this.getcbMonthEnd().setEnabled(false);
+        
+        this.getcbYearEnd().removeAllItems();
+        this.getcbYearEnd().addItem(date.getYear());
+        this.getcbYearEnd().setEnabled(false);
     }
     
     //main
     public static void main(String[] args) {
-        SalesGUI sales = new SalesGUI();
+        SalesGUI sales = new SalesGUI("SF001");
     }
     
 }

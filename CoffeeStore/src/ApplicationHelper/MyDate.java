@@ -96,8 +96,7 @@ public class MyDate {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
         Date date1 = sdf.parse("2022-04-23");
         Date date2 = sdf.parse("2022-04-22");
-        System.out.println(date2.compareTo(date1));
-        System.out.println(MyDate.checkLeapYear(2020));
+        Date date3 = sdf.parse("2022-04-15");
     }
     
 }

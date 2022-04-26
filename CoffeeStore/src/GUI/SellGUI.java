@@ -51,6 +51,8 @@ public final class SellGUI extends JFrame{
     public SellGUI(String staffId) {
         this.setStaffId(staffId);
         this.init();
+        //Xoa nhung don hang mang ve chua thanh toan do gap su co he thong nhu cup dien, tat nguon, het pin
+        this.getSellBUS().getBillBUS().deleteTakeAwayBillDoesNotPayment();
         this.setVisible(true);
     }
 
@@ -471,6 +473,10 @@ public final class SellGUI extends JFrame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing (WindowEvent e) {
+                //Dang bam bill mang ve ma thoat ra :))) thi xoa bill mang ve do. Khi mo lai ung dung thi bam lai
+                if(getlResultTableId().getText().equalsIgnoreCase("")) {
+                    getSellBUS().getBillBUS().deleteBill(getlResultBillId().getText());
+                }
                 System.exit(0);
             }
         });
@@ -969,6 +975,7 @@ public final class SellGUI extends JFrame{
                 int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                     this.getSellBUS().printBill(billId);
+                    JOptionPane.showMessageDialog(SellGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
                 }
                 this.setNewOrder();
                 this.resetAndNextCardTable();
