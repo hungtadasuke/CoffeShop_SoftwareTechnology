@@ -8,7 +8,6 @@ import DTO.StatisticToppingDTO;
 import java.awt.*;
 import static java.awt.Frame.HAND_CURSOR;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
@@ -22,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 public final class StatisticGUI extends JFrame{
     //attribute
-    private JPanel pHeader, pHeaderRight, pBody, pFooter, pBodyLeft, pBodyLeftHeader, pBodyLeftBody, pBodyLeftFooter, pBodyRight;
+    private JPanel pHeader, pHeaderRight, pBody, pFooter, pBodyLeft, pBodyLeftHeader, pBodyLeftBody, pBodyLeftFooter, pBodyRight, pBodyRightProduct, pBodyRightTopping;
     
     private JScrollPane sProduct, sTopping;
     
@@ -430,6 +429,22 @@ public final class StatisticGUI extends JFrame{
     public void setStaffID(String staffID) {
         this.staffID = staffID;
     }
+
+    public JPanel getpBodyRightProduct() {
+        return pBodyRightProduct;
+    }
+
+    public void setpBodyRightProduct(JPanel pBodyRightProduct) {
+        this.pBodyRightProduct = pBodyRightProduct;
+    }
+
+    public JPanel getpBodyRightTopping() {
+        return pBodyRightTopping;
+    }
+
+    public void setpBodyRightTopping(JPanel pBodyRightTopping) {
+        this.pBodyRightTopping = pBodyRightTopping;
+    }
   
     //method
     public void init() {
@@ -454,7 +469,7 @@ public final class StatisticGUI extends JFrame{
     //set frame
     private void setJFrame() {
         this.setTitle("Statistic Form");
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\statistics-icon.png"));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\iconJFrame.png"));
         this.setSize(new Dimension(1300, 760));
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

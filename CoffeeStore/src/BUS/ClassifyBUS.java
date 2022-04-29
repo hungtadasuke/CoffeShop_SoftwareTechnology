@@ -60,4 +60,14 @@ public class ClassifyBUS {
         return null;
     }
     
+    public String getClassifyId(String classifyName) {
+        this.resetClassifyList();
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyName().equalsIgnoreCase(classifyName)) {
+                return o.getClassifyId();
+            }
+        }
+        return null;
+    }
+    
 }
