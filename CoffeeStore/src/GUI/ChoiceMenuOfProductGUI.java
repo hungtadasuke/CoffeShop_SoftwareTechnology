@@ -315,12 +315,14 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setSizeRadioButtonList(createSizeRadioButtonList());
         
         this.getpBodySize().add(this.getlSize());
-        this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
-        for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
-            this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
-            if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
-                    && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProductSize().equalsIgnoreCase(this.getSizeRadioButtonList().get(i).getActionCommand())) {
-               this.getSizeRadioButtonList().get(i).setSelected(true);
+        if(!this.getSizeRadioButtonList().isEmpty()) {
+            this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
+            for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
+                this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
+                if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
+                        && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProductSize().equalsIgnoreCase(this.getSizeRadioButtonList().get(i).getActionCommand())) {
+                   this.getSizeRadioButtonList().get(i).setSelected(true);
+                }
             }
         }
         
@@ -575,6 +577,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     private Vector<JRadioButton> createSizeRadioButtonList() {
         Vector<JRadioButton> listTemp = new Vector<>();
         ButtonGroup bg = new ButtonGroup();
+        this.getSellGUI().getSellBUS().getProductSizeBUS().resetProductSizeList();
         for(Product_SizeDTO o: this.getSellGUI().getSellBUS().getProductSizeBUS().getProductSizeList()) {
             if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                 JRadioButton rBtn = createSizeRadioButton(o.getSize(), o.getSize());
@@ -619,6 +622,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
     private Vector<ChoiceMenuOfToppingGUI> createToppingPanelList() {
        Vector<ChoiceMenuOfToppingGUI> list = new Vector<>();
+       this.getSellGUI().getSellBUS().getProductToppingBUS().reset();
        for(Product_ToppingDTO o: this.getSellGUI().getSellBUS().getProductToppingBUS().getProductToppingList()) {
            if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this));

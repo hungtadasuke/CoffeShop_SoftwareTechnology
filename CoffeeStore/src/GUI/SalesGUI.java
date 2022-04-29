@@ -344,7 +344,7 @@ public final class SalesGUI extends JFrame{
     //set frame
     private void setJFrame() {
         this.setTitle("Sales Form");
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\coins-icon.png"));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\iconJFrame.png"));
         this.setSize(new Dimension(1300, 760));
         this.setResizable(false);
         this.setLayout(new BorderLayout());

@@ -33,6 +33,24 @@ public class StaffDAO {
         return staffList;
     }
     
+//    public void insert(StaffDTO staff) {
+//        try (Connection con = DatabaseHelper.openConnection()){
+//            PreparedStatement ps = con.prepareStatement("INSERT INTO STAFF VALUES (?, ?, ?, ?, ?, ?)");
+//            ps.setString(1, staff.getStaffId());
+//            ps.setNString(2, staff.getStaffName());
+//            ps.setNString(3, staff.getStaffAddress());
+//            ps.setString(4, staff.getStaffBirthday().formatDB());
+//            ps.setString(5, staff.getNumberPhone());
+//            ps.setString(6, staff.getPosition());
+//            ps.executeUpdate();
+//            System.out.println("Sucess!");
+//        } catch (Exception e) {
+//            System.err.println("Error at insert method from StaffDAO class!");
+//            System.err.println(e);
+//        }
+//        
+//    }
+    
     public static void main(String[] args) {
         StaffDAO o = new StaffDAO();
         Vector<StaffDTO> list = o.readStaffListFromDatabase();

@@ -839,16 +839,21 @@ public final class SellGUI extends JFrame{
             }
         });
         this.getbSearch().addActionListener((ActionEvent e) -> {
-            createProductButtonSearchList(getTfSearch().getText());
-            getpItemMenu().removeAll();
-            addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
-            getCard().show(getpBodyMenus(), "Item");
+            if(this.getTfSearch().getText().equalsIgnoreCase("") || this.getTfSearch().getText().equalsIgnoreCase("search product here")) {
+                JOptionPane.showMessageDialog(SellGUI.this, "Empty Search Box!", "Search Product", JOptionPane.OK_OPTION);
+            } else {
+                createProductButtonSearchList(getTfSearch().getText());
+                getpItemMenu().removeAll();
+                addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
+                getCard().show(getpBodyMenus(), "Item");
+            }
         });
         
         this.getTfSearch().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 getCard().show(getpBodyMenus(), "Temp");
+                getTfSearch().setText("");
             }
         });
         
@@ -1043,11 +1048,8 @@ public final class SellGUI extends JFrame{
     
     private void createProductButtonSearchList(String search) {
         this.getButtonList().clear();
-        for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
-            if(!search.equals("") && (product.isProductBusiness() && (product.getProductName().toLowerCase().contains(search) || product.getProductName().toUpperCase().contains(search) || product.getProductName().contains(search)))
-                && this.getSellBUS().getClassifyBUS().getClassifyFromId(product.getClassifyId()).isClassifyBusiness()) {
-                    this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
-            }
+        for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList(search)) {
+            this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
         }
     }
     
