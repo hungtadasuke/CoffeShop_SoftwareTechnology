@@ -30,5 +30,29 @@ public class Product_ToppingBUS {
 
     public void setProductToppingList(Vector<Product_ToppingDTO> productToppingList) {
         this.productToppingList = productToppingList;
-    } 
+    }
+    
+    //reset
+    public void reset() {
+        this.setProductToppingList(this.getProductToppingDAO().readProductToppingListFromDatabase());
+    }
+    
+    //get topping list from product id
+    public Vector<String> getToppingIdList(String productId) {
+        Vector<String> toppingIdList  = new Vector<>();
+        this.reset();
+        for(Product_ToppingDTO productTopping: this.getProductToppingList()) {
+            if(productTopping.getProductId().equalsIgnoreCase(productId)) {
+                toppingIdList.add(productTopping.getToppingId());
+            }
+        }
+        return toppingIdList;
+    }
+    
+    public static void main(String[] args) {
+        Product_ToppingBUS o = new Product_ToppingBUS();
+        for(String s: o.getToppingIdList("CF003")) {
+            System.out.println(s);
+        }
+    }
 }

@@ -1,6 +1,9 @@
 package ApplicationHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class MyDate {
     //attribute
@@ -8,8 +11,8 @@ public class MyDate {
     private String month;
     private String year;
 
-    public static int[][] arrDaysOfMonth = new int[][]{{31,28,31,30,31,30,31,31,30,31,30,31},
-                                                       {31,29,31,30,31,30,31,31,30,31,30,31}};
+    public static int[][] arrDaysOfMonth = new int[][]{{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+                                                       {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
     //constructor
     public MyDate() {
     }
@@ -49,6 +52,14 @@ public class MyDate {
     public void setYear(String year) {
         this.year = year;
     }
+
+    public static int[][] getArrDaysOfMonth() {
+        return arrDaysOfMonth;
+    }
+
+    public static void setArrDaysOfMonth(int[][] arrDaysOfMonth) {
+        MyDate.arrDaysOfMonth = arrDaysOfMonth;
+    }
     
     public void getDateNow() {
         LocalDate date = LocalDate.now(); //2021-12-11 LD
@@ -72,6 +83,20 @@ public class MyDate {
     public static String format(String date) {
         String[] text = date.split("/");
         return text[2] + "-" + text[1] + "-" + text[0];
+    }
+    
+    public static int checkLeapYear(int year) {
+        if(year%400 == 0 || ((year%4 == 0) && (year%100) != 0)) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = sdf.parse("2022-04-29");
+        Date date2 = sdf.parse("2022-05-01");
+        System.out.println(date1.compareTo(date2));
     }
     
 }

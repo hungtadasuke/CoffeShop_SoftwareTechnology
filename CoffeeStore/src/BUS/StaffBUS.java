@@ -43,4 +43,19 @@ public class StaffBUS {
         return null;
     }
     
+    //reset
+    public void reset() {
+        this.setStaffList(this.getStaffDAO().readStaffListFromDatabase());
+    }
+    
+    public boolean checkPosition(String staffID) {
+        this.reset();
+        for(StaffDTO staff: this.getStaffList()) {
+            if(staff.getStaffId().equalsIgnoreCase(staffID) && staff.getPosition().equalsIgnoreCase("Manager")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

@@ -1,5 +1,6 @@
 package DAO;
 
+import ApplicationHelper.DatabaseHelper;
 import ApplicationHelper.MyDate;
 import DTO.BillDTO;
 import java.util.Vector;
@@ -68,7 +69,6 @@ public class BillDAO {
                 CallableStatement call = con.prepareCall("{call DELETE_BILL(?)}");
                 call.setString(1, billId);
                 call.executeUpdate();
-                System.out.println("Deleted!");
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
@@ -93,7 +93,6 @@ public class BillDAO {
                     call.setDouble(3, receivedMoney);
                     call.setDouble(4, excessMoney);
                     call.executeUpdate();
-                    System.out.println("Sucess!");
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
