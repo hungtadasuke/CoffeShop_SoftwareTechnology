@@ -351,7 +351,13 @@ public final class SalesGUI extends JFrame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                if(getSellBUS().getStaffBUS().checkPosition(getStaffID())) {
+                    ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(getStaffID());
+                    dispose();
+                } else {
+                    SellMenuGUI sellMenuGUI = new SellMenuGUI(getStaffID());
+                    dispose();
+                }
             }
         });
         this.setBillPanel(new Vector<>());
@@ -385,6 +391,15 @@ public final class SalesGUI extends JFrame{
             @Override
             public void mouseReleased(MouseEvent e) {
                 getbHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
+            }
+        });
+        this.getbHome().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getStaffBUS().checkPosition(this.getStaffID())) {
+                ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(this.getStaffID());
+                this.dispose();
+            } else {
+                SellMenuGUI sellMenuGUI = new SellMenuGUI(this.getStaffID());
+                this.dispose();
             }
         });
         
@@ -516,7 +531,7 @@ public final class SalesGUI extends JFrame{
         this.getbSearch().addActionListener((ActionEvent e) -> {
             String dateStart = (String) this.getcbYearStart().getSelectedItem() + "-" + (String) this.getcbMonthStart().getSelectedItem() + "-" + (String) this.getcbDayStart().getSelectedItem();
             String dateEnd = (String) this.getcbYearEnd().getSelectedItem() + "-" + (String) this.getcbMonthEnd().getSelectedItem() + "-" + (String) this.getcbDayEnd().getSelectedItem();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date1 = null;
             Date date2 = null;
             try {

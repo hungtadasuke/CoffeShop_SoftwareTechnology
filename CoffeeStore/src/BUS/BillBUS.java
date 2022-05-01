@@ -99,7 +99,7 @@ public class BillBUS {
         this.resetList();
         Vector<BillDTO> list = new Vector<>();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date DateStart = sdf.parse(dateStart);
             Date DateEnd = sdf.parse(dateEnd);
             for(BillDTO bill: this.getBillList()) {
@@ -124,7 +124,7 @@ public class BillBUS {
         this.resetList();
         int count = 0;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date DateStart = sdf.parse(dateStart);
             Date DateEnd = sdf.parse(dateEnd);
             for(BillDTO bill: this.getBillList()) {
@@ -149,7 +149,7 @@ public class BillBUS {
         this.resetList();
         Double total = 0.0;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date DateStart = sdf.parse(dateStart);
             Date DateEnd = sdf.parse(dateEnd);
             Date DateCheck;
@@ -180,7 +180,7 @@ public class BillBUS {
         this.resetList();
         Vector<BillDTO> list = new Vector<>();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date DateStart = sdf.parse(dateStart);
             Date DateEnd = sdf.parse(dateEnd);
             for(BillDTO bill: this.getBillList()) {
