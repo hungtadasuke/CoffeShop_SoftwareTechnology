@@ -17,7 +17,7 @@ public class FormAccount extends JFrame {
     DefaultTableModel model = new DefaultTableModel();
     
      // ham nay de viet giao dien 
-    public void MainDisplay(){
+    private void MainDisplay(){
         this.setTitle("Coffee Shop");
         accountTable = new JTable();
         accountLabel = new JLabel("ACCOUNT");
@@ -127,11 +127,11 @@ public class FormAccount extends JFrame {
 
     }
     
-     public FormAccount(){
+    public FormAccount(){
         MainDisplay();
     }
     
     public static void main(String[] args) {
-        new FormAccount();
+        FormAccount fomrAccount = new FormAccount();
     }
 }

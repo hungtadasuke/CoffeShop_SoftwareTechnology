@@ -3,18 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/FormClassify.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/ApplicationHelper/ID.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/ChoiceMenuOfProductGUI.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/BillDetail_ToppingDTO.java</file>
             <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/TableDTO.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/BUS/BillBUS.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/SellGUI.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/ApplicationHelper/MyDate.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/FormBill.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/ChoiceMenuOfToppingGUI.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DAO/DatabaseHelper.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/FormTopping.java</file>
-            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/GUI/FormAccount.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/Detail_BillDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/StaffDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/AccountDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/ToppingDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/Product_ToppingDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/ClassifyDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/ProductDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/SpotBillDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/BillDTO.java</file>
+            <file>file:/C:/java/CoffeShop_SoftwareTechnology/CoffeeStore/src/DTO/Product_SizeDTO.java</file>
         </group>
     </open-files>
 </project-private>

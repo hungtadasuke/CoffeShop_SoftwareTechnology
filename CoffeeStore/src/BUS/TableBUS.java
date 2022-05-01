@@ -36,4 +36,26 @@ public class TableBUS {
     public void resetTableList() {
         this.setTableList(this.getTableDAO().readTableListFromDatabase());
     }
+    
+    //update status a table
+    public void updateStatusTable(String tableId, boolean status) {
+        this.getTableDAO().updateStatustable(tableId, status);
+        this.resetTableList();
+    }
+    
+    //get table from id
+    public TableDTO getTableFromId(String tableId) {
+        this.resetTableList();
+        for(TableDTO table: this.getTableList()) {
+            if(table.getTableId().equalsIgnoreCase(tableId)) {
+                return table;
+            }
+        }
+        return null;
+    }
+    
+    public static void main(String[] args) {
+        TableBUS o = new TableBUS();
+        o.updateStatusTable("TB001", true);
+    }
 }
