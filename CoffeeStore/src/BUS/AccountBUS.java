@@ -52,7 +52,7 @@ public class AccountBUS {
     public boolean checkAccount(String username, String password) {
         this.reset();
         for(AccountDTO account: this.getAccountList()) {
-            if(account.getUsername().equalsIgnoreCase(username) && account.getPassword().equalsIgnoreCase(password)) {
+            if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
                 return true;
             }
         }
@@ -63,8 +63,8 @@ public class AccountBUS {
     public String getStaffID(String username, String password) {
         this.reset();
         for(AccountDTO account: this.getAccountList()) {
-            if(account.getUsername().equalsIgnoreCase(username) 
-               && account.getPassword().equalsIgnoreCase(password)) {
+            if(account.getUsername().equals(username) 
+               && account.getPassword().equals(password)) {
                 return account.getStaffId();
             }
         }
