@@ -11,8 +11,7 @@ public class ClassifyDTO {
         this.classifyId = classifyId;
         this.classifyName = classifyName;
         this.classifyBusiness = classifyBusiness;
-    }
-    
+    }    
     
     //setter and getter
     public String getClassifyId() {

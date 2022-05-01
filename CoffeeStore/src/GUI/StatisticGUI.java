@@ -10,6 +10,8 @@ import static java.awt.Frame.HAND_CURSOR;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -472,7 +474,18 @@ public final class StatisticGUI extends JFrame{
         this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\iconJFrame.png"));
         this.setSize(new Dimension(1300, 760));
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(getSellBUS().getStaffBUS().checkPosition(getStaffID())) {
+                    ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(getStaffID());
+                    dispose();
+                } else {
+                    SellMenuGUI sellMenuGUI = new SellMenuGUI(getStaffID());
+                    dispose();
+                }
+            }
+        });
         this.setLayout(new BorderLayout());
     }
     
@@ -505,6 +518,15 @@ public final class StatisticGUI extends JFrame{
                 getbHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
             }
         });
+        this.getbHome().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getStaffBUS().checkPosition(this.getStaffID())) {
+                ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(this.getStaffID());
+                this.dispose();
+            } else {
+                SellMenuGUI sellMenuGUI = new SellMenuGUI(this.getStaffID());
+                this.dispose();
+            }
+        });
         
         //create pHeaderRight
         this.setpHeaderRight(new JPanel());
@@ -523,7 +545,7 @@ public final class StatisticGUI extends JFrame{
         this.getbSearch().addActionListener((ActionEvent e) -> {
             String dateStart = this.getCbYearStart().getSelectedItem() + "-" + this.getCbMonthStart().getSelectedItem() + "-" + this.getCbDayStart().getSelectedItem();
             String dateEnd = this.getCbYearEnd().getSelectedItem() + "-" + this.getCbMonthEnd().getSelectedItem() + "-" + this.getCbDayEnd().getSelectedItem();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dateS = null;
             Date dateE = null;
             try {
@@ -702,7 +724,7 @@ public final class StatisticGUI extends JFrame{
         this.getbFind().addActionListener((ActionEvent e) -> {
             String dateStart = getCbYearStart().getSelectedItem() + "-" + getCbMonthStart().getSelectedItem() + "-" + getCbDayStart().getSelectedItem();
             String dateEnd = getCbYearEnd().getSelectedItem() + "-" + getCbMonthEnd().getSelectedItem() + "-" + getCbDayEnd().getSelectedItem();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dateS = null;
             Date dateE = null;
             try {
@@ -863,14 +885,16 @@ public final class StatisticGUI extends JFrame{
                 int result = JOptionPane.showConfirmDialog(StatisticGUI.this, "Do You Want To Print This Toppings Statistic?", "Print Toppings Statistic", JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                     this.getStatisticBUS().printToppingStatistic(this.getTbTopping(), this.getlFrom().getText().split("\\s")[1], this.getlTo().getText().split("\\s")[1], this.getStaffID());
+                    JOptionPane.showMessageDialog(StatisticGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
                 }
             } else {
                 int result = JOptionPane.showConfirmDialog(StatisticGUI.this, "Do You Want To Print This Products Statistic?", "Print Products Statistic", JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                    this.getStatisticBUS().printProductStatistic(this.getTbProduct(), this.getlFrom().getText().split("\\s")[1], this.getlTo().getText().split("\\s")[1], this.getStaffID());
+                   JOptionPane.showMessageDialog(StatisticGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
                 }
             }
-            JOptionPane.showMessageDialog(StatisticGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
+  
         });
         
         tempContainer.add(this.getbProduct());

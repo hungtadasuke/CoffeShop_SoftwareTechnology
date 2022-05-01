@@ -477,7 +477,13 @@ public final class SellGUI extends JFrame{
                 if(getlResultTableId().getText().equalsIgnoreCase("")) {
                     getSellBUS().getBillBUS().deleteBill(getlResultBillId().getText());
                 }
-                System.exit(0);
+                if(getSellBUS().getStaffBUS().checkPosition(getStaffId())) {
+                    ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(getStaffId());
+                    dispose();
+                } else {
+                    SellMenuGUI sellMenuGUI = new SellMenuGUI(getStaffId());
+                    dispose();
+                }
             }
         });
         this.setLayout(new BorderLayout());
@@ -771,6 +777,15 @@ public final class SellGUI extends JFrame{
             @Override
             public void mouseReleased(MouseEvent e) {
                 getbHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
+            }
+        });
+        this.getbHome().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getStaffBUS().checkPosition(this.getStaffId())) {
+                ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(this.getStaffId());
+                this.dispose();
+            } else {
+                SellMenuGUI sellMenuGUI = new SellMenuGUI(this.getStaffId());
+                this.dispose();
             }
         });
         

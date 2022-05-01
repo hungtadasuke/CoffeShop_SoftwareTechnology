@@ -6,6 +6,7 @@ import BUS.ClassifyBUS;
 import BUS.ProductBUS;
 import BUS.Product_SizeBUS;
 import BUS.Product_ToppingBUS;
+import BUS.StaffBUS;
 import BUS.ToppingBUS;
 import DTO.ClassifyDTO;
 import DTO.ProductDTO;
@@ -15,9 +16,10 @@ import DTO.ToppingDTO;
 import java.awt.*;
 import static java.awt.Frame.HAND_CURSOR;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -38,15 +40,19 @@ public final class ProductGUI extends JFrame{
     private ProductBUS productBUS;
     private ClassifyBUS classifyBUS;
     private ToppingBUS toppingBUS;
+    private StaffBUS staffBUS;
     private Product_ToppingBUS productToppingBUS;
     private Product_SizeBUS productSizeBUS;
     private JComboBox cbClassify;
+    private String staffID;
     private  Vector<Product_ToppingDTO> productToppingList;
     
     Color BACKGROUND_COLOR = new Color(202, 135, 96);
     
     //constructor
-    public ProductGUI() {
+    public ProductGUI(String staffID) {
+        this.setStaffID(staffID);
+        this.setStaffBUS(new StaffBUS());
         this.setProductToppingList(new Vector<>());
         this.setProductBUS(new ProductBUS());
         this.setClassifyBUS(new ClassifyBUS());
@@ -73,6 +79,22 @@ public final class ProductGUI extends JFrame{
 
     public void setTfNickName(JTextField tfNickName) {
         this.tfNickName = tfNickName;
+    }
+
+    public String getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
+    }
+
+    public StaffBUS getStaffBUS() {
+        return staffBUS;
+    }
+
+    public void setStaffBUS(StaffBUS staffBUS) {
+        this.staffBUS = staffBUS;
     }
 
     public JButton getbOk() {
@@ -451,7 +473,13 @@ public final class ProductGUI extends JFrame{
        this.setTitle("Product Form");
        this.setIconImage(Toolkit.getDefaultToolkit().getImage("Resource\\iconJFrame.png"));
        this.setSize(1300, 760);
-       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(getStaffID());
+                dispose();
+            }
+       });
        this.setResizable(false);
        this.setLayout(new BorderLayout());
        
@@ -503,6 +531,10 @@ public final class ProductGUI extends JFrame{
             public void mouseReleased(MouseEvent e) {
                 getbHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
             }
+        });
+        this.getbHome().addActionListener((ActionEvent e) -> {
+            ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(this.getStaffID());
+            this.dispose();
         });
         
         //pTop Left
@@ -1211,8 +1243,4 @@ public final class ProductGUI extends JFrame{
         return frame;
     }
     
-    //main
-    public static void main(String[] args) {
-        ProductGUI o = new ProductGUI();
-    }
 }

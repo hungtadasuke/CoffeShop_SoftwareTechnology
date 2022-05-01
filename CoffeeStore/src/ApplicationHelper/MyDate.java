@@ -93,10 +93,10 @@ public class MyDate {
     }
     
     public static void main(String[] args) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-        Date date1 = sdf.parse("2022-04-23");
-        Date date2 = sdf.parse("2022-04-22");
-        Date date3 = sdf.parse("2022-04-15");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = sdf.parse("2022-04-29");
+        Date date2 = sdf.parse("2022-05-01");
+        System.out.println(date1.compareTo(date2));
     }
     
 }
