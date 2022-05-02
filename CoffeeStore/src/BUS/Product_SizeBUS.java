@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.Product_SizeDAO;
 import DTO.Product_SizeDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class Product_SizeBUS {
+public class Product_SizeBUS implements ICoffeeShop{
     //attribute
     private Product_SizeDAO productSizeDAO;
     private Vector<Product_SizeDTO> productSizeList;
@@ -34,7 +35,8 @@ public class Product_SizeBUS {
     
     //method
     //reset list
-    public void resetProductSizeList() {
+    @Override
+    public void resetList() {
         this.setProductSizeList(this.getProductSizeDAO().readProductAndSizeFromDatabase());
     }
     
@@ -50,7 +52,7 @@ public class Product_SizeBUS {
     
     //check exists of a size of a product
     public boolean checkSize(String productId, String size) {
-        this.resetProductSizeList();
+        this.resetList();
         for(Product_SizeDTO o: this.getProductSizeList()) {
             if(o.getProductId().equalsIgnoreCase(productId) && o.getSize().equalsIgnoreCase(size)) {
                 return true;

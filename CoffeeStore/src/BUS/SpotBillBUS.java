@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.SpotBillDAO;
 import DTO.SpotBillDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class SpotBillBUS {
+public class SpotBillBUS implements ICoffeeShop{
     //attribute
     private SpotBillDAO spotBillDAO;
     private Vector<SpotBillDTO> spotBillList;
@@ -34,19 +35,24 @@ public class SpotBillBUS {
     
     //method
     //reset
-    public void reset() {
+
+    /**
+     *
+     */
+    @Override
+    public void resetList() {
         this.setSpotBillList(this.getSpotBillDAO().readSpotBillListFromDB());
     }
     
     //insert a spot bill
     public void insertSpotBill(SpotBillDTO spotBill) {
         this.getSpotBillDAO().insetSpotBill(spotBill);
-        this.reset();
+        this.resetList();
     }
     
     //get spot bill from id
     public SpotBillDTO getSpotBillFromId(String billId) {
-        this.reset();
+        this.resetList();
         for(SpotBillDTO spotBill: this.getSpotBillList()) {
             if(spotBill.getBillId().equalsIgnoreCase(billId)) {
                 return spotBill;

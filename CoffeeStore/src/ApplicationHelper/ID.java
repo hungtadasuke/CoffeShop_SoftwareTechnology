@@ -69,7 +69,7 @@ public class ID {
     
     //Cap id san pham
     public static String createProductId(String classify) {
-        getProductBUS().resetProductList();
+        getProductBUS().resetList();
         String beforeId;
         
         if(classify.equalsIgnoreCase("Coffee")) {

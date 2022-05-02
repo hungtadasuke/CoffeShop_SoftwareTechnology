@@ -133,7 +133,7 @@ public class StatisticBUS {
     
     //Tao danh sach detail_topping from dateStart and dateEnd
     private Vector<BillDetail_ToppingDTO> getDetailToppingFromDate(String dateStart, String dateEnd) {
-        this.getSellBUS().getDetailBillToppingBUS().reset();
+        this.getSellBUS().getDetailBillToppingBUS().resetList();
         Vector<BillDetail_ToppingDTO> detailToppingList = new Vector<>();
         for(Detail_BillDTO detail: this.getDetailBillListFromDate(dateStart, dateEnd)) {
             for(BillDetail_ToppingDTO detailTopping: this.getSellBUS().getDetailBillToppingBUS().getDetailToppingList(detail.getDetailBillId().trim())) {

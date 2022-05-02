@@ -405,10 +405,10 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         //Tao phan pBodyCenter
         this.setpBodyCenter(new JPanel());
         this.getpBodyCenter().setBackground(BACKGROUND_COLOR);
-        this.getpBodyCenter().setLayout(new BoxLayout(this.getpBodyCenter(), BoxLayout.Y_AXIS));
         Border lineBorder = new LineBorder(Color.WHITE);
         this.getpBodyCenter().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 50, 0, 50), lineBorder), "Topping", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
         
+        this.getpBodyCenter().setLayout(new GridLayout(this.getToppingPanelList().size(), 1));
         if(this.getToppingPanelList().size() < 3) {
             this.setSize(450, 400);
             for(ChoiceMenuOfToppingGUI toppingPanel: this.getToppingPanelList()) {
@@ -577,7 +577,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     private Vector<JRadioButton> createSizeRadioButtonList() {
         Vector<JRadioButton> listTemp = new Vector<>();
         ButtonGroup bg = new ButtonGroup();
-        this.getSellGUI().getSellBUS().getProductSizeBUS().resetProductSizeList();
+        this.getSellGUI().getSellBUS().getProductSizeBUS().resetList();
         for(Product_SizeDTO o: this.getSellGUI().getSellBUS().getProductSizeBUS().getProductSizeList()) {
             if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                 JRadioButton rBtn = createSizeRadioButton(o.getSize(), o.getSize());
@@ -622,7 +622,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
     private Vector<ChoiceMenuOfToppingGUI> createToppingPanelList() {
        Vector<ChoiceMenuOfToppingGUI> list = new Vector<>();
-       this.getSellGUI().getSellBUS().getProductToppingBUS().reset();
+       this.getSellGUI().getSellBUS().getProductToppingBUS().resetList();
        for(Product_ToppingDTO o: this.getSellGUI().getSellBUS().getProductToppingBUS().getProductToppingList()) {
            if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this));

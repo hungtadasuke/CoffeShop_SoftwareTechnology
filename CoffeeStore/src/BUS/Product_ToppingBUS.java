@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.Product_ToppingDAO;
 import DTO.Product_ToppingDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class Product_ToppingBUS {
+public class Product_ToppingBUS implements ICoffeeShop{
     //attribute
     private Product_ToppingDAO productToppingDAO;
     private Vector<Product_ToppingDTO> productToppingList;
@@ -33,14 +34,15 @@ public class Product_ToppingBUS {
     }
     
     //reset
-    public void reset() {
+    @Override
+    public void resetList() {
         this.setProductToppingList(this.getProductToppingDAO().readProductToppingListFromDatabase());
     }
     
     //get topping list from product id
     public Vector<String> getToppingIdList(String productId) {
         Vector<String> toppingIdList  = new Vector<>();
-        this.reset();
+        this.resetList();
         for(Product_ToppingDTO productTopping: this.getProductToppingList()) {
             if(productTopping.getProductId().equalsIgnoreCase(productId)) {
                 toppingIdList.add(productTopping.getToppingId());

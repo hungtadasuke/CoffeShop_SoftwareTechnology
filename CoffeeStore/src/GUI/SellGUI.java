@@ -1037,7 +1037,7 @@ public final class SellGUI extends JFrame{
         Border mix = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
         Border line = BorderFactory.createTitledBorder(mix, "Menu", TitledBorder.RIGHT, TitledBorder.BELOW_TOP, new Font("Arial", Font.ITALIC, 10), Color.BLACK);
         this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table", line));
-        this.getSellBUS().getClassifyBUS().resetClassifyList();
+        this.getSellBUS().getClassifyBUS().resetList();
         for(ClassifyDTO classify: this.getSellBUS().getClassifyBUS().getClassifyList()) {
             if(classify.isClassifyBusiness()) {
                 this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId(), line));
@@ -1053,7 +1053,7 @@ public final class SellGUI extends JFrame{
     
     private void createProductButtonList(String classifyId) {
         this.getButtonList().clear();
-        this.getSellBUS().getProductBUS().resetProductList();
+        this.getSellBUS().getProductBUS().resetList();
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
             if(product.isProductBusiness() && product.getClassifyId().equalsIgnoreCase(classifyId)) {      
                 this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
