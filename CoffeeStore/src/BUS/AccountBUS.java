@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class AccountBUS {
+public class AccountBUS implements ICoffeeShop{
     //attribute
     private AccountDAO accountDAO;
     private Vector<AccountDTO> accountList;
@@ -44,13 +45,18 @@ public class AccountBUS {
     
     //method
     //reset account list
-    public void reset(){
+
+    /**
+     *
+     */
+    @Override
+    public void resetList(){
         this.setAccountList(this.getAccountDAO().readAccountListFromDatabase());
     }
     
     //check account
     public boolean checkAccount(String username, String password) {
-        this.reset();
+        this.resetList();
         for(AccountDTO account: this.getAccountList()) {
             if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
                 return true;
@@ -61,7 +67,7 @@ public class AccountBUS {
     
     //getStaffID from unsername and password
     public String getStaffID(String username, String password) {
-        this.reset();
+        this.resetList();
         for(AccountDTO account: this.getAccountList()) {
             if(account.getUsername().equals(username) 
                && account.getPassword().equals(password)) {

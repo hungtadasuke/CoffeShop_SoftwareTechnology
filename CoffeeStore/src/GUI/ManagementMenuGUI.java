@@ -255,6 +255,10 @@ public class ManagementMenuGUI extends JFrame {
         //Bill
         this.setbBill(this.createJButton(new ImageIcon("Resource\\Ecommerce-Bill-icon.png")));
         this.getbBill().setBounds(635, 100, 100, 80);
+        this.getbBill().addActionListener((ActionEvent e) -> {
+            BillGUI billGUI = new BillGUI(this.getStaffID());
+            this.dispose();
+        });
         
         this.setlBill(this.createJLabel("Bill"));
         this.getlBill().setBounds(668, 155, 100, 80);

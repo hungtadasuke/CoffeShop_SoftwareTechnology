@@ -3,12 +3,13 @@ package BUS;
 import ApplicationHelper.MyDate;
 import DAO.BillDAO;
 import DTO.BillDTO;
+import Interface.ICoffeeShop;
 import java.text.*;
 import java.util.Date;
 import java.util.Vector;
 
 
-public class BillBUS {
+public class BillBUS implements ICoffeeShop{
     //attribute
     private BillDAO billDAO;
     private Vector<BillDTO> billList;
@@ -38,6 +39,7 @@ public class BillBUS {
     
     //method
     //reset list
+    @Override
     public void resetList() {
         this.setBillList(this.billDAO.readBillListFromDatabase());
     }
@@ -219,12 +221,22 @@ public class BillBUS {
         }
     }
     
+    //Search bill list from keyWord
+    public Vector<BillDTO> getBillList(String keyWord) {
+        Vector<BillDTO> searchBillList = new Vector<>();
+        for(BillDTO bill: this.getBillList()) {
+            if(bill.getBillId().toLowerCase().contains(keyWord.toLowerCase()) || bill.getDate().toString().contains(keyWord) 
+                || bill.getBillType().toLowerCase().contains(keyWord.toLowerCase()) || bill.getStaffId().toLowerCase().contains(keyWord.toLowerCase())) {
+                searchBillList.add(bill);
+            }  
+        }
+        return searchBillList;
+    }
+    
     public static void main(String[] args) throws ParseException {
         BillBUS o = new BillBUS();
         for(BillDTO bill: o.getBillList("2022-04-22", "2022-04-22")) {
             System.out.println(bill.getBillId());
         }
-    }
-    
-    
+    }  
 }

@@ -4,9 +4,10 @@ import DAO.ProductDAO;
 import DTO.ProductDTO;
 import DTO.Product_SizeDTO;
 import DTO.Product_ToppingDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class ProductBUS {
+public class ProductBUS implements ICoffeeShop{
     //attribute
     private ProductDAO productDAO;
     private Vector<ProductDTO> productList;
@@ -36,7 +37,8 @@ public class ProductBUS {
     
     //method
     //reset list when update database
-    public void resetProductList() {
+    @Override
+    public void resetList() {
         this.setProductList(this.getProductDAO().readProductListFromDatabase());
     }
     
@@ -52,13 +54,12 @@ public class ProductBUS {
     
     //get product list from keyWord
     public Vector<ProductDTO> getProductList(String keyWord) {
-        this.resetProductList();
+        this.resetList();
         Vector<ProductDTO> list = new Vector<>();
         ClassifyBUS classifyBUS = new ClassifyBUS();
         for(ProductDTO o: this.getProductList()) {
-            if( classifyBUS.getClassifyName(o.getClassifyId()).toLowerCase().contains(keyWord) || o.getProductName().contains(keyWord) || o.getProductName().toLowerCase().contains(keyWord) 
-                || o.getProductName().toUpperCase().contains(keyWord) || o.getProductId().toLowerCase().contains(keyWord)|| o.getProductId().contains(keyWord) ||o.getClassifyId().contains(keyWord) 
-                || o.getClassifyId().toLowerCase().contains(keyWord)) {
+            if( classifyBUS.getClassifyName(o.getClassifyId()).toLowerCase().contains(keyWord.toLowerCase()) ||o.getProductName().toLowerCase().contains(keyWord.toLowerCase())
+                || o.getProductId().toLowerCase().contains(keyWord.toLowerCase())|| o.getClassifyId().toLowerCase().contains(keyWord.toLowerCase())) {
                 list.add(o);
             }
         }
@@ -67,7 +68,7 @@ public class ProductBUS {
     
     //check product id
     public boolean checkId(String productId) {
-        this.resetProductList();
+        this.resetList();
         for(ProductDTO product: this.getProductList()) {
             if(product.getProductId().equalsIgnoreCase(productId)) {
                 return true;
@@ -77,7 +78,7 @@ public class ProductBUS {
     }
     //check product name
     public boolean checkName(String productName) {
-        this.resetProductList();
+        this.resetList();
         for(ProductDTO product: this.getProductList()) {
             if(product.getProductName().equalsIgnoreCase(productName)) {
                 return true;
@@ -88,7 +89,7 @@ public class ProductBUS {
     
     //check product nick name
     public boolean checkNickName(String productNickName) {
-        this.resetProductList();
+        this.resetList();
         for(ProductDTO product: this.getProductList()) {
             if(product.getProductNickName().equalsIgnoreCase(productNickName)) {
                 return true;

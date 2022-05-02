@@ -923,8 +923,8 @@ public final class ProductGUI extends JFrame{
                     int result = JOptionPane.showConfirmDialog(this, "Are You Sure You Want To Add This Product To The Database?", "Confirm", JOptionPane.YES_NO_OPTION);
                     if(result == JOptionPane.YES_OPTION) {
                         JOptionPane.showMessageDialog(this, insertProduct(sizeList, this.getProductToppingList()), "Notification", JOptionPane.CLOSED_OPTION);
-                        this.getProductSizeBUS().resetProductSizeList();
-                        this.getProductToppingBUS().reset();
+                        this.getProductSizeBUS().resetList();
+                        this.getProductToppingBUS().resetList();
                         this.resetGUIAfterUpdate();
                     }
                 } 
@@ -966,8 +966,8 @@ public final class ProductGUI extends JFrame{
                     int result = JOptionPane.showConfirmDialog(this, "Are You Sure You Want To Update This Product In The Database?", "Confirm", JOptionPane.YES_NO_OPTION);
                     if(result == JOptionPane.YES_OPTION) {
                         JOptionPane.showMessageDialog(this, updateProduct(sizeList, this.getProductToppingList()), "Notification", JOptionPane.CLOSED_OPTION);
-                        this.getProductSizeBUS().resetProductSizeList();
-                        this.getProductToppingBUS().reset();
+                        this.getProductSizeBUS().resetList();
+                        this.getProductToppingBUS().resetList();
                         this.resetGUIAfterUpdate();
                     }
                 } 
@@ -1154,7 +1154,7 @@ public final class ProductGUI extends JFrame{
     
     //show product list on table
     private void showProductListOnTable() {
-        this.getProductBUS().resetProductList();
+        this.getProductBUS().resetList();
         this.getProductModel().setRowCount(0);
         for(ProductDTO product: this.getProductBUS().getProductList()) {
             this.getProductModel().addRow(new Object[] {this.getClassifyBUS().getClassifyName(product.getClassifyId()), product.getProductId(), product.getProductName(), product.getProductNickName(), 
@@ -1165,7 +1165,7 @@ public final class ProductGUI extends JFrame{
     
     //show product list from keyWord on table
     private void showProductListFromKeyWord(String keyWord) {
-        this.getProductBUS().resetProductList();
+        this.getProductBUS().resetList();
         this.getProductModel().setRowCount(0);
         for(ProductDTO product: this.getProductBUS().getProductList(keyWord)) {
             this.getProductModel().addRow(new Object[] {this.getClassifyBUS().getClassifyName(product.getClassifyId()), product.getProductId(), product.getProductName(), product.getProductNickName(), 
@@ -1176,7 +1176,7 @@ public final class ProductGUI extends JFrame{
     
     //fill date from classify list to cbClassify
     private void fillDataFromClassifyListToCB() {
-        this.getClassifyBUS().resetClassifyList();
+        this.getClassifyBUS().resetList();
         for(ClassifyDTO o: this.getClassifyBUS().getClassifyList()) {
             this.getCbClassify().addItem(o.getClassifyName());
         }
