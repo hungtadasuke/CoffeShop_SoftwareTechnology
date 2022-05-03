@@ -50,11 +50,4 @@ public class Product_ToppingBUS implements ICoffeeShop{
         }
         return toppingIdList;
     }
-    
-    public static void main(String[] args) {
-        Product_ToppingBUS o = new Product_ToppingBUS();
-        for(String s: o.getToppingIdList("CF003")) {
-            System.out.println(s);
-        }
-    }
 }

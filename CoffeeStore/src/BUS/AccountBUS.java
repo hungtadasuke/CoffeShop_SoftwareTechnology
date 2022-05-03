@@ -76,9 +76,4 @@ public class AccountBUS implements ICoffeeShop{
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-        AccountBUS o = new AccountBUS();
-        System.out.println(o.getStaffID("seller1", "12345678"));
-    }
 }

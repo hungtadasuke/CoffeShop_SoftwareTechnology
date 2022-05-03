@@ -918,10 +918,4 @@ public final class SalesGUI extends JFrame{
         this.getcbYearEnd().addItem(date.getYear());
         this.getcbYearEnd().setEnabled(false);
     }
-    
-    //main
-    public static void main(String[] args) {
-        SalesGUI sales = new SalesGUI("SF001");
-    }
-    
 }

@@ -734,8 +734,4 @@ public class SellBUS{
         }
         return null;
     }
-    public static void main(String[] args) {
-        SellBUS sell = new SellBUS();
-        sell.printSales("SF001", "13/04/2022", "24/04/2022", 12, 5, 17, 2300000.0);
-    }
 }

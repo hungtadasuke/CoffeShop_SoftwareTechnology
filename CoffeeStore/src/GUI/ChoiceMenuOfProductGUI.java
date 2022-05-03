@@ -663,10 +663,4 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         card.show(ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer(), "OrderBody");
         ChoiceMenuOfProductGUI.this.getSellGUI().getlToTalResult().setText(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().getPriceOfBill(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText()) + "");
     }
-    
-    //main
-    public static void main(String[] args) {
-        SellGUI sell = new SellGUI("SF004");
-        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE001", "BL0011", sell);
-    }
 }

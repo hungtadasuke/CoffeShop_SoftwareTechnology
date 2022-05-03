@@ -138,16 +138,4 @@ public class ProductDAO {
         return true;
     }
     
-    public static void main(String[] args) {
-        ProductDTO product = new ProductDTO("CL001", "CF008", "Coffee Tadasuke", "Tadasuke", "HOT", false);
-        Vector<Product_SizeDTO> sizeList = new Vector<>();
-        sizeList.add(new Product_SizeDTO("CF008", "L", 35000.0));
-        sizeList.add(new Product_SizeDTO("CF008", "M", 27000.0));
-        Vector<Product_ToppingDTO> toppingList = new Vector<>();
-        toppingList.add(new Product_ToppingDTO("CF008", "TP003"));
-        toppingList.add(new Product_ToppingDTO("CF008", "TP004"));
-        ProductDAO o = new ProductDAO();
-        System.out.println(o.update(product, sizeList, toppingList));
-    }
-    
 }

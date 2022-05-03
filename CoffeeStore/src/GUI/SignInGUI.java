@@ -201,7 +201,4 @@ public class SignInGUI extends JFrame{
     public static void main(String[] args) {
         SignInGUI signIn = new SignInGUI();
     }
-
-    
-    
 }

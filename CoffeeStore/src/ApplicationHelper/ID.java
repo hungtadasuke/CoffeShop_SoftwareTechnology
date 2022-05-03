@@ -103,8 +103,4 @@ public class ID {
         newProductId = beforeId + String.format("%03d", id);
         return newProductId;
     }
-    
-    public static void main(String[] args) {
-        System.out.println(createProductId("Fruit Juice"));
-    }
 }

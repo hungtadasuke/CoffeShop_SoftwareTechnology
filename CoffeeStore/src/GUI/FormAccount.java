@@ -130,8 +130,4 @@ public class FormAccount extends JFrame {
     public FormAccount(){
         MainDisplay();
     }
-    
-    public static void main(String[] args) {
-        FormAccount fomrAccount = new FormAccount();
-    }
 }

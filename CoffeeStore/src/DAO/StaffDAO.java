@@ -51,12 +51,4 @@ public class StaffDAO {
 //        
 //    }
     
-    public static void main(String[] args) {
-        StaffDAO o = new StaffDAO();
-        Vector<StaffDTO> list = o.readStaffListFromDatabase();
-        for(StaffDTO x: list) {
-            System.out.println(x.getStaffId() + "---" + x.getStaffName() + "---" + x.getStaffAddress()+ "---" + x.getStaffBirthday().toString()+ "---" + x.getPosition());
-        }
-    }
-    
 }

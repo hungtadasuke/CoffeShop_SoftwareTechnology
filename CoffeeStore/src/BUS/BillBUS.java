@@ -232,11 +232,4 @@ public class BillBUS implements ICoffeeShop{
         }
         return searchBillList;
     }
-    
-    public static void main(String[] args) throws ParseException {
-        BillBUS o = new BillBUS();
-        for(BillDTO bill: o.getBillList("2022-04-22", "2022-04-22")) {
-            System.out.println(bill.getBillId());
-        }
-    }  
 }

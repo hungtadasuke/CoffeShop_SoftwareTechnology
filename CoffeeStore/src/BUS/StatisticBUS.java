@@ -720,11 +720,4 @@ public class StatisticBUS {
             System.err.println(e);
         }
     }
-    
-    public static void main(String[] args) {
-        StatisticBUS o = new StatisticBUS();
-        JTable table = new JTable();
-        o.printProductStatistic(table, "24/04/2022", "24/04/2022", "SF005");
-    }
-    
 }

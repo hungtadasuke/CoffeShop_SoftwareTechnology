@@ -36,12 +36,4 @@ public class AccountDAO {
         }
         return accountList;
     }
-    
-    //main
-    public static void main(String[] args) {
-        AccountDAO o = new AccountDAO();
-        for(AccountDTO x: o.readAccountListFromDatabase()) {
-            System.out.println(x.getUsername() + "---" + x.getPassword() + "---" + x.getStaffId());
-        }
-    }
 }
