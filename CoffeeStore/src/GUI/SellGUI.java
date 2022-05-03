@@ -1257,12 +1257,4 @@ public final class SellGUI extends JFrame{
         this.createTablePanelList();
         this.addComponentsInTablePanelListToJPanel(this.getPanelList(), this.getpTable());
     }
-    
-    
-    
-    //main
-    public static void main (String[] args) {
-        SellGUI gui = new SellGUI("SF005");
-    }
-    
 }

@@ -55,9 +55,4 @@ public class TableBUS implements ICoffeeShop{
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-        TableBUS o = new TableBUS();
-        o.updateStatusTable("TB001", true);
-    }
 }

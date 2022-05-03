@@ -83,10 +83,4 @@ public class Product_ToppingDAO {
         }
         return true;
     }
-    
-    public static void main(String[] args) {
-        Product_ToppingDAO o = new Product_ToppingDAO();
-        System.out.println(o.insert(new Product_ToppingDTO("CF008", "TP002")));
-    }
-    
 }

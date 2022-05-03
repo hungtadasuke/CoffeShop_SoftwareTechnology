@@ -88,9 +88,4 @@ public class Product_SizeDAO {
         }
         return true; 
     }
-    
-    public static void main(String[] args) {
-        Product_SizeDAO o = new Product_SizeDAO();
-        System.out.println(o.insert(new Product_SizeDTO("CF008", "S", 20000.0)));
-    }
 }

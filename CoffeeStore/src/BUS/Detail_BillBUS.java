@@ -83,10 +83,4 @@ public class Detail_BillBUS implements ICoffeeShop{
         }
         return detailList;
     }
-    
-    //main test
-    public static void main(String[] args) {
-        Detail_BillBUS detail = new Detail_BillBUS();
-        System.out.println(detail.getDetailBillFromId("BL0041").getUnitPrice());
-    }
 }

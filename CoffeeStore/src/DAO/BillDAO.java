@@ -107,15 +107,4 @@ public class BillDAO {
         }
         
     }
-    
-    //main test
-    public static void main(String[] args) {
-        BillDAO o = new BillDAO();
-        Vector<BillDTO> list = o.readBillListFromDatabase();
-        for(BillDTO x: list) {
-            System.out.println(x.getBillId() + "---" + x.getStaffId() + "--" + x.getDate().toString() + "--" + x.getTotal() + "---" + x.getReceivedMoney() + "--" + x.getExcessMoney());
-        }
-        o.updateBill("BL003", true, 100000.0, 30000.0);
-    }
-    
 }

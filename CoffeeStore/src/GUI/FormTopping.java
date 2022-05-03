@@ -145,9 +145,4 @@ public class FormTopping extends JFrame {
     public FormTopping(){
         MainDisplay();
     }
-    
-    public static void main(String[] args) {
-        new FormTopping();
-    }
-    
 }

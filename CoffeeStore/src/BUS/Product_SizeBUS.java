@@ -70,9 +70,4 @@ public class Product_SizeBUS implements ICoffeeShop{
         return "X";
     }
     
-    public static void main(String[] args) {
-        Product_SizeBUS o = new Product_SizeBUS();
-        System.out.println(o.checkSize("SM001", "S"));
-    }
-    
 }

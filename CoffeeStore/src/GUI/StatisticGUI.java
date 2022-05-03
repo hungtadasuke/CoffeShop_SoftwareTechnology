@@ -1034,9 +1034,4 @@ public final class StatisticGUI extends JFrame{
         this.getlFrom().setText("From: " + dateFrom);
         this.getlTo().setText("To: " + dateTo);
     }
-    
-    //main
-    public static void main(String[] args) {
-        StatisticGUI statistic = new StatisticGUI("SF001");
-    }
 }

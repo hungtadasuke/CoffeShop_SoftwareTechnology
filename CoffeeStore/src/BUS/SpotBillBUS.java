@@ -60,9 +60,4 @@ public class SpotBillBUS implements ICoffeeShop{
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-        SpotBillBUS o = new SpotBillBUS();
-        o.insertSpotBill(new SpotBillDTO("BL001", "TB001"));
-    }
 }

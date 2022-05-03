@@ -49,14 +49,4 @@ public class SpotBillDAO {
             System.err.println(e);
         }
     }
-    
-    public static void main(String[] args) {
-        SpotBillDAO o = new SpotBillDAO();
-        Vector<SpotBillDTO> list = o.readSpotBillListFromDB();
-        for(SpotBillDTO sB: list) {
-            System.out.println(sB.getBillId() + "--" + sB.getTableId());
-        }
-    }
-   
-    
 }

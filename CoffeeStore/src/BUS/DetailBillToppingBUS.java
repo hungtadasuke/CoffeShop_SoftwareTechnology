@@ -78,12 +78,4 @@ public class DetailBillToppingBUS implements ICoffeeShop{
         }
         return detailToppingList;
     }
-    
-    public static void main(String[] args) {
-        DetailBillToppingBUS o = new DetailBillToppingBUS();
-        Vector<BillDetail_ToppingDTO> list = o.getDetailToppingList("BL0012");
-        for(BillDetail_ToppingDTO b: list) {
-            System.out.println(b.getDetailBillId() + "--" + b.getToppingId() + "--" + b.getQuantity() + "--" + b.getPrice());
-        }
-    }
 }
