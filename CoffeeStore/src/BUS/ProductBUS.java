@@ -58,8 +58,8 @@ public class ProductBUS implements ICoffeeShop{
         Vector<ProductDTO> list = new Vector<>();
         ClassifyBUS classifyBUS = new ClassifyBUS();
         for(ProductDTO o: this.getProductList()) {
-            if( classifyBUS.getClassifyName(o.getClassifyId()).toLowerCase().contains(keyWord.toLowerCase()) ||o.getProductName().toLowerCase().contains(keyWord.toLowerCase())
-                || o.getProductId().toLowerCase().contains(keyWord.toLowerCase())|| o.getClassifyId().toLowerCase().contains(keyWord.toLowerCase())) {
+            if(o.isProductBusiness() && (classifyBUS.getClassifyName(o.getClassifyId()).toLowerCase().contains(keyWord.toLowerCase()) ||o.getProductName().toLowerCase().contains(keyWord.toLowerCase())
+                || o.getProductId().toLowerCase().contains(keyWord.toLowerCase())|| o.getClassifyId().toLowerCase().contains(keyWord.toLowerCase()))) {
                 list.add(o);
             }
         }

@@ -83,4 +83,8 @@ public class Detail_BillBUS implements ICoffeeShop{
         }
         return detailList;
     }
+    
+    public void updateDetailBill(Detail_BillDTO detailBill) {
+        this.getDetailBillDAO().updateDetailBill(detailBill);
+    }
 }
