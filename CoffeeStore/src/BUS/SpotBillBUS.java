@@ -60,4 +60,16 @@ public class SpotBillBUS implements ICoffeeShop{
         }
         return null;
     }
+    
+    //xem mot ban da co bill chua thanh toan hay chua
+    public boolean checkSpotBill(String tableId, String billId) {
+        this.resetList();
+        BillBUS billTemp = new BillBUS();
+        for(SpotBillDTO o: this.getSpotBillList()) {
+            if(o.getTableId().equalsIgnoreCase(tableId) && !billTemp.getBillFromId(billId).isBillStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

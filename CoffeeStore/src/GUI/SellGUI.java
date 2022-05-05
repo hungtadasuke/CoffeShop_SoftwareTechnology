@@ -1109,7 +1109,7 @@ public final class SellGUI extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPanel newDetail = (JPanel) e.getSource();
-                ChoiceMenuOfProductGUI edit = new ChoiceMenuOfProductGUI(getSellBUS().getDetailBillBUS().getDetailBillFromId(newDetail.getName()).getProductId(), newDetail.getName(), SellGUI.this);
+                ChoiceMenuOfProductGUI edit = new ChoiceMenuOfProductGUI(getSellBUS().getDetailBillBUS().getDetailBillFromId(detailBillId).getProductId(), detailBillId, SellGUI.this);
                 edit.getBtnCheck().setActionCommand("Edit");
                         
             }    

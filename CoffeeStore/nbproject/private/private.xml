@@ -11,6 +11,7 @@
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/StaffDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/Product_ToppingDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/ChoiceMenuOfProductGUI.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/TablePanelGUI.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/SalesGUI.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/StatisticBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/StaffBUS.java</file>
@@ -30,6 +31,7 @@
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/ProductGUI.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/SpotBillBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/ApplicationHelper/MyDate.java</file>
+            <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/GUI/SellMenuGUI.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/DAO/SpotBillDAO.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/BillBUS.java</file>
             <file>file:/D:/NetBeansProjects/Software%20Technology%20-%20Coffee%20Shop/CoffeeStore/src/BUS/DetailBillToppingBUS.java</file>

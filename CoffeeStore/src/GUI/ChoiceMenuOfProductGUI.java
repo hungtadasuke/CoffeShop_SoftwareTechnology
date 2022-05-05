@@ -468,7 +468,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
                 if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())) {
                     this.insertBill("Take Away");
                 }
-                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill()));
+                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill(ApplicationHelper.ID.createDetailBillId(this.getSellGUI().getlResultBillId().getText()))));
                 ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().add(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size() - 1));
                 nextCardAndUpdateResult();
                 ChoiceMenuOfProductGUI.this.dispose();
@@ -476,17 +476,25 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
                 if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())) {
                     this.insertBill("Spot");
                 }
-                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill()));
+                ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.insertDetailBill(ApplicationHelper.ID.createDetailBillId(this.getSellGUI().getlResultBillId().getText()))));
                 ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().add(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size() - 1));
                 nextCardAndUpdateResult();
                 ChoiceMenuOfProductGUI.this.dispose();
             } else {
+                //Bug o day
                 ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().deleteDetailBill(this.getDetailBillId());
-                insertDetailBill();
+                if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())
+                   && ChoiceMenuOfProductGUI.this.getSellGUI().getlResultTableId().getText().equals("")) {
+                    this.insertBill("Take Away");
+                } else if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().checkExists(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText())
+                   && !ChoiceMenuOfProductGUI.this.getSellGUI().getlResultTableId().getText().equals("")){
+                    this.insertBill("Spot");
+                }
+                insertDetailBill(this.getDetailBillId());
                 for(int i = 0; i < ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().size(); i++) {
                     if(ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().get(i).getName().equalsIgnoreCase(this.getDetailBillId().trim())) {
                         ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().remove(i);
-                        ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(i, ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.getDetailBillId()));
+                        ChoiceMenuOfProductGUI.this.getSellGUI().getDetailPanelList().add(i, ChoiceMenuOfProductGUI.this.getSellGUI().createDetailBillPanel(this.getDetailBillId().trim()));
                     }
                 }
                 ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBody().removeAll();
@@ -519,13 +527,14 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         //set status table
         this.getSellGUI().getSellBUS().getTableBUS().updateStatusTable(this.getSellGUI().getlResultTableId().getText(), false);
         this.getSellGUI().resetpTable();
+        this.getSellGUI().resetAndNextCardTable();
     }
     
-    private String insertDetailBill() {
-        String newDetailBillId = ApplicationHelper.ID.createDetailBillId(this.getSellGUI().getlResultBillId().getText());
+    private String insertDetailBill(String detailBillId) {
         String newBillId = this.getSellGUI().getlResultBillId().getText();
+        String newDetailBillId = detailBillId;
         String newProductId = this.getProductId();
-        int ordinalNumber = ApplicationHelper.ID.createOrdinalNumber(this.getSellGUI().getlResultBillId().getText());
+        int ordinalNumber = ApplicationHelper.ID.createOrdinalNumber(newBillId);
         String size = this.getSizeSelected();
         String status = this.getStatusSelected().toUpperCase();
         int qty = Integer.parseInt(this.getTfQuantity().getText());

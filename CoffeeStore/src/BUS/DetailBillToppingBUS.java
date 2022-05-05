@@ -78,4 +78,9 @@ public class DetailBillToppingBUS implements ICoffeeShop{
         }
         return detailToppingList;
     }
+    
+    //delete detail toppings from detailBillId
+    public void deleteDetailBillTopping(String detailBillId) {
+        this.getDetailBillToppingDAO().deleteDetailBillTopping(detailBillId);
+    }
 }

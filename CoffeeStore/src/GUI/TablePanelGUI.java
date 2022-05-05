@@ -80,6 +80,10 @@ public final class TablePanelGUI extends JPanel {
                     getSellGUI().getlTableId().setText("Table  : ");
                     getSellGUI().getlResultTableId().setText(tableId);
                     getSellGUI().getlToTalResult().setText(billNow.getTotal() + "");
+                    getSellGUI().getTfReceived().setText("");
+                    getSellGUI().getlExcessResult().setText("");
+                    
+                    
                 }
             }
         });
@@ -150,8 +154,16 @@ public final class TablePanelGUI extends JPanel {
                     getCenter().setIcon(new ImageIcon("Resource\\table-icon.png"));
                     getFooter().setText("Choose");
                     getFooter().setBackground(Color.LIGHT_GRAY);
-                    getSellGUI().getlTableId().setText("");
-                    getSellGUI().getlResultTableId().setText("");
+                    //Hot bug
+                    if(getSellGUI().getSellBUS().getBillBUS().checkExists(getSellGUI().getlResultBillId().getText()) == false
+                            && getSellGUI().getSellBUS().getSpotBillBUS().checkSpotBill(getSellGUI().getlResultTableId().getText(), getSellGUI().getlResultBillId().getText()) == false) {
+                        System.out.println(getSellGUI().getlResultBillId().getText());
+                            getSellGUI().getlTableId().setText("");
+                            getSellGUI().getlResultTableId().setText("");
+                    } else if (getSellGUI().getSellBUS().getBillBUS().checkExists(getSellGUI().getlResultBillId().getText())) {
+                            getSellGUI().getlTableId().setText("");
+                            getSellGUI().getlResultTableId().setText("");
+                    }
                 }
             }
         });

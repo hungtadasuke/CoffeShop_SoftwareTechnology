@@ -86,4 +86,35 @@ public class Detail_BillDAO {
             System.err.println(e);
         }
     }
+    
+    //update a detailBill
+    public void updateDetailBill(Detail_BillDTO detailBill) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call UPDATE_DETAIL_BILL(?, ?, ?, ?, ?)}");
+                call.setString(1, detailBill.getDetailBillId());
+                call.setDouble(2, detailBill.getUnitPrice());
+                call.setString(3, detailBill.getProductSize());
+                call.setString(4, detailBill.getProducStatus());
+                call.setInt(5, detailBill.getQuantity());
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at updateDetailBill method from Detail_BillDAO class!");
+            System.err.println(e);
+        }
+    }
+    
+    public static void main(String[] args) {
+        Detail_BillDAO o = new Detail_BillDAO();
+        o.updateDetailBill(new Detail_BillDTO("BL000011", "BL00001", "TE003", 1, "L", "BOTH", 10, 230000.0));
+    }
 }

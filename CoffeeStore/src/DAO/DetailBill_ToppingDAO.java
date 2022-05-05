@@ -61,4 +61,26 @@ public class DetailBill_ToppingDAO {
             System.err.println(e);
         }
     }
+    
+    //delete detail toppings from detailbill_id
+    public void deleteDetailBillTopping(String detailBillId) {
+        try (Connection con = ApplicationHelper.DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call DELTETE_DETAILBILL_TOPPING (?)}");
+                call.setString(1, detailBillId);
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println("Error at delete DetailBillTopping method from DetailBill_ToppingDAO class!");
+                System.err.println(e);
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (ClassNotFoundException|SQLException e) {
+            System.err.println("Error at delete DetailBillTopping method from DetailBill_ToppingDAO class!");
+            System.err.println(e);
+        }
+    }
 }
