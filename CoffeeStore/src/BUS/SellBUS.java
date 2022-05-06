@@ -21,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class SellBUS {
+public class SellBUS{
    //attribute
    private ClassifyBUS classifyBUS;
    private ProductBUS productBUS;
@@ -490,7 +490,7 @@ public class SellBUS {
             range = new CellRangeAddress(i, i, 0, 8);
             sheet.addMergedRegion(range);
             
-            String path = "D://NetBeansProjects//Software Technology - Coffee Shop//ExcelBill//" + billId + ".xlsx";
+            String path = "./ExcelBill/" + billId + ".xlsx";
             //Tao mot doi tuong file tren dia
             File f = new File(path);
             //Mo file
@@ -504,7 +504,224 @@ public class SellBUS {
             }  
         } catch (IOException e) {
             System.err.println(e);
-            System.err.println("Error at prinBill method of BillBUS class");
+            System.err.println("Error at prinBill method of SellBUS class");
+        }
+    }
+    
+    //print sales
+    public void printSales(String staffID, String dateStart, String dateFinish, int qtySpot, int qtyTakeAWay, int Both, Double sales) {
+        try {
+            //Tao khong gian lam viec trong excel
+            XSSFWorkbook workBook = new XSSFWorkbook();
+            
+            //Tao mot sheet moi
+            XSSFSheet sheet = workBook.createSheet();
+            
+            //Khoi tao row and cell la null
+            XSSFRow row = null;
+            Cell cell = null;
+            
+            CellRangeAddress range = new CellRangeAddress(0, 0, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            CellStyle row0 = workBook.createCellStyle();
+            row0.setAlignment(HorizontalAlignment.CENTER);
+            
+            XSSFFont title = workBook.createFont();
+            title.setFontHeight(18);
+            title.setBold(true);
+            row0.setFont(title);
+            
+            row = sheet.createRow(0);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Sales Coffee Shop");
+            cell.setCellStyle(row0);
+            
+            range = new CellRangeAddress(1, 1, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            range = new CellRangeAddress(2, 2, 1, 4);
+            sheet.addMergedRegion(range);
+            
+            CellStyle address = workBook.createCellStyle();
+            address.setAlignment(HorizontalAlignment.CENTER);
+            
+            XSSFFont addressFont =  workBook.createFont();
+            addressFont.setFontHeight(14);
+            address.setFont(addressFont);
+            
+            row = sheet.createRow(2);
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue("770 CMT8");
+            cell.setCellStyle(address);
+            
+            range = new CellRangeAddress(3, 3, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            row = sheet.createRow(3);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("5 Ward, Tan Binh District, Ho Chi Minh City");
+            cell.setCellStyle(address);
+            
+            range = new CellRangeAddress(4, 4, 1, 4);
+            sheet.addMergedRegion(range);
+            
+            range = new CellRangeAddress(5, 5, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            CellStyle styleFromTo = workBook.createCellStyle();
+            styleFromTo.setAlignment(HorizontalAlignment.CENTER);
+            
+            XSSFFont fontFromTo = workBook.createFont();
+            fontFromTo.setFontHeight(14);
+            fontFromTo.setItalic(true);
+            
+            styleFromTo.setFont(fontFromTo);
+            
+            row = sheet.createRow(5);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("From: " + dateStart + " To: " + dateFinish);
+            cell.setCellStyle(styleFromTo);
+            
+            CellStyle boldStyle = workBook.createCellStyle();
+            boldStyle.setAlignment(HorizontalAlignment.LEFT);
+            
+            XSSFFont boldFont =  workBook.createFont();
+            boldFont.setFontHeight(14);
+            boldFont.setBold(true);
+            boldStyle.setFont(boldFont);
+            
+            CellStyle normalStyle = workBook.createCellStyle();
+            normalStyle.setAlignment(HorizontalAlignment.LEFT);
+            
+            XSSFFont normalFont =  workBook.createFont();
+            normalFont.setFontHeight(14);
+            normalStyle.setFont(normalFont);
+            
+            row = sheet.createRow(7);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Staff: ");
+            cell.setCellStyle(boldStyle);
+            
+            range = new CellRangeAddress(7, 7, 1, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue(this.getStaffBUS().getStaffFromId(staffID).getStaffName());
+            cell.setCellStyle(normalStyle);
+            
+            range = new CellRangeAddress(9, 9, 0, 2);
+            sheet.addMergedRegion(range);
+            
+            CellStyle boldStyle2 = workBook.createCellStyle();
+            boldStyle2.setAlignment(HorizontalAlignment.CENTER);
+            
+            XSSFFont boldFont2 =  workBook.createFont();
+            boldFont2.setFontHeight(14);
+            boldFont2.setBold(true);
+            boldStyle2.setFont(boldFont2);
+            
+            row = sheet.createRow(9);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Type");
+            cell.setCellStyle(boldStyle2);
+            
+            range = new CellRangeAddress(9, 9, 3, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue("Quantity");
+            cell.setCellStyle(boldStyle2);
+            
+            row = sheet.createRow(10);
+            
+            range = new CellRangeAddress(10, 10, 0, 2);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Spot Bill");
+            cell.setCellStyle(normalStyle);
+            
+            range = new CellRangeAddress(10, 10, 3, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue(qtySpot);
+            cell.setCellStyle(normalStyle);
+            
+            row = sheet.createRow(11);
+            
+            range = new CellRangeAddress(11, 11, 0, 2);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Take Away Bill");
+            cell.setCellStyle(normalStyle);
+            
+            range = new CellRangeAddress(11, 11, 3, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue(qtyTakeAWay);
+            cell.setCellStyle(normalStyle);
+            
+            row = sheet.createRow(12);
+            
+            range = new CellRangeAddress(12, 12, 0, 2);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Both");
+            cell.setCellStyle(normalStyle);
+            
+            range = new CellRangeAddress(12, 12, 3, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue(Both);
+            cell.setCellStyle(normalStyle);
+            
+            row = sheet.createRow(13);
+            
+            range = new CellRangeAddress(13, 13, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            range = new CellRangeAddress(13, 13, 0, 4);
+            
+            RegionUtil.setBorderBottom(BorderStyle.DASHED, range, sheet);
+            
+            row = sheet.createRow(15);
+            
+            range = new CellRangeAddress(15, 15, 0, 5);
+            sheet.addMergedRegion(range);
+            
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Sales(VND): " + sales);
+            cell.setCellStyle(boldStyle);
+            
+            range = new CellRangeAddress(0, 16, 0, 5);
+            
+            RegionUtil.setBorderBottom(BorderStyle.THIN, range, sheet);
+            RegionUtil.setBorderTop(BorderStyle.DOUBLE, range, sheet);
+            RegionUtil.setBorderLeft(BorderStyle.DOUBLE, range, sheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, range, sheet);
+            
+            
+            
+            String path = "./ExcelSales/" + "SalesFrom" + dateStart.replace("/", "") + "To" + dateFinish.replace("/", "") + ".xlsx";
+            //Tao mot doi tuong file tren disk
+            File file = new File(path);
+            //Mo file
+            try (FileOutputStream fis = new FileOutputStream(file)){
+                workBook.write(fis);
+            } catch (FileNotFoundException e) {
+                System.err.println(e);
+                System.err.println("Error at printSales method of SellBUS class");
+            }
+            
+        } catch (IOException e) {
+            System.err.println(e);
+            System.err.println("Error at printSales method of SellBUS class");
         }
     }
     

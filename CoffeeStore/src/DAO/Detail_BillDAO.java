@@ -86,18 +86,4 @@ public class Detail_BillDAO {
             System.err.println(e);
         }
     }
-    
-    
-    
-    //main test
-    public static void main(String[] args) {
-        Detail_BillDAO o = new Detail_BillDAO();
-        Vector<Detail_BillDTO> list = o.readDetailBillListFromDatabase();
-        for(Detail_BillDTO x: list) {
-            System.out.println(x.getBillId() + "--" + x.getDetailBillId().trim() + "--" + x.getOrdinalNumber()+ "--" + x.getProductSize()+ "--" + x.getProducStatus()+ "--" + x.getQuantity() + "--" + x.getUnitPrice());
-        }
-        o.deleteDetailBill("BL0013");
-    }
-    
-    
 }

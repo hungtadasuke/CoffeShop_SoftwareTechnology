@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.DetailBill_ToppingDAO;
 import DTO.BillDetail_ToppingDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class DetailBillToppingBUS {
+public class DetailBillToppingBUS implements ICoffeeShop{
     //attribute
     private DetailBill_ToppingDAO detailBillToppingDAO;
     private Vector<BillDetail_ToppingDTO> detailBillToppingList;
@@ -34,7 +35,8 @@ public class DetailBillToppingBUS {
     
     //method
     //reset list
-    public void reset() {
+    @Override
+    public void resetList() {
         this.setDetailBillToppingList(this.getDetailBillToppingDAO().readDetailBillToppingListFromDB());
     }
     
@@ -62,12 +64,12 @@ public class DetailBillToppingBUS {
     //insert ct topping
     public void insertDetailBillTopping(BillDetail_ToppingDTO detailTopping) {
         this.getDetailBillToppingDAO().insertDetailBillTopping(detailTopping);
-        this.reset();
+        this.resetList();
     }
     
     //get detailTopping list from detailBillId
     public Vector<BillDetail_ToppingDTO> getDetailToppingList(String detailBillId) {
-        this.reset();
+        this.resetList();
         Vector<BillDetail_ToppingDTO> detailToppingList = new Vector<>();
         for(BillDetail_ToppingDTO detailTopping: this.getDetailBillToppingList()) {
             if(detailTopping.getDetailBillId().trim().equalsIgnoreCase(detailBillId)) {
@@ -75,13 +77,5 @@ public class DetailBillToppingBUS {
             }
         }
         return detailToppingList;
-    }
-    
-    public static void main(String[] args) {
-        DetailBillToppingBUS o = new DetailBillToppingBUS();
-        Vector<BillDetail_ToppingDTO> list = o.getDetailToppingList("BL004");
-        for(BillDetail_ToppingDTO b: list) {
-            System.out.println(b.getDetailBillId() + "--" + b.getToppingId() + "--" + b.getQuantity() + "--" + b.getPrice());
-        }
     }
 }

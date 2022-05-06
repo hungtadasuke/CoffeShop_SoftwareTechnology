@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.ToppingDAO;
 import DTO.ToppingDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class ToppingBUS {
+public class ToppingBUS implements ICoffeeShop{
     //attribue
     private ToppingDAO toppingDAO;
     private Vector<ToppingDTO> toppingList;
@@ -50,6 +51,11 @@ public class ToppingBUS {
             }
         }
         return 0.0;
+    }
+
+    @Override
+    public void resetList() {
+        this.setToppingList(this.getToppingDAO().readToppingListFromDatabase());
     }
     
 }

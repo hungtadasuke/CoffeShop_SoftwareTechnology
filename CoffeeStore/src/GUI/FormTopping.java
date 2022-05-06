@@ -156,7 +156,6 @@ public class FormTopping extends JFrame {
     }
     
     public static void main(String[] args) {
-        new FormTopping();
+        FormTopping o = new FormTopping();
     }
-    
 }

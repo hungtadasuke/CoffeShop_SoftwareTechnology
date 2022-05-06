@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.Detail_BillDAO;
 import DTO.Detail_BillDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class Detail_BillBUS {
+public class Detail_BillBUS implements ICoffeeShop{
     //attribute
     private Detail_BillDAO detailBillDAO;
     private Vector<Detail_BillDTO> detailBillList;
@@ -33,6 +34,7 @@ public class Detail_BillBUS {
     }
     
     //reset list
+    @Override
     public void resetList() {
         this.setDetailBillList(this.getDetailBillDAO().readDetailBillListFromDatabase());
     }
@@ -80,11 +82,5 @@ public class Detail_BillBUS {
             }
         }
         return detailList;
-    }
-    
-    //main test
-    public static void main(String[] args) {
-        Detail_BillBUS detail = new Detail_BillBUS();
-        System.out.println(detail.getDetailBillFromId("BL0041").getUnitPrice());
     }
 }

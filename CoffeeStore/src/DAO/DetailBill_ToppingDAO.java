@@ -61,14 +61,4 @@ public class DetailBill_ToppingDAO {
             System.err.println(e);
         }
     }
-    
-    //main test
-    public static void main(String[] args) {
-        DetailBill_ToppingDAO o = new DetailBill_ToppingDAO();
-        Vector<BillDetail_ToppingDTO> list = o.readDetailBillToppingListFromDB();
-        for(BillDetail_ToppingDTO x: list) {
-            System.out.println(x.getDetailBillId().trim() + "---" + x.getToppingId() + "---" + x.getQuantity() + "---" + x.getPrice());
-        }
-        o.insertDetailBillTopping(new BillDetail_ToppingDTO("BL0012", "TP001", 2, 12000));
-    }
 }

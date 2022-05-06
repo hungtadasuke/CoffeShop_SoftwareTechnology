@@ -36,11 +36,56 @@ public class Product_SizeDAO {
         return productSizeList;
     }
     
-    public static void main(String[] args) {
-        Product_SizeDAO o = new Product_SizeDAO();
-        Vector<Product_SizeDTO> list = o.readProductAndSizeFromDatabase();
-        for(Product_SizeDTO x: list) {
-            System.out.println(x.getProductId() + "-" + x.getSize() + "-" + x.getPrice());
+    //insert a product_size
+    public boolean insert(Product_SizeDTO productSize) {
+        try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call INSERT_PRODUCT_SIZE (?, ?, ?)}");
+                call.setString(1, productSize.getProductId());
+                call.setString(2, productSize.getSize());
+                call.setDouble(3, productSize.getPrice());
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                System.err.println(e);
+                con.rollback();
+                return false;
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+           System.err.println("Error at insert method from Product_SizeDAO class!");
+           System.err.println(e);
+           return false;
         }
+        return true;
+    }
+    
+    //delete product_size
+    public boolean delete(String productId, String size) {
+       try (Connection con = DatabaseHelper.openConnection()){
+            try {
+                con.setAutoCommit(false);
+                CallableStatement call = con.prepareCall("{call DELETE_PRODUCT_SIZE (?, ?)}");
+                call.setString(1, productId);
+                call.setString(2, size);
+                call.executeUpdate();
+                con.commit();
+            } catch (SQLException e) {
+                System.err.println(e);
+                con.rollback();
+                return false;
+            } finally {
+                con.setAutoCommit(true);
+            }
+            
+        } catch (ClassNotFoundException|SQLException e) {
+           System.err.println("Error at delete method from Product_SizeDAO class!");
+           System.err.println(e);
+           return false;
+        }
+        return true; 
     }
 }

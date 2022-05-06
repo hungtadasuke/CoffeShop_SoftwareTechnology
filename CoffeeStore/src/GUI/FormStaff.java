@@ -17,12 +17,15 @@ public class FormStaff extends JFrame {
             addressTextField, phoneTextField, positionTextField; // cac o de nhap "Name", "id",...
     private JButton searchButton, saveButton, addButton, editButton, //cac nut chuc nang
             deleteButton, logoutButton, homeButton;
-    DefaultTableModel model = new DefaultTableModel();
+    JScrollPane sStaff;
+    DefaultTableModel model;
     
     // ham nay de viet giao dien 
     public void MainDisplay(){
         this.setTitle("Coffee Shop");
-        staffTable = new JTable();
+        model = new DefaultTableModel();
+        staffTable = new JTable(model);
+        staffTable.setBounds(110,95,615,500);
         staffLabel = new JLabel("STAFF");
         infoLabel = new JLabel("INFO");
         idLabel = new JLabel("ID:");
@@ -87,14 +90,19 @@ public class FormStaff extends JFrame {
         searchButton.setIcon(new ImageIcon("Resource\\search-icon.png"));
         searchButton.setBackground(new Color(149,231,231));
         
-        staffTable.setBounds(110,95,615,500);
-        staffTable.setModel(model);
+        staffTable.setBackground(Color.red);
+        this.sStaff = new JScrollPane(staffTable);
+        sStaff. setBounds(110,95,615,500);
         model.addColumn("ID");
         model.addColumn("Name");
         model.addColumn("Birthday");
         model.addColumn("Address");
         model.addColumn("Phone");
         model.addColumn("Position");
+        
+        for(int i = 0; i < 50; i++) {
+            model.addRow(new Object[] {"hung", "hung", "hung", "hung", "hung", "hung"});
+        }
         
         infoLabel.setBounds(1020, 120, 120, 25);
         infoLabel.setFont(new Font("Serif", Font.BOLD, 22)); 
@@ -133,7 +141,7 @@ public class FormStaff extends JFrame {
         this.add(deleteButton);
 //        this.add(logoutButton);
         this.add(searchButton);
-        this.add(staffTable);
+        this.add(sStaff);
         this.add(infoLabel);
         this.add(idLabel);
         this.add(nameLabel);
@@ -161,10 +169,9 @@ public class FormStaff extends JFrame {
     
     public FormStaff(){
         MainDisplay();
-    }
+    } 
     
     public static void main(String[] args) {
-        new FormStaff();
+        FormStaff o = new FormStaff();
     }
-    
 }

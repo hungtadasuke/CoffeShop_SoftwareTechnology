@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.StaffDAO;
 import DTO.StaffDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class StaffBUS {
+public class StaffBUS implements ICoffeeShop{
     //attribute
     private StaffDAO staffDAO;
     private Vector<StaffDTO> staffList;
@@ -41,6 +42,22 @@ public class StaffBUS {
             }
         }
         return null;
+    }
+    
+    //reset
+    @Override
+    public void resetList() {
+        this.setStaffList(this.getStaffDAO().readStaffListFromDatabase());
+    }
+    
+    public boolean checkPosition(String staffID) {
+        this.resetList();
+        for(StaffDTO staff: this.getStaffList()) {
+            if(staff.getStaffId().equalsIgnoreCase(staffID) && staff.getPosition().equalsIgnoreCase("Manager")) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

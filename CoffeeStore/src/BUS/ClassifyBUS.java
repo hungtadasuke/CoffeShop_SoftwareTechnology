@@ -2,9 +2,10 @@ package BUS;
 
 import DAO.ClassifyDAO;
 import DTO.ClassifyDTO;
+import Interface.ICoffeeShop;
 import java.util.Vector;
 
-public class ClassifyBUS {
+public class ClassifyBUS implements ICoffeeShop{
     //attribute
     private Vector<ClassifyDTO> classifyList;
     private ClassifyDAO classifyDAO;
@@ -35,7 +36,8 @@ public class ClassifyBUS {
     
     //method
     //process get classify list from ClassifyDAO class
-    public void resetClassifyList() {
+    @Override
+    public void resetList() {
         this.setClassifyList(this.getClassifyDAO().readClassifyListFromDatabase());
     }
     
@@ -47,6 +49,27 @@ public class ClassifyBUS {
             }
         }
         return classify;
+    }
+    
+    //get classify name from id
+    public String getClassifyName(String classifyId) {
+        this.resetList();
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyId().equalsIgnoreCase(classifyId)) {
+                return o.getClassifyName();
+            }
+        }
+        return null;
+    }
+    
+    public String getClassifyId(String classifyName) {
+        this.resetList();
+        for(ClassifyDTO o: this.getClassifyList()) {
+            if(o.getClassifyName().equalsIgnoreCase(classifyName)) {
+                return o.getClassifyId();
+            }
+        }
+        return null;
     }
     
 }

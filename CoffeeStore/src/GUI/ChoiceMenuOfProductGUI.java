@@ -315,12 +315,14 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         this.setSizeRadioButtonList(createSizeRadioButtonList());
         
         this.getpBodySize().add(this.getlSize());
-        this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
-        for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
-            this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
-            if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
-                    && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProductSize().equalsIgnoreCase(this.getSizeRadioButtonList().get(i).getActionCommand())) {
-               this.getSizeRadioButtonList().get(i).setSelected(true);
+        if(!this.getSizeRadioButtonList().isEmpty()) {
+            this.getSizeRadioButtonList().get(this.getSizeRadioButtonList().size() - 1).setSelected(true);
+            for(int i = this.getSizeRadioButtonList().size() - 1; i >= 0; i--) {
+                this.getpBodySize().add(this.getSizeRadioButtonList().get(i));
+                if(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()) != null
+                        && ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getDetailBillBUS().getDetailBillFromId(this.getDetailBillId()).getProductSize().equalsIgnoreCase(this.getSizeRadioButtonList().get(i).getActionCommand())) {
+                   this.getSizeRadioButtonList().get(i).setSelected(true);
+                }
             }
         }
         
@@ -403,10 +405,10 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         //Tao phan pBodyCenter
         this.setpBodyCenter(new JPanel());
         this.getpBodyCenter().setBackground(BACKGROUND_COLOR);
-        this.getpBodyCenter().setLayout(new BoxLayout(this.getpBodyCenter(), BoxLayout.Y_AXIS));
         Border lineBorder = new LineBorder(Color.WHITE);
         this.getpBodyCenter().setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 50, 0, 50), lineBorder), "Topping", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 15), Color.BLACK));
         
+        this.getpBodyCenter().setLayout(new GridLayout(this.getToppingPanelList().size(), 1));
         if(this.getToppingPanelList().size() < 3) {
             this.setSize(450, 400);
             for(ChoiceMenuOfToppingGUI toppingPanel: this.getToppingPanelList()) {
@@ -575,6 +577,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
     private Vector<JRadioButton> createSizeRadioButtonList() {
         Vector<JRadioButton> listTemp = new Vector<>();
         ButtonGroup bg = new ButtonGroup();
+        this.getSellGUI().getSellBUS().getProductSizeBUS().resetList();
         for(Product_SizeDTO o: this.getSellGUI().getSellBUS().getProductSizeBUS().getProductSizeList()) {
             if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                 JRadioButton rBtn = createSizeRadioButton(o.getSize(), o.getSize());
@@ -619,6 +622,7 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         
     private Vector<ChoiceMenuOfToppingGUI> createToppingPanelList() {
        Vector<ChoiceMenuOfToppingGUI> list = new Vector<>();
+       this.getSellGUI().getSellBUS().getProductToppingBUS().resetList();
        for(Product_ToppingDTO o: this.getSellGUI().getSellBUS().getProductToppingBUS().getProductToppingList()) {
            if(o.getProductId().equalsIgnoreCase(this.getProductId())) {
                list.add(new ChoiceMenuOfToppingGUI(o.getToppingId(), o.getToppingId() + "Add", o.getToppingId() + "Sub", this));
@@ -658,11 +662,5 @@ public final class ChoiceMenuOfProductGUI extends JFrame{
         card.show(ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer(), "OrderBodyTemp");
         card.show(ChoiceMenuOfProductGUI.this.getSellGUI().getpOrderBodyContainer(), "OrderBody");
         ChoiceMenuOfProductGUI.this.getSellGUI().getlToTalResult().setText(ChoiceMenuOfProductGUI.this.getSellGUI().getSellBUS().getBillBUS().getPriceOfBill(ChoiceMenuOfProductGUI.this.getSellGUI().getlResultBillId().getText()) + "");
-    }
-    
-    //main
-    public static void main(String[] args) {
-        SellGUI sell = new SellGUI("SF004");
-        ChoiceMenuOfProductGUI o = new ChoiceMenuOfProductGUI("TE001", "BL0011", sell);
     }
 }

@@ -111,8 +111,4 @@ public class FormBill extends JFrame {
         MainDisplay();
     }
     
-    public static void main(String[] args) {
-        new FormBill();
-    }
-    
 }

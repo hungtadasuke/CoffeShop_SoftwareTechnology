@@ -51,6 +51,8 @@ public final class SellGUI extends JFrame{
     public SellGUI(String staffId) {
         this.setStaffId(staffId);
         this.init();
+        //Xoa nhung don hang mang ve chua thanh toan do gap su co he thong nhu cup dien, tat nguon, het pin
+        this.getSellBUS().getBillBUS().deleteTakeAwayBillDoesNotPayment();
         this.setVisible(true);
     }
 
@@ -471,7 +473,17 @@ public final class SellGUI extends JFrame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing (WindowEvent e) {
-                System.exit(0);
+                //Dang bam bill mang ve ma thoat ra :))) thi xoa bill mang ve do. Khi mo lai ung dung thi bam lai
+                if(getlResultTableId().getText().equalsIgnoreCase("")) {
+                    getSellBUS().getBillBUS().deleteBill(getlResultBillId().getText());
+                }
+                if(getSellBUS().getStaffBUS().checkPosition(getStaffId())) {
+                    ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(getStaffId());
+                    dispose();
+                } else {
+                    SellMenuGUI sellMenuGUI = new SellMenuGUI(getStaffId());
+                    dispose();
+                }
             }
         });
         this.setLayout(new BorderLayout());
@@ -767,6 +779,15 @@ public final class SellGUI extends JFrame{
                 getbHome().setIcon(new ImageIcon("Resource\\iconHome.png"));
             }
         });
+        this.getbHome().addActionListener((ActionEvent e) -> {
+            if(this.getSellBUS().getStaffBUS().checkPosition(this.getStaffId())) {
+                ManagementMenuGUI managementMenuGUI = new ManagementMenuGUI(this.getStaffId());
+                this.dispose();
+            } else {
+                SellMenuGUI sellMenuGUI = new SellMenuGUI(this.getStaffId());
+                this.dispose();
+            }
+        });
         
         //add button New and Del to pEastScrossBar1
         this.getpEastScrossBar1().add(this.getbDel(), BorderLayout.WEST);
@@ -833,16 +854,21 @@ public final class SellGUI extends JFrame{
             }
         });
         this.getbSearch().addActionListener((ActionEvent e) -> {
-            createProductButtonSearchList(getTfSearch().getText());
-            getpItemMenu().removeAll();
-            addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
-            getCard().show(getpBodyMenus(), "Item");
+            if(this.getTfSearch().getText().equalsIgnoreCase("") || this.getTfSearch().getText().equalsIgnoreCase("search product here")) {
+                JOptionPane.showMessageDialog(SellGUI.this, "Empty Search Box!", "Search Product", JOptionPane.OK_OPTION);
+            } else {
+                createProductButtonSearchList(getTfSearch().getText());
+                getpItemMenu().removeAll();
+                addComponentsInButtonListToJPanel(getButtonList(), getpItemMenu());
+                getCard().show(getpBodyMenus(), "Item");
+            }
         });
         
         this.getTfSearch().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 getCard().show(getpBodyMenus(), "Temp");
+                getTfSearch().setText("");
             }
         });
         
@@ -969,6 +995,7 @@ public final class SellGUI extends JFrame{
                 int result = JOptionPane.showConfirmDialog(SellGUI.this, "Do You Want To Print This Bill?", "Print Bill", JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                     this.getSellBUS().printBill(billId);
+                    JOptionPane.showMessageDialog(SellGUI.this, "Successfully!", "Notification", JOptionPane.CLOSED_OPTION);
                 }
                 this.setNewOrder();
                 this.resetAndNextCardTable();
@@ -1010,7 +1037,7 @@ public final class SellGUI extends JFrame{
         Border mix = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
         Border line = BorderFactory.createTitledBorder(mix, "Menu", TitledBorder.RIGHT, TitledBorder.BELOW_TOP, new Font("Arial", Font.ITALIC, 10), Color.BLACK);
         this.getButtonList().add(this.createChooseDrinkJButton("Table", "Table", line));
-        this.getSellBUS().getClassifyBUS().resetClassifyList();
+        this.getSellBUS().getClassifyBUS().resetList();
         for(ClassifyDTO classify: this.getSellBUS().getClassifyBUS().getClassifyList()) {
             if(classify.isClassifyBusiness()) {
                 this.getButtonList().add(this.createChooseDrinkJButton(classify.getClassifyName(), classify.getClassifyId(), line));
@@ -1026,7 +1053,7 @@ public final class SellGUI extends JFrame{
     
     private void createProductButtonList(String classifyId) {
         this.getButtonList().clear();
-        this.getSellBUS().getProductBUS().resetProductList();
+        this.getSellBUS().getProductBUS().resetList();
         for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
             if(product.isProductBusiness() && product.getClassifyId().equalsIgnoreCase(classifyId)) {      
                 this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
@@ -1036,11 +1063,8 @@ public final class SellGUI extends JFrame{
     
     private void createProductButtonSearchList(String search) {
         this.getButtonList().clear();
-        for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList()) {
-            if(!search.equals("") && (product.isProductBusiness() && (product.getProductName().toLowerCase().contains(search) || product.getProductName().toUpperCase().contains(search) || product.getProductName().contains(search)))
-                && this.getSellBUS().getClassifyBUS().getClassifyFromId(product.getClassifyId()).isClassifyBusiness()) {
-                    this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
-            }
+        for(ProductDTO product: this.getSellBUS().getProductBUS().getProductList(search)) {
+            this.getButtonList().add(this.createChooseDrinkJButton(product.getProductNickName(), product.getProductId(), BorderFactory.createRaisedBevelBorder()));
         }
     }
     
@@ -1233,12 +1257,4 @@ public final class SellGUI extends JFrame{
         this.createTablePanelList();
         this.addComponentsInTablePanelListToJPanel(this.getPanelList(), this.getpTable());
     }
-    
-    
-    
-    //main
-    public static void main (String[] args) {
-        SellGUI gui = new SellGUI("SF005");
-    }
-    
 }
