@@ -4,6 +4,7 @@ import ApplicationHelper.ClassifyID;
 import ApplicationHelper.MyDate;
 import BUS.ClassifyBUS;
 import DTO.ClassifyDTO;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -232,41 +233,46 @@ public class ClassifyGUI extends JFrame {
                     //nay la them 1 dong moi vao table truoc roi moi them vao csdl
                     ClassifyBUS o = new ClassifyBUS();
                     Vector<ClassifyDTO> list = new Vector<>();
-                    String id = ClassifyID.createClassifyID();
-                    boolean business = onRadioButton.isSelected();
-                    list.add(new ClassifyDTO(id, nameTextField.getText(), business));
-                    int i = list.size() - 1;
-                    for (int a = 0; a <= i; a++) {
-                        ClassifyDTO classify = list.get(a);
-                        model.addRow(new Object[]{classify.getClassifyId(), classify.getClassifyName(), classify.isClassifyBusiness()});
-                    }
-                    //day la them vao csdl
-                    int result = JOptionPane.showConfirmDialog(rootPane,
-                            "Are you sure you want to save this classify?",
-                            "Confirm",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
-                    if (result == JOptionPane.YES_OPTION) {
-                        o.insert(list.get(list.size() - 1));
-                        //vong lap if nay de kiem tra xem cac the loai o trang thai "true" co qua 10 hay khong, qua 10 la khong duoc
-                        if (classifyBUS.count() > 10) {
-                            JOptionPane.showMessageDialog(rootPane, "Do not trade more than 10 product classifies at the same time!");
-                            o.delete(list.get(list.size() - 1).getClassifyId());
-                            model.removeRow(model.getRowCount() - 1);
-                        } else {
-                            JOptionPane.showMessageDialog(rootPane, "Added!");
-                        }
-                    } else if (result == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                    if (checkClassifyID(idTextField.getText()) == false) {
+                        JOptionPane.showMessageDialog(rootPane, "This classify already exists in the database!");
                     } else {
-                        JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                        String id = ClassifyID.createClassifyID();
+                        boolean business = onRadioButton.isSelected();
+                        list.add(new ClassifyDTO(id, nameTextField.getText(), business));
+                        int i = list.size() - 1;
+                        for (int a = 0; a <= i; a++) {
+                            ClassifyDTO classify = list.get(a);
+                            model.addRow(new Object[]{classify.getClassifyId(), classify.getClassifyName(), classify.isClassifyBusiness()});
+                        }
+                        //day la them vao csdl
+                        int result = JOptionPane.showConfirmDialog(rootPane,
+                                "Are you sure you want to save this classify?",
+                                "Confirm",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if (result == JOptionPane.YES_OPTION) {
+                            o.insert(list.get(list.size() - 1));
+                            //vong lap if nay de kiem tra xem cac the loai o trang thai "true" co qua 10 hay khong, qua 10 la khong duoc
+                            if (classifyBUS.count() > 10) {
+                                JOptionPane.showMessageDialog(rootPane, "Do not trade more than 10 product classifies at the same time!");
+                                o.delete(list.get(list.size() - 1).getClassifyId());
+                                model.removeRow(model.getRowCount() - 1);
+                            } else {
+                                JOptionPane.showMessageDialog(rootPane, "Added!");
+                            }
+                        } else if (result == JOptionPane.NO_OPTION) {
+                            JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                        } else {
+                            JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                        }
                     }
                 }
             }
 
         });
 
-        //sua -- Tuong tu phan Them o tren
+        //sua -- ham nay phuc tap, can xu ly khi sua, neu trung id thi duoc phep trung ten, khac id thi khong duoc phep trung ten- giai 
+        // phap thay the la them ki tu (2) vao sau ten the loai
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -279,15 +285,59 @@ public class ClassifyGUI extends JFrame {
                     if (nameTextField.getText().equalsIgnoreCase("")) {
                         JOptionPane.showMessageDialog(rootPane, "Name cannot be left blank!");
                     } else if (checkClassifyName(nameTextField.getText()) == false) {
-                        JOptionPane.showMessageDialog(rootPane, "ClassifyName cannot match!");
-                    } else {
+                        int result2 = JOptionPane.showConfirmDialog(rootPane, "Are you sure about this change?", "Confirm?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (result2 == JOptionPane.YES_OPTION) {
+                            if (!nameTextField.getText().equals(model.getValueAt(i, 1).toString())) {
+                                nameTextField.setText(nameTextField.getText() + "(2)");
+                            } else {
+                                JOptionPane.showMessageDialog(rootPane, "Change business status only or change nothing!");
+                            }
+                            int result = JOptionPane.showConfirmDialog(rootPane,
+                                    "Are you sure you want to update this classify '" + model.getValueAt(i, 1).toString() + "'?",
+                                    "Confirm",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE);
+                            if (result == JOptionPane.YES_OPTION) {
+                                ClassifyBUS o = new ClassifyBUS();
+                                o.delete(model.getValueAt(i, 0).toString());
+                                model.removeRow(i);
+                                Vector<ClassifyDTO> list = new Vector<>();
+                                String id = ClassifyID.createClassifyID();
+                                boolean business = onRadioButton.isSelected();
+                                list.add(new ClassifyDTO(id, nameTextField.getText(), business));
+                                o.insert(list.get(list.size() - 1));
+                                int k = list.size() - 1;
+                                for (int a = 0; a <= k; a++) {
+                                    ClassifyDTO classify = list.get(a);
+                                    model.addRow(new Object[]{classify.getClassifyId(), classify.getClassifyName(), classify.isClassifyBusiness()});
+                                }
+                                if (classifyBUS.count() > 10) {
+                                    JOptionPane.showMessageDialog(rootPane, "Do not trade more than 10 product classifies at the same time!");
+                                    o.update(list.get(list.size() - 1).getClassifyId());
+                                    int a = model.getRowCount();
+                                    while (a > 0) {
+                                        model.removeRow(a - 1);
+                                        a--;
+                                    }
+                                    LoadDataFromDatabase();
 
+                                } else {
+                                    JOptionPane.showMessageDialog(rootPane, "Updated!");
+                                }
+                            } else if (result == JOptionPane.NO_OPTION) {
+                                JOptionPane.showMessageDialog(rootPane, "Not update!");
+                            } else {
+                                JOptionPane.showMessageDialog(rootPane, "Not update!");
+                            }
+                        } else if (result2 == JOptionPane.NO_OPTION) {
+                            JOptionPane.showMessageDialog(rootPane, "Not update!");
+                        }
+                    } else {
                         int result = JOptionPane.showConfirmDialog(rootPane,
                                 "Are you sure you want to update this classify '" + model.getValueAt(i, 1).toString() + "'?",
                                 "Confirm",
                                 JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
-
                         if (result == JOptionPane.YES_OPTION) {
                             ClassifyBUS o = new ClassifyBUS();
                             o.delete(model.getValueAt(i, 0).toString());
@@ -321,6 +371,8 @@ public class ClassifyGUI extends JFrame {
                             JOptionPane.showMessageDialog(rootPane, "Not update!");
                         }
                     }
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "This classify does not exist in the database!");
                 }
             }
         });
@@ -377,6 +429,18 @@ public class ClassifyGUI extends JFrame {
         int a = s.size() - 1;
         for (int i = 0; i <= a; i++) {
             if (s.get(i).equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //ham check trung id
+    public boolean checkClassifyID(String id) {
+        Vector<String> s = new ClassifyBUS().getClassifyID();
+        int a = s.size() - 1;
+        for (int i = 0; i <= a; i++) {
+            if (s.get(i).equals(id)) {
                 return false;
             }
         }

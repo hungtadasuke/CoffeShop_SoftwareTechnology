@@ -260,26 +260,32 @@ public class StaffGUI extends JFrame {
                     MyDate t = new MyDate();
                     String b = t.format(d);
                     MyDate mydate = new MyDate(b);
-                    String id = StaffID.createStaffID();
-                    list.add(new StaffDTO(id, nameTextField.getText(), mydate,
-                            addressTextField.getText(), phoneTextField.getText(), positionTextField.getText()));
-                    int i = list.size() - 1;
-                    for (int a = 0; a <= i; a++) {
-                        StaffDTO staff = list.get(a);
-                        model.addRow(new Object[]{staff.getStaffId(), staff.getStaffName(), staff.getStaffBirthday(), staff.getStaffAddress(), staff.getNumberPhone(), staff.getPosition()});
-                    }
-                    int result = JOptionPane.showConfirmDialog(rootPane,
-                            "Are you sure you want to save this employee?",
-                            "Confirm",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
-                    if (result == JOptionPane.YES_OPTION) {
-                        o.insert(list.get(list.size() - 1));
-                        JOptionPane.showMessageDialog(rootPane, "Added!");
-                    } else if (result == JOptionPane.NO_OPTION) {
-                        JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                    if (checkStaffID(idTextField.getText()) == false) {
+                        JOptionPane.showMessageDialog(rootPane, "This employee already exists in the database!");
                     } else {
-                        JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                        String id = StaffID.createStaffID();
+                        list.add(new StaffDTO(id, nameTextField.getText(), mydate,
+                                addressTextField.getText(), phoneTextField.getText(), positionTextField.getText()));
+                        int i = list.size() - 1;
+                        for (int a = 0; a <= i; a++) {
+                            StaffDTO staff = list.get(a);
+                            model.addRow(new Object[]{staff.getStaffId(), staff.getStaffName(), staff.getStaffBirthday(), staff.getStaffAddress(), staff.getNumberPhone(), staff.getPosition()});
+                        }
+                        int result = JOptionPane.showConfirmDialog(rootPane,
+                                "Are you sure you want to save this employee?",
+                                "Confirm",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if (result == JOptionPane.YES_OPTION) {
+                            o.insert(list.get(list.size() - 1));
+                            JOptionPane.showMessageDialog(rootPane, "Added!");
+                        } else if (result == JOptionPane.NO_OPTION) {
+                            JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                            model.removeRow(model.getRowCount() - 1);
+                        } else {
+                            JOptionPane.showMessageDialog(rootPane, "Not yet added!");
+                            model.removeRow(model.getRowCount() - 1);
+                        }
                     }
                 }
             }
@@ -374,6 +380,8 @@ public class StaffGUI extends JFrame {
                         }
 
                     }
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "This employee does not exist in the database!");
                 }
             }
 
@@ -456,6 +464,18 @@ public class StaffGUI extends JFrame {
                 }
             }
         }
+    }
+
+    //ham check trung id
+    public boolean checkStaffID(String id) {
+        Vector<String> s = new StaffBUS().getStaffID();
+        int a = s.size() - 1;
+        for (int i = 0; i <= a; i++) {
+            if (s.get(i).equals(id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {

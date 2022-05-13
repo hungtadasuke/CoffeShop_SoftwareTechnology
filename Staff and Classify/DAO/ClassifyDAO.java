@@ -92,7 +92,7 @@ public class ClassifyDAO {
             System.err.println(e);
         }
     }
-
+    
     //ham xoa
     public void delete(String id) {
         try (Connection con = DatabaseHelper.openConnection()) {
@@ -116,7 +116,7 @@ public class ClassifyDAO {
         }
         return i;
     }
-
+    
     //ham lay ra danh sach ten the loai san pham
     public Vector<String> ClassifyName() {
         Vector<String> name = new Vector<>();
